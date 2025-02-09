@@ -1,0 +1,25 @@
+{
+  "name": "ne-ulan-bu---websocket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "22.13.1",
+    "cors": "2.8.5",
+    "express": "4.21.2",
+    "socket.io": "4.8.1",
+    "ts-node": "10.9.2",
+    "typescript": "5.7.3"
+  },
+  "devDependencies": {
+    "@types/cors": "2.8.17",
+    "@types/express": "5.0.0"
+  }
+}
