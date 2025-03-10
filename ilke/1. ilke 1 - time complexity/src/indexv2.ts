@@ -2,7 +2,7 @@ import { mockDataset } from "./database/mockDataset";
 import { performance } from "perf_hooks";
 
 // O(log n)
-// binary serach
+// binary search
 const findFatih = (dataset: string[]): number => {
   const start = performance.now();
   let left = 0;
