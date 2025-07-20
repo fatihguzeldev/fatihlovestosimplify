@@ -10,7 +10,7 @@ function buildPrompt(context: string, question: string): string {
 
   Question: ${question}
 
-  just give the answer directly, with few sentences.`;
+  just give the answer directly, with few sentences. don't mention the context in the answer.`;
 }
 
 const main = async () => {
