@@ -23,6 +23,8 @@ export default defineConfig({
                   'public',
                   'neural-network-weights.json'
                 )
+                const dir = path.dirname(filePath)
+                fs.mkdirSync(dir, { recursive: true })
                 fs.writeFileSync(filePath, JSON.stringify(weightsData, null, 2))
                 res.writeHead(200, { 'Content-Type': 'application/json' })
                 res.end(JSON.stringify({ success: true }))
@@ -51,6 +53,8 @@ export default defineConfig({
                   'public',
                   'training-checkpoint.json'
                 )
+                const dir = path.dirname(filePath)
+                fs.mkdirSync(dir, { recursive: true })
                 fs.writeFileSync(filePath, JSON.stringify(checkpoint, null, 2))
                 res.writeHead(200, { 'Content-Type': 'application/json' })
                 res.end(JSON.stringify({ success: true }))
@@ -94,6 +98,11 @@ export default defineConfig({
                   )
                   return
                 }
+
+                const dir1 = path.dirname(checkpointPath)
+                const dir2 = path.dirname(bestPath)
+                fs.mkdirSync(dir1, { recursive: true })
+                fs.mkdirSync(dir2, { recursive: true })
 
                 fs.writeFileSync(
                   checkpointPath,
