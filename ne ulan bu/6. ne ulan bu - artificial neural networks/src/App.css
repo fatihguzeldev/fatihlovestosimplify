@@ -1,0 +1,61 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.neural-network-panel {
+  flex: 0 0 60%;
+  background: #fff;
+  padding: 20px;
+  border-bottom: 2px solid #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.neural-network-panel h2 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.panel-title-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 10px;
+}
+
+.game-panel {
+  flex: 0 0 40%;
+  background: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.game-panel h2 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.reset-training-btn {
+  background: #3f3f3f;
+  color: #ffffff;
+  border: 1px solid #2a2a2a;
+  padding: 8px 12px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.reset-training-btn:hover {
+  filter: brightness(1.05);
+}
