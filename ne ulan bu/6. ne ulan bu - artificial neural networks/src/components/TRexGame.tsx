@@ -1114,7 +1114,7 @@ const TRexGame: React.FC<TRexGameProps> = ({
               // far from obstacle - penalize unnecessary actions
               if (actionIdx === 0) {
                 // jump
-                gameData.fitness[i] -= 15 // heavy penalty for unnecessary jump
+                gameData.fitness[i] -= 20 // heavy penalty for unnecessary jump
               } else if (actionIdx === 1) {
                 // duck
                 gameData.fitness[i] -= 2 // unnecessary duck

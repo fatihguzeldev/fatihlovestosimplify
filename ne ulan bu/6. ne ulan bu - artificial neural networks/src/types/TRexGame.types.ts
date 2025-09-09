@@ -206,7 +206,7 @@ export const OBSTACLE_TYPES: Readonly<ObstacleDefinition[]> = [
     type: 'PTERODACTYL',
     width: 46,
     height: 40,
-    yPos: [100, 75, 50],
+    yPos: [50, 100],
     minGap: 150,
     minSpeed: 8.5,
     numFrames: 2,
