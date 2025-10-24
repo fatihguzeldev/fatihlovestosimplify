@@ -1,0 +1,269 @@
+Description: load balancer demo
+Parameters:
+  LatestAmiId:
+    Description: ami for instance
+    Type: "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>"
+    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+  WebAsgMax:
+    AllowedPattern: ^([0-0]?[0-9]|10)$
+    ConstraintDescription: 1-30
+    Default: "10"
+    Description: specifies the maximum number of ec2 instances in the web asg.
+    Type: String
+  WebAsgMin:
+    AllowedPattern: ^([0-0]?[0-9]|10)$
+    ConstraintDescription: 0-10
+    Default: "0"
+    Description: specifies the minimum number of ec2 instances in the web asg.
+    Type: String
+  WebAsgDesired:
+    AllowedPattern: ^([0-0]?[0-9]|10)$
+    ConstraintDescription: 0-10
+    Default: "6"
+    Description: specifies the desired number of ec2 instances in the web asg.
+    Type: String
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.16.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: name
+          Value: vpc1
+  IGW:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: name
+          Value: vpc1-igw
+  IGWAttachment:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref IGW
+  RouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: name
+          Value: vpc1-rt
+  RouteTableIPv4:
+    Type: "AWS::EC2::Route"
+    DependsOn: IGWAttachment
+    Properties:
+      RouteTableId:
+        Ref: RouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId:
+        Ref: IGW
+  SubnetPublicA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      CidrBlock: 10.16.48.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: name
+          Value: subnet-public-a
+  SubnetPublicB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      CidrBlock: 10.16.112.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: name
+          Value: subnet-public-b
+  SubnetPublicC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [2, !GetAZs ""]
+      CidrBlock: 10.16.176.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: name
+          Value: subnet-public-c
+  RouteTableAssociationSubnetPublicA:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetPublicA
+      RouteTableId:
+        Ref: RouteTable
+  RouteTableAssociationSubnetPublicB:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetPublicB
+      RouteTableId:
+        Ref: RouteTable
+  RouteTableAssociationSubnetPublicC:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetPublicC
+      RouteTableId:
+        Ref: RouteTable
+  SG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: control access to instances
+      SecurityGroupIngress:
+        - Description: "allow http ipv4 in"
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: "0.0.0.0/0"
+        - Description: "allow www in from load balancer"
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref SGLoadBalancer
+  SGLoadBalancer:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: control access to load balancer
+      SecurityGroupIngress:
+        - Description: "allow http ipv4 in"
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: "0.0.0.0/0"
+  IAMWebRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  WebInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Path: /
+      Roles:
+        - !Ref IAMWebRole
+  WebLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        InstanceType: "t2.micro"
+        CreditSpecification:
+          CpuCredits: unlimited
+        ImageId: !Ref LatestAmiId
+        IamInstanceProfile:
+          Name: !Ref WebInstanceProfile
+        SecurityGroupIds:
+          - !Ref SG
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash -xe
+
+            # updates and install essentials
+            yum -y update
+            yum -y install httpd php
+
+            # enable and start web server
+            systemctl enable httpd
+            systemctl start httpd
+
+            # generate random background color
+            bgcolor=$(printf "%02x%02x%02x\n" $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
+
+            #get instance id
+            TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+            instanceId=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
+
+            # create simple webpage with random background color and instance id
+            cat > /var/www/html/index.php <<EOF
+            <html>
+            <head>
+            <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+            <meta http-equiv="Pragma" content="no-cache">
+            <meta http-equiv="Expires" content="0">
+            </head>
+            <body style="background-color:#$bgcolor;">
+              <center><h1>hello world</h1></center>
+              <center><h2>instance: $instanceId</h2></center>
+            </body>
+            </html>
+            EOF
+
+            # set permissions
+            chown -R ec2-user:apache /var/www
+            chmod -R 2775 /var/www
+            find /var/www -type f -exec chmod 0664 {} \;
+  ASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier:
+        - !Ref SubnetPublicA
+        - !Ref SubnetPublicB
+        - !Ref SubnetPublicC
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WebLaunchTemplate
+        Version: "1"
+      MaxSize: !Ref WebAsgMax
+      MinSize: !Ref WebAsgMin
+      DesiredCapacity: !Ref WebAsgDesired
+      Tags:
+        - Key: name
+          Value: web-asg
+          PropagateAtLaunch: true
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      TargetGroupARNs:
+        - !Ref ALBTG
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: "ipv4"
+      Scheme: "internet-facing"
+      SecurityGroups:
+        - !Ref SGLoadBalancer
+      Subnets:
+        - !Ref SubnetPublicA
+        - !Ref SubnetPublicB
+        - !Ref SubnetPublicC
+      Tags:
+        - Key: name
+          Value: !Join ["", ["ALB-", !Ref "AWS::StackName"]]
+      Type: "application"
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ALBTG
+      LoadBalancerArn: !Ref ALB
+      Port: 80
+      Protocol: HTTP
+  ALBTG:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /index.php
+      HealthCheckTimeoutSeconds: 5
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId: !Ref VPC
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: false
+Outputs:
+  ALBURL:
+    Description: load balancer url
+    Value: !Sub "http://${ALB.DNSName}"
