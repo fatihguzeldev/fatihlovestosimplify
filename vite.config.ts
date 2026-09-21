@@ -4,7 +4,7 @@ import ffmpeg from '@motion-canvas/ffmpeg';
 
 export default defineConfig({
   plugins: [
-    motionCanvas({project: []}),
+    motionCanvas({project: ['./ddia/01/project.ts']}),
     ffmpeg(),
   ],
   server: {
