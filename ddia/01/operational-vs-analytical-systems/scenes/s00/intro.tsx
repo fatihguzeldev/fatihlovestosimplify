@@ -1,7 +1,7 @@
 import {makeScene2D} from '@motion-canvas/2d';
 import {waitFor} from '@motion-canvas/core';
-import {fontFamily, loadFonts} from '../../../animations/fonts';
-import {theme} from '../../../animations/theme';
+import {fontFamily, loadFonts} from '../../../../../animations/fonts';
+import {theme} from '../../../theme';
 
 export default makeScene2D(function* (view) {
   yield loadFonts();
