@@ -23,7 +23,7 @@ async function findThumbnails(directory) {
 
 async function render(browser, origin, html) {
   const page = await browser.newPage({
-    viewport: {width: 1280, height: 720},
+    viewport: {width: 3840, height: 2160},
     deviceScaleFactor: 1,
   });
   const errors = [];
