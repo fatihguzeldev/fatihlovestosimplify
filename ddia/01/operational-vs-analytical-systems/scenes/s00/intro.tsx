@@ -1,16 +1,51 @@
-import {makeScene2D} from '@motion-canvas/2d';
+import {Layout, makeScene2D, Txt} from '@motion-canvas/2d';
 import {waitFor} from '@motion-canvas/core';
 import {fontFamily, loadFonts} from '../../../../../animations/fonts';
 import {theme} from '../../../theme';
+
+// Preview hold; set the final duration when the narration is ready.
+const previewHoldSeconds = 3;
 
 export default makeScene2D(function* (view) {
   yield loadFonts();
 
   view.fill(theme.colors.background);
   view.fontFamily(fontFamily.sans);
-  view.fontSize(theme.fontSize.body);
   view.fontWeight(400);
 
-  // Empty stage for the next intro pass; this is not the final duration.
-  yield* waitFor(1);
+  view.add(
+    <Layout
+      layout
+      width={1612.8}
+      direction={'column'}
+      alignItems={'start'}
+      textAlign={'left'}
+    >
+      <Txt
+        text={'chapter 1'}
+        fill={theme.colors.accent}
+        fontSize={55.68}
+        lineHeight={'130%'}
+      />
+      <Txt
+        text={'trade-offs\nin data systems'}
+        textWrap={'pre'}
+        fill={theme.colors.foreground}
+        marginTop={24.96}
+        fontSize={157.44}
+        fontWeight={500}
+        lineHeight={'105.5%'}
+        letterSpacing={-157.44 * 0.035}
+      />
+      <Txt
+        text={'operational vs. analytical systems'}
+        fill={theme.colors.foreground}
+        marginTop={80.64}
+        fontSize={71.04}
+        lineHeight={'125%'}
+      />
+    </Layout>,
+  );
+
+  yield* waitFor(previewHoldSeconds);
 });
