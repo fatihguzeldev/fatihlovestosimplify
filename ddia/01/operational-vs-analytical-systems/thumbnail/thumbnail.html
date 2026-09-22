@@ -19,17 +19,33 @@
         font-family: 'IBM Plex Sans', sans-serif;
         font-weight: 400;
       }
-      .composition { width: 100%; display: flex; flex-direction: column; gap: 4.5vw; }
+      .composition { width: 100%; display: flex; flex-direction: column; gap: 4.2vw; }
+      .chapter { position: relative; }
+      .chapter-label {
+        position: absolute;
+        left: 0;
+        bottom: calc(100% + 1.2vw);
+        margin: 0;
+        font-size: 3vw;
+        line-height: 1.3;
+        text-decoration: underline solid var(--chapter-accent);
+        text-decoration-thickness: .14vw;
+        text-underline-offset: .7vw;
+        text-decoration-skip-ink: none;
+      }
       .hero { margin: 0; font-size: 11.2vw; font-weight: 500; line-height: 1.07; letter-spacing: -.035em; }
       .accent { color: var(--chapter-accent); }
-      .byline { margin: 0; font-size: 3.5vw; line-height: 1.3; }
+      .byline { margin: 0; font-size: 4vw; line-height: 1.3; }
     </style>
   </head>
   <body>
     <main class="thumbnail">
       <div class="composition">
-        <h1 class="hero">aynı data.<br><span class="accent">farklı işler.</span></h1>
-        <p class="byline">chapter 1 · operational vs. analytical systems</p>
+        <div class="chapter">
+          <p class="chapter-label">chapter 1</p>
+          <h1 class="hero">aynı data.<br><span class="accent">farklı işler.</span></h1>
+        </div>
+        <p class="byline">operational vs. analytical systems</p>
       </div>
     </main>
     <script>
