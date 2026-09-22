@@ -5,7 +5,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "thumbnails": "node scripts/render-thumbnails.mjs"
   },
   "dependencies": {
     "@motion-canvas/2d": "3.17.2",
@@ -15,6 +16,7 @@
     "@motion-canvas/ffmpeg": "3.17.2",
     "@motion-canvas/ui": "3.17.2",
     "@motion-canvas/vite-plugin": "3.17.2",
+    "playwright": "1.63.0",
     "typescript": "~5.9.3",
     "vite": "~5.4.21"
   },
