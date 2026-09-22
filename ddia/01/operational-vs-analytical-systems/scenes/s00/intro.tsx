@@ -1,6 +1,6 @@
 import {Layout, makeScene2D, Txt} from '@motion-canvas/2d';
 import {waitFor} from '@motion-canvas/core';
-import {fontFamily, loadFonts} from '../../../../../animations/fonts';
+import {fontFamily, loadFonts} from '../../../../../common/fonts';
 import {theme} from '../../../theme';
 
 // Preview hold; set the final duration when the narration is ready.

@@ -1,4 +1,4 @@
-import {theme as baseTheme} from '../../animations/theme';
+import {theme as baseTheme} from '../../common/theme';
 import chapterColors from './theme.json';
 
 export const theme = {
