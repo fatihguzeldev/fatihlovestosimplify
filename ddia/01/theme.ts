@@ -1,7 +1,9 @@
-import {theme as baseTheme} from '../../common/theme';
-import chapterColors from './theme.json';
+import {theme as commonTheme} from '../../common/theme';
 
 export const theme = {
-  ...baseTheme,
-  colors: {...baseTheme.colors, ...chapterColors},
+  ...commonTheme,
+  colors: {
+    ...commonTheme.colors,
+    accent: '#7db4ff',
+  },
 } as const;

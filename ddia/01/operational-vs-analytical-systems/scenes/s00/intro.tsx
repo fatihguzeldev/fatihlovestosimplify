@@ -1,7 +1,7 @@
 import {Layout, makeScene2D, Txt} from '@motion-canvas/2d';
 import {waitFor} from '@motion-canvas/core';
-import {fontFamily, loadFonts} from '../../../../../common/fonts';
-import {theme} from '../../../theme';
+import {loadFonts} from '../../../../../common/fonts';
+import {theme} from '../../theme';
 
 // Preview hold; set the final duration when the narration is ready.
 const previewHoldSeconds = 3;
@@ -10,13 +10,13 @@ export default makeScene2D(function* (view) {
   yield loadFonts();
 
   view.fill(theme.colors.background);
-  view.fontFamily(fontFamily.sans);
+  view.fontFamily(theme.fontFamily.sans);
   view.fontWeight(400);
 
   view.add(
     <Layout
       layout
-      width={1612.8}
+      width={theme.intro.width}
       direction={'column'}
       alignItems={'start'}
       textAlign={'left'}
@@ -24,25 +24,25 @@ export default makeScene2D(function* (view) {
       <Txt
         text={'chapter 1'}
         fill={theme.colors.accent}
-        fontSize={55.68}
-        lineHeight={'130%'}
+        fontSize={theme.intro.chapterFontSize}
+        lineHeight={theme.intro.chapterLineHeight}
       />
       <Txt
         text={'trade-offs\nin data systems'}
         textWrap={'pre'}
         fill={theme.colors.foreground}
-        marginTop={24.96}
-        fontSize={157.44}
+        marginTop={theme.intro.chapterGap}
+        fontSize={theme.intro.titleFontSize}
         fontWeight={500}
-        lineHeight={'105.5%'}
-        letterSpacing={-157.44 * 0.035}
+        lineHeight={theme.intro.titleLineHeight}
+        letterSpacing={theme.intro.titleLetterSpacing}
       />
       <Txt
         text={'operational vs. analytical systems'}
         fill={theme.colors.foreground}
-        marginTop={80.64}
-        fontSize={71.04}
-        lineHeight={'125%'}
+        marginTop={theme.intro.topicGap}
+        fontSize={theme.intro.topicFontSize}
+        lineHeight={theme.intro.topicLineHeight}
       />
     </Layout>,
   );

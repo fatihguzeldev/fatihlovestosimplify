@@ -1,9 +1,7 @@
 import './fonts.css';
+import {theme} from './theme';
 
-export const fontFamily = {
-  sans: 'IBM Plex Sans',
-  mono: 'IBM Plex Mono',
-} as const;
+export const fontFamily = theme.fontFamily;
 
 // Yield this before creating text so the first frame uses the intended metrics.
 export async function loadFonts(): Promise<void> {
