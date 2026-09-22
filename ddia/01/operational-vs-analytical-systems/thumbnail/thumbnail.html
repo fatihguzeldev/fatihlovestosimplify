@@ -13,28 +13,28 @@
         height: 56.25vw;
         display: flex;
         align-items: center;
-        padding: var(--thumbnail-padding-y) var(--thumbnail-padding-x);
+        padding: 5vw var(--space-xl);
         color: var(--foreground);
         font-family: var(--font-sans), sans-serif;
         font-weight: 400;
       }
-      .composition { width: 100%; display: flex; flex-direction: column; gap: var(--thumbnail-topic-gap); }
+      .composition { width: 100%; display: flex; flex-direction: column; gap: 4.2vw; }
       .chapter { position: relative; }
       .chapter-label {
         position: absolute;
         left: 0;
-        bottom: calc(100% + var(--thumbnail-chapter-gap));
+        bottom: calc(100% + 1.2vw);
         margin: 0;
-        font-size: var(--thumbnail-chapter-size);
-        line-height: var(--thumbnail-label-line-height);
+        font-size: 3vw;
+        line-height: 1.3;
         text-decoration: underline solid var(--chapter-accent);
-        text-decoration-thickness: var(--thumbnail-underline-thickness);
-        text-underline-offset: var(--thumbnail-underline-offset);
+        text-decoration-thickness: var(--underline-thickness);
+        text-underline-offset: var(--space-s);
         text-decoration-skip-ink: none;
       }
-      .hero { margin: 0; font-size: var(--thumbnail-title-size); font-weight: 500; line-height: var(--thumbnail-title-line-height); letter-spacing: var(--thumbnail-title-letter-spacing); }
+      .hero { margin: 0; font-size: 11.2vw; font-weight: 500; line-height: 1.07; letter-spacing: -.035em; }
       .accent { color: var(--chapter-accent); }
-      .byline { margin: 0; font-size: var(--thumbnail-topic-size); line-height: var(--thumbnail-label-line-height); }
+      .byline { margin: 0; font-size: 4vw; line-height: 1.3; }
     </style>
   </head>
   <body>
@@ -54,25 +54,16 @@
           import('../theme.ts'),
           import('../../../../common/fonts.ts'),
         ]);
-        const {thumbnail} = theme;
         const properties = {
           '--background': theme.colors.background,
           '--foreground': theme.colors.foreground,
           '--chapter-accent': theme.colors.accent,
           '--font-sans': `"${theme.fontFamily.sans}"`,
-          '--thumbnail-padding-x': `${thumbnail.paddingX}vw`,
-          '--thumbnail-padding-y': `${thumbnail.paddingY}vw`,
-          '--thumbnail-chapter-gap': `${thumbnail.chapterGap}vw`,
-          '--thumbnail-topic-gap': `${thumbnail.topicGap}vw`,
-          '--thumbnail-chapter-size': `${thumbnail.chapterFontSize}vw`,
-          '--thumbnail-title-size': `${thumbnail.titleFontSize}vw`,
-          '--thumbnail-topic-size': `${thumbnail.topicFontSize}vw`,
-          '--thumbnail-title-line-height': String(thumbnail.titleLineHeight),
-          '--thumbnail-label-line-height': String(thumbnail.labelLineHeight),
-          '--thumbnail-title-letter-spacing': `${thumbnail.titleLetterSpacing}em`,
-          '--thumbnail-underline-thickness': `${thumbnail.underlineThickness}vw`,
-          '--thumbnail-underline-offset': `${thumbnail.underlineOffset}vw`,
+          '--underline-thickness': `${theme.underlineThickness}vw`,
         };
+        for (const [size, value] of Object.entries(theme.spacing)) {
+          properties[`--space-${size}`] = `${value}vw`;
+        }
         for (const [property, value] of Object.entries(properties)) {
           document.documentElement.style.setProperty(property, value);
         }

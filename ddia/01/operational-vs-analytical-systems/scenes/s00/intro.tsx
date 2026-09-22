@@ -16,7 +16,7 @@ export default makeScene2D(function* (view) {
   view.add(
     <Layout
       layout
-      width={theme.intro.width}
+      width={1612.8}
       direction={'column'}
       alignItems={'start'}
       textAlign={'left'}
@@ -24,25 +24,25 @@ export default makeScene2D(function* (view) {
       <Txt
         text={'chapter 1'}
         fill={theme.colors.accent}
-        fontSize={theme.intro.chapterFontSize}
-        lineHeight={theme.intro.chapterLineHeight}
+        fontSize={55.68}
+        lineHeight={'130%'}
       />
       <Txt
         text={'trade-offs\nin data systems'}
         textWrap={'pre'}
         fill={theme.colors.foreground}
-        marginTop={theme.intro.chapterGap}
-        fontSize={theme.intro.titleFontSize}
+        marginTop={24.96}
+        fontSize={157.44}
         fontWeight={500}
-        lineHeight={theme.intro.titleLineHeight}
-        letterSpacing={theme.intro.titleLetterSpacing}
+        lineHeight={'105.5%'}
+        letterSpacing={-5.5104}
       />
       <Txt
         text={'operational vs. analytical systems'}
         fill={theme.colors.foreground}
-        marginTop={theme.intro.topicGap}
-        fontSize={theme.intro.topicFontSize}
-        lineHeight={theme.intro.topicLineHeight}
+        marginTop={80.64}
+        fontSize={71.04}
+        lineHeight={'125%'}
       />
     </Layout>,
   );
