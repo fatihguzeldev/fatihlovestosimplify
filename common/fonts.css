@@ -1,6 +1,6 @@
 /* Complete, unmodified IBM Plex fonts (SIL OFL; see fonts/LICENSE.txt).
  * Source: https://github.com/IBM/plex/tree/78cd4223d8de9fcb78cba84eadecb269c56093c5/packages
- * plex-{sans,mono}/fonts/complete/woff2/IBMPlex{Sans,Mono}-{Regular,Medium}.woff2
+ * plex-{sans,mono}/fonts/complete/woff2/ (Sans Regular/Medium/Italic/MediumItalic; Mono Regular/Medium)
  * The face-level ss02 setting gives DOM layout and canvas drawing the same g/ğ.
  */
 @font-face {
@@ -15,6 +15,22 @@
   font-family: 'IBM Plex Sans';
   src: url('./fonts/IBMPlexSans-Medium.woff2') format('woff2');
   font-style: normal;
+  font-weight: 500;
+  font-feature-settings: 'ss02' 1;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('./fonts/IBMPlexSans-Italic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 400;
+  font-feature-settings: 'ss02' 1;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('./fonts/IBMPlexSans-MediumItalic.woff2') format('woff2');
+  font-style: italic;
   font-weight: 500;
   font-feature-settings: 'ss02' 1;
 }
