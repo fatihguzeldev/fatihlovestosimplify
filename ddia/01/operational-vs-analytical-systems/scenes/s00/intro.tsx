@@ -1,10 +1,7 @@
 import {Layout, makeScene2D, Txt} from '@motion-canvas/2d';
-import {waitFor} from '@motion-canvas/core';
+import {waitUntil} from '@motion-canvas/core';
 import {loadFonts} from '../../../../../common/fonts';
 import {theme} from '../../theme';
-
-// Preview hold; set the final duration when the narration is ready.
-const previewHoldSeconds = 3;
 
 export default makeScene2D(function* (view) {
   yield loadFonts();
@@ -47,5 +44,5 @@ export default makeScene2D(function* (view) {
     </Layout>,
   );
 
-  yield* waitFor(previewHoldSeconds);
+  yield* waitUntil('start-video');
 });
