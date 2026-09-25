@@ -5,7 +5,6 @@ import {
   easeInOutCubic,
   easeOutCubic,
   fadeTransition,
-  sequence,
   waitUntil,
 } from '@motion-canvas/core';
 import {loadFonts} from '../../../../../common/fonts';
@@ -104,16 +103,16 @@ export default makeScene2D(function* (view) {
   const fragments = [
     {kind: 'mesaj', value: 'birazdan oradayım.', x: 20, y: -190},
     {kind: 'konum', value: '41.01, 28.98', x: 210, y: 20},
-    {kind: 'ölçüm', value: '22 °C', x: 55, y: 230},
+    {kind: 'ölçüm', value: '22°C', x: 55, y: 230},
   ].map(({kind, value, x, y}) => {
     const group = new Layout({position: [x, y + 18], opacity: 0});
     const label = text(kind, 30, {y: -52, fill: accent});
     const content = text(value, 55, {
-      fontFamily: kind === 'mesaj' ? theme.fontFamily.sans : theme.fontFamily.mono,
+      fontFamily: kind === 'konum' ? theme.fontFamily.mono : theme.fontFamily.sans,
     });
     group.add([label, content]);
     traces.add(group);
-    return {group, y};
+    return {group, label, content, y};
   });
   view.add(traces);
 
@@ -126,135 +125,216 @@ export default makeScene2D(function* (view) {
   }
 
   yield* waitUntil('read-data');
-  const reading = text('okumak', 48, {position: [left, 185], opacity: 0});
-  const readLine = new Line({
-    points: [[-10, -190], [-215, -190], [-215, 185], [-460, 185]],
-    radius: 30,
-    stroke: accent,
-    lineWidth: 3,
-    endArrow: true,
-    end: 0,
-  });
-  const readCopy = text('birazdan oradayım.', 40, {
-    position: [20, -190], opacity: 0,
-  });
-  view.add([readLine, reading, readCopy]);
-  yield* all(reading.opacity(1, 0.4), readLine.end(1, 0.9));
-  yield* all(readCopy.opacity(1, 0.2), readCopy.position([left, 260], 1, easeInOutCubic));
+  const conversation = new Layout({position: [350, 40]});
+  const frame = new Rect({size: [840, 530], radius: 16, stroke: foreground, lineWidth: 2, opacity: 0});
+  const chatTitle = text('deniz ile konuşma', 30, {position: [-375, -220], opacity: 0});
+  const incoming = new Rect({position: [-40, -95], size: [660, 106], radius: 12, stroke: foreground, lineWidth: 2, opacity: 0});
+  const composer = new Rect({position: [0, 170], size: [750, 76], radius: 10, stroke: foreground, lineWidth: 2, opacity: 0});
+  const sendButton = new Rect({position: [295, 170], size: [136, 56], radius: 6, fill: accent, opacity: 0});
+  sendButton.add(text('gönder', 26, {offset: [0, 0], fill: background}));
+  conversation.add([frame, chatTitle, incoming, composer, sendButton]);
+  view.add(conversation);
+  const message = fragments[0];
+  message.group.remove();
+  message.group.position([-330, -230]);
+  conversation.add(message.group);
+  const action = text('mesajı açıyorsun.', 46, {position: [left, 190], opacity: 0});
+  view.add(action);
+  yield* all(
+    fragments[1].group.opacity(0, 0.45), fragments[2].group.opacity(0, 0.45),
+    frame.opacity(0.45, 0.6), chatTitle.opacity(1, 0.6), incoming.opacity(0.65, 0.6),
+    message.group.position([-340, -95], 0.85, easeInOutCubic),
+    message.content.fontSize(44, 0.85), message.label.opacity(0, 0.4),
+    action.opacity(1, 0.6),
+  );
+  traces.remove();
 
   yield* waitUntil('produce-data');
-  yield* all(readLine.opacity(0, 0.4), readCopy.opacity(0, 0.4));
-  readLine.remove();
-  readCopy.remove();
-  yield* replaceText(reading, 'üretmek');
-  const newMessage = text('geldim.', 55, {position: [left, 265], opacity: 0});
-  view.add(newMessage);
-  yield* newMessage.opacity(1, 0.5);
-  yield* newMessage.position([20, -95], 1, easeInOutCubic);
+  yield* replaceText(action, 'cevap yazıp\ngönderiyorsun.');
+  const reply = text('', 40, {position: [-340, 170]});
+  const outgoing = new Rect({position: [40, 55], size: [660, 100], radius: 12, stroke: accent, lineWidth: 2, opacity: 0});
+  const sent = text('gönderildi', 25, {position: [190, 125], fill: accent, opacity: 0});
+  conversation.add([outgoing, reply, sent]);
+  yield* all(composer.opacity(0.5, 0.4), sendButton.opacity(1, 0.4));
+  yield* reply.text('tamam, bekliyorum.', 1.1);
+  yield* sendButton.opacity(0.55, 0.15);
+  yield* all(
+    sendButton.opacity(1, 0.2), outgoing.opacity(1, 0.5),
+    reply.position([-250, 55], 0.8, easeInOutCubic),
+  );
+  yield* all(sent.opacity(1, 0.35), composer.opacity(0, 0.35), sendButton.opacity(0, 0.35));
 
   yield* waitUntil('intensive-question');
   yield* all(
-    traces.opacity(0, 0.55), newMessage.opacity(0, 0.55),
-    reading.opacity(0, 0.4), underline.opacity(0, 0.4),
+    action.opacity(0, 0.4), underline.opacity(0, 0.4),
     intensiveWord.x(322, 0.65, easeOutCubic), intensiveWord.opacity(1, 0.65),
+    opening.y(-340, 0.8, easeInOutCubic), opening.scale(0.6, 0.8),
+    conversation.position([350, 90], 0.8), conversation.scale(0.87, 0.8),
   );
-  traces.remove();
-  newMessage.remove();
-  reading.remove();
-
-  const question = text('ne zaman?', 64, {position: [left, 180], opacity: 0});
+  action.remove();
+  const question = text('peki, ne zaman\ndata-intensive diyoruz?', 50, {
+    position: [left, -85], lineHeight: '125%', opacity: 0,
+  });
   view.add(question);
   yield* question.opacity(1, 0.5);
 
   yield* waitUntil('volume');
-  yield* all(opening.y(-320, 0.8, easeInOutCubic), opening.scale(0.6, 0.8));
-  yield* all(question.y(-180, 0.6), question.opacity(0, 0.5));
-  question.text('çok data?');
-  question.y(-130);
-  yield* question.opacity(1, 0.4);
-
-  const workload = new Layout({});
-  const records = Array.from({length: 24}, (_, index) => {
-    const record = new Line({
-      points: [[0, 0], [155, 0]],
-      position: [65 + index % 4 * 175, -60 + Math.floor(index / 4) * 58],
-      stroke: foreground,
-      lineWidth: 9,
-      lineCap: 'round',
-      end: 0,
+  yield* replaceText(question, 'çok fazla data\nbiriktiğinde mi?');
+  const historyCount = text('2 mesaj', 38, {position: [left, 90], fill: accent, opacity: 0});
+  view.add(historyCount);
+  yield* all(
+    composer.opacity(0, 0.3), sendButton.opacity(0, 0.3), sent.opacity(0, 0.3),
+    incoming.position([0, -150], 0.7), incoming.size([750, 60], 0.7),
+    message.group.position([-340, -150], 0.7), message.content.fontSize(34, 0.7),
+    outgoing.position([0, -80], 0.7), outgoing.size([750, 60], 0.7),
+    reply.position([-340, -80], 0.7), reply.fontSize(34, 0.7), historyCount.opacity(1, 0.5),
+  );
+  chatTitle.text('mesaj geçmişi');
+  const extraMessages = [
+    'konumu paylaştım.', 'yoldayım.', 'beş dakikaya geliyorum.', 'kapıdayım.',
+  ].map((value, index) => {
+    const row = new Rect({
+      position: [0, index * 70 + 4], size: [750, 60], radius: 10,
+      stroke: foreground, lineWidth: 2, opacity: 0,
     });
-    workload.add(record);
-    return record;
+    row.add(text(value, 34, {x: -340}));
+    conversation.add(row);
+    return row;
   });
-  view.add(workload);
-  yield* sequence(0.07, ...records.map(record => record.end(1, 0.32)));
+  for (const [index, row] of extraMessages.entries()) {
+    yield* all(row.opacity(0.8, 0.35), row.y(index * 70 - 10, 0.35, easeOutCubic));
+    historyCount.text(`${index + 3} mesaj`);
+  }
 
   yield* waitUntil('query-rate');
-  yield* replaceText(question, 'daha sık erişim?');
-  const requests = Array.from({length: 3}, (_, index) => new Line({
-    points: [[-360, -30 + index * 100], [10, -30 + index * 100]],
-    stroke: accent,
-    lineWidth: 3,
-    endArrow: true,
-    start: 0,
-    end: 0,
-  }));
-  workload.add(requests);
-  for (let pass = 0; pass < 3; pass++) {
-    for (const request of requests) {
-      request.start(0);
-      request.end(0);
-    }
-    yield* sequence(0.14, ...requests.map(request => request.end(1, 0.45)));
-    yield* all(...requests.map(request => request.start(1, 0.35)));
+  yield* replaceText(question, 'saniyede daha çok\nistek gelirse?');
+  const requests = new Layout({opacity: 0});
+  const app = new Rect({position: [-590, 235], size: [360, 140], radius: 12, stroke: foreground, lineWidth: 2});
+  app.add(text('konuşmayı aç', 34, {offset: [0, 0]}));
+  const requestLabel = text('istek', 27, {position: [-330, 185], fill: accent});
+  const requestPath = new Line({points: [[-405, 235], [-35, 235]], stroke: accent, lineWidth: 2, endArrow: true});
+  const pulse = new Rect({position: [-395, 235], size: [24, 12], radius: 3, fill: accent, opacity: 0});
+  requests.add([app, requestPath, requestLabel, pulse]);
+  view.add(requests);
+  yield* requests.opacity(1, 0.4);
+  for (const duration of [0.95, 0.65, 0.4, 0.28, 0.28]) {
+    pulse.position([-395, 235]);
+    pulse.opacity(1);
+    yield* pulse.x(-40, duration);
+    pulse.opacity(0);
+    yield* frame.opacity(0.75, 0.12).to(0.45, 0.12);
   }
 
   yield* waitUntil('changes');
-  yield* all(...records.map(record => record.opacity(0, 0.4)));
-  workload.removeChildren();
-  const value = text('22 °C', 130, {
-    position: [90, 85], fontFamily: theme.fontFamily.mono, opacity: 0,
-  });
-  const valueLabel = text('aynı ölçüm noktası', 32, {position: [90, -25], fill: accent, opacity: 0});
-  workload.add([value, valueLabel]);
-  yield* replaceText(question, 'data değişiyor.');
-  yield* all(value.opacity(1, 0.5), valueLabel.opacity(1, 0.5));
-  yield* value.fill(accent, 0.35);
-  yield* value.text('23 °C', 0.65);
-  yield* value.fill(foreground, 0.5);
+  yield* replaceText(question, 'bu arada data\ndeğişmeye devam ediyor.');
+  yield* all(
+    requests.opacity(0, 0.4), historyCount.opacity(0, 0.4),
+    ...extraMessages.map(row => row.opacity(0, 0.4)),
+    outgoing.opacity(0, 0.4), reply.opacity(0, 0.4),
+    incoming.position([0, -50], 0.7), incoming.size([750, 110], 0.7),
+    message.group.position([-340, -50], 0.7), message.content.fontSize(42, 0.7),
+  );
+  requests.remove();
+  historyCount.remove();
+  for (const row of extraMessages) row.remove();
+  chatTitle.text('deniz aynı mesajı düzenliyor');
+  const editStatus = text('düzenleniyor…', 26, {position: [-340, 40], fill: accent});
+  conversation.add(editStatus);
+  yield* all(message.content.text('on dakika gecikeceğim.', 0.95), incoming.stroke(accent, 0.5));
+  editStatus.text('düzenlendi');
 
   yield* waitUntil('concurrency');
-  yield* replaceText(question, 'aynı anda.');
-  const read = new Line({
-    points: [[-305, -15], [35, 60]],
-    stroke: accent, lineWidth: 3, endArrow: true, end: 0,
-  });
-  const write = new Line({
-    points: [[-305, 190], [35, 115]],
-    stroke: foreground, lineWidth: 3, endArrow: true, end: 0,
-  });
-  const readLabel = text('read', 36, {position: [-450, -25], opacity: 0});
-  const writeLabel = text('write', 36, {position: [-450, 195], opacity: 0});
-  workload.add([read, write, readLabel, writeLabel]);
-  yield* all(read.end(1, 0.75), write.end(1, 0.75), readLabel.opacity(1, 0.4), writeLabel.opacity(1, 0.4));
+  yield* question.opacity(0, 0.2);
+  question.text('biri değiştirirken diğeri açarsa?');
+  question.y(-185);
+  const otherView = new Layout({position: [435, 135], opacity: 0});
+  const otherFrame = new Rect({size: [700, 350], radius: 14, stroke: foreground, lineWidth: 2, opacity: 0.45});
+  const otherTitle = text('sen konuşmayı açıyorsun', 28, {position: [-305, -130]});
+  const otherMessage = text('mesaj getiriliyor…', 38, {position: [-305, 0], lineHeight: '130%'});
+  const otherStatus = text('read', 26, {position: [-305, 120], fill: accent});
+  otherView.add([otherFrame, otherTitle, otherMessage, otherStatus]);
+  view.add(otherView);
+  yield* all(
+    question.opacity(1, 0.4), conversation.position([-390, 135], 0.85, easeInOutCubic),
+    conversation.scale(0.82, 0.85), frame.height(427, 0.85), chatTitle.y(-158, 0.85),
+    otherView.opacity(1, 0.7),
+  );
+  chatTitle.text('deniz mesajı düzenliyor');
+  editStatus.text('write');
+  editStatus.y(146);
+  yield* all(
+    message.content.text('beş dakika gecikeceğim.', 1.1),
+    otherFrame.stroke(accent, 1.1),
+  );
+  yield* replaceText(otherMessage, 'önceki hâli mi,\nyeni hâli mi?');
 
   yield* waitUntil('failures');
-  yield* replaceText(question, 'bir şeyler bozulunca?');
-  const breakMask = new Rect({position: [-140, 20], width: 74, height: 95, fill: background, opacity: 0});
-  const consistency = text('consistency', 46, {position: [90, 265], fill: accent, opacity: 0});
-  workload.add([breakMask, consistency]);
-  yield* all(breakMask.opacity(1, 0.3), consistency.opacity(1, 0.5));
-  const doubt = text('?', 58, {position: [-160, 18], fill: accent, opacity: 0});
-  workload.add(doubt);
-  yield* doubt.opacity(1, 0.4);
+  yield* replaceText(question, 'yanıt gelmedi. mesaj kaydedildi mi?');
+  yield* all(
+    conversation.position([-515, 135], 0.8), conversation.scale(0.68, 0.8),
+    otherView.position([515, 135], 0.8), otherView.scale(0.81, 0.8),
+    incoming.opacity(0, 0.35), message.group.opacity(0, 0.35), editStatus.opacity(0, 0.35),
+  );
+  chatTitle.text('sen mesaj gönderiyorsun');
+  outgoing.position([0, -35]);
+  outgoing.size([750, 110]);
+  reply.position([-340, -35]);
+  reply.fontSize(44);
+  reply.text('tamam, haber ver.');
+  sent.position([-340, 100]);
+  sent.text('gönderiliyor…');
+  otherTitle.text('mesaj servisi');
+  otherMessage.text('tamam, haber ver.');
+  otherMessage.fontSize(36);
+  otherStatus.text('write isteği');
+  otherFrame.stroke(foreground);
+  const delivery = new Layout({opacity: 0});
+  const sendPath = new Line({points: [[-220, 70], [215, 70]], stroke: accent, lineWidth: 2, endArrow: true});
+  const returnPath = new Line({points: [[220, 180], [-215, 180]], stroke: foreground, lineWidth: 2, endArrow: true});
+  const sendLabel = text('gönder', 26, {position: [-45, 30], fill: accent});
+  const returnLabel = text('yanıt', 26, {position: [-30, 225]});
+  const packet = new Rect({position: [-215, 70], size: [26, 14], radius: 3, fill: accent});
+  const interruption = text('×', 56, {position: [0, 180], offset: [0, 0], fill: accent, opacity: 0});
+  delivery.add([sendPath, returnPath, sendLabel, returnLabel, packet, interruption]);
+  view.add(delivery);
+  yield* all(outgoing.opacity(1, 0.4), reply.opacity(1, 0.4), sent.opacity(1, 0.4), delivery.opacity(1, 0.4));
+  yield* packet.x(215, 0.85);
+  packet.position([215, 180]);
+  yield* packet.x(20, 0.65);
+  yield* all(packet.opacity(0, 0.2), interruption.opacity(1, 0.25), returnPath.opacity(0.25, 0.25));
+  sent.text('yanıt alınamadı');
+  returnLabel.text('yanıt ulaşmadı');
+  returnLabel.x(-85);
 
   yield* waitUntil('availability');
-  yield* replaceText(question, 'erişebiliyor muyuz?');
-  yield* replaceText(consistency, 'availability');
+  yield* replaceText(question, 'peki, konuşmayı açabiliyor muyuz?');
+  chatTitle.text('sen konuşmayı açıyorsun');
+  reply.text('konuşma yükleniyor…');
+  reply.fontSize(42);
+  sent.text('bekleniyor…');
+  otherMessage.text('cevap yok');
+  otherStatus.text('hizmete ulaşılamıyor');
+  sendLabel.text('aç');
+  sendLabel.x(-15);
+  interruption.position([0, 70]);
+  interruption.opacity(0);
+  returnLabel.opacity(0);
+  returnPath.opacity(0);
+  packet.position([-215, 70]);
+  packet.opacity(1);
+  yield* all(packet.x(-20, 0.85), otherView.opacity(0.5, 0.85));
+  yield* all(packet.opacity(0, 0.2), interruption.opacity(1, 0.25), sendPath.opacity(0.25, 0.25));
+  reply.text('konuşma yüklenemedi.');
+  sent.text('şu an cevap alamıyoruz');
 
   yield* waitUntil('compute-intensive');
-  yield* all(workload.opacity(0, 0.6), opening.opacity(0, 0.6), question.opacity(0, 0.45));
-  workload.remove();
+  yield* all(
+    conversation.opacity(0, 0.6), otherView.opacity(0, 0.6), delivery.opacity(0, 0.6),
+    opening.opacity(0, 0.6), question.opacity(0, 0.45),
+  );
+  conversation.remove();
+  otherView.remove();
+  delivery.remove();
   opening.remove();
   question.remove();
 
