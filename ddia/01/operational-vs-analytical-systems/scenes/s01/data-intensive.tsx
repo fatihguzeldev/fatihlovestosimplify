@@ -9,6 +9,7 @@ import {
 } from '@motion-canvas/core';
 import {loadFonts} from '../../../../../common/fonts';
 import {theme} from '../../theme';
+import {showCompute} from './compute';
 
 const {background, foreground, accent} = theme.colors;
 const left = -960 + 1920 * theme.spacing.xl / 100;
@@ -338,41 +339,7 @@ export default makeScene2D(function* (view) {
   opening.remove();
   question.remove();
 
-  const comparison = new Layout({});
-  const computeTitle = text('compute-intensive', 100, {position: [left, -265], fontWeight: 500});
-  const computeCaption = text('büyük bir computation', 44, {position: [left, -120]});
-  const calculation = new Rect({position: [0, 115], size: [760, 160], lineWidth: 2, stroke: foreground});
-  calculation.add(text('computation', 50, {offset: [0, 0]}));
-  comparison.add([computeTitle, computeCaption, calculation]);
-  comparison.opacity(0);
-  view.add(comparison);
-  yield* comparison.opacity(1, 0.6);
-
-  yield* waitUntil('parallel-computation');
-  yield* calculation.opacity(0, 0.35);
-  calculation.remove();
-  const pieces = Array.from({length: 4}, (_, index) => {
-    const piece = new Rect({
-      position: [0, 115], size: [220, 160],
-      lineWidth: 2, stroke: accent, opacity: 0,
-    });
-    piece.add(text(`parça ${index + 1}`, 35, {offset: [0, 0]}));
-    comparison.add(piece);
-    return piece;
-  });
-  yield* all(...pieces.map((piece, index) => all(
-    piece.opacity(1, 0.5), piece.x(-465 + index * 310, 0.9, easeInOutCubic),
-  )));
-  yield* replaceText(computeCaption, 'paralel çalıştırmak');
-  const progress = pieces.map(piece => {
-    const line = new Line({
-      points: [[-90, 48], [90, 48]],
-      stroke: accent, lineWidth: 5, end: 0,
-    });
-    piece.add(line);
-    return line;
-  });
-  yield* all(...progress.map(line => line.end(1, 1.4)));
+  const comparison = yield* showCompute(view);
 
   yield* waitUntil('data-management');
   yield* comparison.opacity(0, 0.55);
