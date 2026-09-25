@@ -5,6 +5,7 @@ import {
   easeInOutCubic,
   easeOutCubic,
   fadeTransition,
+  waitFor,
   waitUntil,
 } from '@motion-canvas/core';
 import {loadFonts} from '../../../../../common/fonts';
@@ -192,11 +193,11 @@ export default makeScene2D(function* (view) {
   );
   chatTitle.text('mesaj geçmişi');
   const extraMessages = [
-    'konumu paylaştım.', 'yoldayım.', 'beş dakikaya geliyorum.', 'kapıdayım.',
+    'konumu paylaştım.', 'gördüm, teşekkürler.', 'ana girişteyim.', 'yaklaşınca haber veririm.',
   ].map((value, index) => {
     const row = new Rect({
       position: [0, index * 70 + 4], size: [750, 60], radius: 10,
-      stroke: foreground, lineWidth: 2, opacity: 0,
+      stroke: index % 2 === 0 ? accent : foreground, lineWidth: 2, opacity: 0,
     });
     row.add(text(value, 34, {x: -340}));
     conversation.add(row);
@@ -218,10 +219,11 @@ export default makeScene2D(function* (view) {
   requests.add([app, requestPath, requestLabel, pulse]);
   view.add(requests);
   yield* requests.opacity(1, 0.4);
-  for (const duration of [0.95, 0.65, 0.4, 0.28, 0.28]) {
+  for (const pause of [0.8, 0.45, 0.15, 0, 0]) {
+    yield* waitFor(pause);
     pulse.position([-395, 235]);
     pulse.opacity(1);
-    yield* pulse.x(-40, duration);
+    yield* pulse.x(-40, 0.5);
     pulse.opacity(0);
     yield* frame.opacity(0.75, 0.12).to(0.45, 0.12);
   }
@@ -354,20 +356,31 @@ export default makeScene2D(function* (view) {
       text('-intensive', 140, {fontWeight: 500}),
     ],
   });
-  const closingCaption = text('data’yı yönetmek.', 68, {y: 160});
+  const closingData = new Txt({text: 'data', fill: foreground});
+  const closingCaption = new Txt({
+    y: 160, offset: [-1, 0], fontFamily: theme.fontFamily.sans,
+    fontSize: 68, fontWeight: 400, fill: foreground, textWrap: false,
+    children: [closingData, new Txt({text: '’yı yönetmek.'})],
+  });
   const closingUnderline = new Line({
     points: [[0, 213], [170, 211], [354, 215], [550, 210]],
     stroke: accent, lineWidth: 6, lineCap: 'round', end: 0,
   });
-  const qualifier = text('başlıca mühendislik zorluklarından biri', 36, {y: 280, opacity: 0});
-  closing.add([closingTitle, closingCaption, closingUnderline, qualifier]);
+  const nextQuestion = text('peki, nasıl?', 48, {
+    y: 145, fontFamily: theme.fontFamily.serif, fontStyle: 'italic', opacity: 0,
+  });
+  closing.add([closingTitle, closingCaption, nextQuestion]);
   view.add(closing);
   yield* closing.opacity(1, 0.7);
-  yield* all(closingUnderline.end(1, 0.75), qualifier.opacity(1, 0.6));
+  closing.add(closingUnderline);
+  yield* closingUnderline.end(1, 0.75);
 
   yield* waitUntil('building-blocks');
-  yield* all(closingTitle.opacity(0, 0.5), closingUnderline.opacity(0, 0.5), qualifier.opacity(0, 0.5));
-  yield* all(closingCaption.y(0, 0.65, easeInOutCubic), closingCaption.fontSize(86, 0.65));
-  yield* replaceText(closingCaption, 'peki, nasıl?');
+  yield* all(
+    closingTitle.opacity(0, 0.5), closingUnderline.opacity(0, 0.5),
+    closingCaption.y(0, 0.8, easeInOutCubic), closingCaption.fontSize(86, 0.8),
+    closingData.fill(accent, 0.8),
+  );
+  yield* all(nextQuestion.opacity(1, 0.6), nextQuestion.y(130, 0.6, easeOutCubic));
   yield* waitUntil('end');
 });
