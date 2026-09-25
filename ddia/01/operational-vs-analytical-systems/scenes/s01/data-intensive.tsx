@@ -172,8 +172,15 @@ export default makeScene2D(function* (view) {
     opening.y(-340, 0.8, easeInOutCubic), opening.scale(0.6, 0.8),
     phone.root.position([430, 65], 0.8), phone.root.scale(0.82, 0.8),
   );
-  const question = text('peki, ne zaman\ndata-intensive diyoruz?', 50, {
-    position: [left, -85], lineHeight: '125%', opacity: 0,
+  const question = new Txt({
+    position: [left, -85], offset: [-1, 0], fontFamily: theme.fontFamily.sans,
+    fontSize: 50, fontWeight: 400, fill: foreground, textWrap: false,
+    lineHeight: '125%', opacity: 0,
+    children: [
+      new Txt({text: 'peki, ne zaman '}),
+      new Txt({text: 'data-intensive', fill: accent, fontStyle: 'italic', fontWeight: 500}),
+      new Txt({text: ' diyoruz?'}),
+    ],
   });
   view.add(question);
   yield* question.opacity(1, 0.5);
