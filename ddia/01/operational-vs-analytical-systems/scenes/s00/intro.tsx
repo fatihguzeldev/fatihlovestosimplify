@@ -96,7 +96,7 @@ export default makeScene2D(function* (view) {
       <Path
         position={[153.6, 739.2]}
         scale={[76.8 / 44, 136.32 / 78]}
-        data={'M16 4C8 21 6 43 13 57C18 67 27 67 38 66'}
+        data={'M16 4C8 26 4 58 13 78C18 92 30 92 44 90'}
         stroke={theme.colors.accent}
         lineWidth={2.7}
         lineCap={'round'}
