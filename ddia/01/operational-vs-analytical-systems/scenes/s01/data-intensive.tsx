@@ -5,13 +5,13 @@ import {
   easeInOutCubic,
   easeOutCubic,
   fadeTransition,
-  waitFor,
   waitUntil,
 } from '@motion-canvas/core';
 import {loadFonts} from '../../../../../common/fonts';
 import {theme} from '../../theme';
 import {showCompute} from './compute';
 import {createBubble, createPhone} from './phone';
+import {showRequestRate} from './traffic';
 
 const {background, foreground, accent} = theme.colors;
 const left = -960 + 1920 * theme.spacing.xl / 100;
@@ -132,7 +132,7 @@ export default makeScene2D(function* (view) {
   phone.root.position([440, 75]);
   phone.root.rotation(-5);
   phone.root.opacity(0);
-  const incoming = createBubble('birazdan oradayım.', false);
+  const incoming = createBubble('birazdan oradayım.', false, '14:32');
   incoming.root.position([-25, -125]);
   incoming.root.opacity(0);
   phone.chat.add(incoming.root);
@@ -149,7 +149,8 @@ export default makeScene2D(function* (view) {
   );
 
   yield* waitUntil('produce-data');
-  const outgoing = createBubble('tamam, bekliyorum.', true);
+  const outgoing = createBubble('tamam, bekliyorum.', true, '14:33');
+  phone.clock.text('14:33');
   outgoing.root.position([25, 145]);
   outgoing.root.opacity(0);
   outgoing.checks.opacity(0);
@@ -186,7 +187,7 @@ export default makeScene2D(function* (view) {
   yield* question.opacity(1, 0.5);
 
   yield* waitUntil('volume');
-  yield* replaceText(question, 'çok fazla data\nbiriktiğinde mi?');
+  yield* replaceText(question, 'mesajlar biriktikçe mi?');
   const historyCount = text('2 mesaj', 38, {position: [left, 90], fill: accent, opacity: 0});
   view.add(historyCount);
   yield* all(
@@ -199,7 +200,7 @@ export default makeScene2D(function* (view) {
   const extraMessages = [
     'konumu paylaştım.', 'gördüm, teşekkürler.', 'ana girişteyim.', 'yaklaşınca haber veririm.',
   ].map((value, index) => {
-    const bubble = createBubble(value, index % 2 === 0);
+    const bubble = createBubble(value, index % 2 === 0, `14:${34 + index}`);
     bubble.root.position([index % 2 === 0 ? 25 : -25, 11 + index * 82 + 18]);
     bubble.root.opacity(0);
     bubble.body.height(74);
@@ -210,132 +211,168 @@ export default makeScene2D(function* (view) {
   for (const [index, bubble] of extraMessages.entries()) {
     yield* all(bubble.root.opacity(1, 0.3), bubble.root.y(11 + index * 82, 0.4, easeOutCubic));
     historyCount.text(`${index + 3} mesaj`);
+    phone.clock.text(`14:${34 + index}`);
   }
 
   yield* waitUntil('query-rate');
-  yield* replaceText(question, 'saniyede daha çok\nistek gelirse?');
-  const requests = new Layout({opacity: 0});
-  const requestPath = new Line({
-    points: [[-420, 240], [190, 160]],
-    stroke: accent, lineWidth: 3, endArrow: true, arrowSize: 14,
-  });
-  const requestLabel = text('read', 30, {position: [-420, 185], fill: accent});
-  const pulse = new Rect({position: [-420, 240], size: [22, 12], radius: 4, fill: foreground, opacity: 0});
-  requests.add([requestPath, requestLabel, pulse]);
-  view.add(requests);
-  yield* requests.opacity(1, 0.4);
-  for (const pause of [0.8, 0.45, 0.15, 0, 0]) {
-    yield* waitFor(pause);
-    pulse.position([-420, 240]);
-    pulse.opacity(1);
-    yield* pulse.position([190, 160], 0.5);
-    pulse.opacity(0);
-    yield* phone.screen.stroke(accent, 0.12).to(foreground, 0.12);
-  }
-
-  yield* waitUntil('changes');
-  yield* replaceText(question, 'bu arada data\ndeğişmeye devam ediyor.');
-  yield* all(
-    requests.opacity(0, 0.4), historyCount.opacity(0, 0.4),
-    ...extraMessages.map(bubble => bubble.root.opacity(0, 0.4)), outgoing.root.opacity(0, 0.4),
-    incoming.root.y(-75, 0.7), incoming.body.height(108, 0.7),
-    incoming.text.fontSize(30, 0.7), incoming.stamp.y(35, 0.7),
-  );
-  requests.remove();
+  yield* all(question.opacity(0, 0.2), historyCount.opacity(0, 0.3));
   historyCount.remove();
-  for (const bubble of extraMessages) bubble.root.remove();
-  yield* incoming.text.text('on dakika gecikeceğim.', 0.95);
-  incoming.stamp.text('düzenlendi · 14:33');
-
-  yield* waitUntil('concurrency');
-  yield* question.opacity(0, 0.2);
-  question.text('biri değiştirirken diğeri açarsa?');
-  question.y(-285);
-  const writer = createPhone('sen');
-  writer.root.position([-420, 165]);
-  writer.root.scale(0.64);
-  writer.root.opacity(0);
-  const edited = createBubble('on dakika gecikeceğim.', true);
-  edited.root.position([25, -75]);
-  writer.chat.add(edited.root);
-  const names = new Layout({opacity: 0});
-  names.add([
-    text('deniz', 30, {position: [-420, -195], offset: [0, 0], fontFamily: theme.fontFamily.serif, fontStyle: 'italic'}),
-    text('sen', 30, {position: [430, -195], offset: [0, 0], fontFamily: theme.fontFamily.serif, fontStyle: 'italic'}),
+  question.children([
+    new Txt({text: 'request/second', fill: accent, fontStyle: 'italic', fontWeight: 500}),
+    new Txt({text: ' arttığında mı?'}),
   ]);
-  view.add([writer.root, names]);
+  question.y(-285);
   yield* all(
     question.opacity(1, 0.4), opening.y(-405, 0.8), opening.scale(0.45, 0.8),
-    phone.root.position([430, 145], 0.8), phone.root.scale(0.64, 0.8),
-    writer.root.opacity(1, 0.6), writer.root.y(145, 0.8), names.opacity(1, 0.6),
+    phone.root.position([-620, 145], 0.8), phone.root.scale(0.64, 0.8),
   );
-  edited.stamp.text('düzenleniyor…');
-  edited.checks.opacity(0);
-  yield* all(edited.text.text('beş dakika gecikeceğim.', 1.1), incoming.root.opacity(0.55, 1.1));
-  edited.stamp.text('düzenlendi · 14:33');
-  const unresolved = text('hangisi?', 38, {position: [0, 80], offset: [0, 0], fill: accent, opacity: 0});
-  phone.chat.add(unresolved);
-  yield* unresolved.opacity(1, 0.4);
+  const traffic = yield* showRequestRate(view);
+  const service = traffic.service;
+
+  yield* waitUntil('changes');
+  service.remove();
+  view.add(service);
+  yield* all(traffic.root.opacity(0, 0.35), question.opacity(0, 0.2));
+  traffic.root.remove();
+  question.text('mesajı sonradan düzeltirsek?');
+  const writer = createPhone('fatih');
+  writer.root.position([-620, 165]);
+  writer.root.scale(0.64);
+  writer.root.opacity(0);
+  writer.clock.text('14:38');
+  const edited = createBubble('birazdan oradayım.', true, '14:32');
+  edited.root.position([25, -75]);
+  writer.chat.add(edited.root);
+  const editMode = text('mesajı düzenle', 23, {position: [-207, 277], fill: accent, opacity: 0});
+  writer.screen.add(editMode);
+  const names = new Layout({opacity: 0});
+  names.add([
+    text('deniz', 30, {position: [-620, -195], offset: [0, 0], fontFamily: theme.fontFamily.serif, fontStyle: 'italic'}),
+    text('fatih', 30, {position: [620, -195], offset: [0, 0], fontFamily: theme.fontFamily.serif, fontStyle: 'italic'}),
+  ]);
+  const shared = new Layout({position: [0, 235], opacity: 0});
+  const record = new Rect({size: [350, 150], radius: 20, fill: '#2a2e33', stroke: accent, lineWidth: 0});
+  const storedText = text('birazdan\noradayım.', 32, {offset: [0, 0], y: -8, lineHeight: '115%'});
+  const recordId = text('mesaj #42', 25, {offset: [0, 0], y: -105, fontFamily: theme.fontFamily.mono, fill: accent});
+  const recordStamp = text('14:32', 18, {position: [145, 52], offset: [1, 0], fill: theme.colors.muted});
+  shared.add([record, recordId, storedText, recordStamp]);
+  const operations = new Layout({});
+  const editPath = new Line({points: [[-453, 95], [-190, 205]], stroke: accent, lineWidth: 3, endArrow: true, arrowSize: 14, end: 0});
+  const editLabel = text('edit', 28, {position: [-340, 100], offset: [0, 0], fill: accent, opacity: 0});
+  const editPacket = new Rect({position: [-453, 95], size: [24, 12], radius: 4, fill: accent, opacity: 0});
+  const readPath = new Line({points: [[453, 95], [190, 205]], stroke: foreground, lineWidth: 3, endArrow: true, arrowSize: 14, end: 0});
+  const readLabel = text('read', 28, {position: [340, 100], offset: [0, 0], opacity: 0});
+  const readPacket = new Rect({position: [453, 95], size: [24, 12], radius: 4, fill: foreground, opacity: 0});
+  operations.add([editPath, editLabel, editPacket, readPath, readLabel, readPacket]);
+  view.add([writer.root, names, shared, operations]);
+  yield* all(
+    question.opacity(1, 0.4), service.position([0, -15], 0.8), service.scale(0.47, 0.8),
+    phone.root.position([620, 145], 0.8), phone.root.opacity(0.6, 0.8),
+    writer.root.opacity(1, 0.7), writer.root.y(145, 0.8), names.opacity(1, 0.6), shared.opacity(1, 0.7),
+    ...extraMessages.map(bubble => bubble.root.opacity(0, 0.4)), outgoing.root.opacity(0, 0.4),
+    incoming.root.y(-75, 0.7), incoming.body.height(108, 0.7),
+    incoming.text.fontSize(30, 0.7), incoming.stamp.y(32, 0.7),
+  );
+  for (const bubble of extraMessages) bubble.root.remove();
+  yield* editMode.opacity(1, 0.2);
+  yield* writer.input.text('on dakika gecikeceğim.', 0.8);
+  yield* writer.send.scale(0.84, 0.12).to(1, 0.18);
+  writer.input.text('');
+  yield* all(editPath.end(1, 0.3), editLabel.opacity(1, 0.3));
+  editPacket.opacity(1);
+  yield* editPacket.position([-190, 205], 0.55);
+  editPacket.opacity(0);
+  storedText.text('on dakika\ngecikeceğim.');
+  recordStamp.text('14:38');
+  edited.text.text('on dakika gecikeceğim.');
+  edited.stamp.text('düzenlendi · 14:38');
+  yield* all(record.lineWidth(3, 0.15).to(0, 0.3), editMode.opacity(0, 0.3));
+  incoming.text.text('on dakika gecikeceğim.');
+  incoming.stamp.text('düzenlendi · 14:38');
+  phone.clock.text('14:38');
+  yield* phone.root.opacity(1, 0.4);
+
+  yield* waitUntil('concurrency');
+  yield* replaceText(question, 'fatih hangi hâlini görecek?');
+  writer.clock.text('14:39');
+  phone.clock.text('14:39');
+  yield* editMode.opacity(1, 0.15);
+  yield* writer.input.text('beş dakika gecikeceğim.', 0.65);
+  const readerLoading = text('yükleniyor…', 30, {position: [0, -75], offset: [0, 0], opacity: 0});
+  phone.chat.add(readerLoading);
+  yield* all(
+    writer.send.scale(0.84, 0.12).to(1, 0.18),
+    incoming.root.opacity(0, 0.2), readerLoading.opacity(1, 0.3),
+    readPath.end(1, 0.3), readLabel.opacity(1, 0.3),
+  );
+  editMode.text('kaydediliyor…');
+  editPacket.position([-453, 95]);
+  editPacket.opacity(1);
+  readPacket.opacity(1);
+  yield* all(editPacket.position([-190, 205], 0.7), readPacket.position([190, 205], 0.7));
+  yield* all(editPacket.opacity(0, 0.15), readPacket.opacity(0, 0.15), record.height(230, 0.4), record.lineWidth(3, 0.4), storedText.y(-53, 0.4), recordId.y(-145, 0.4), recordStamp.y(95, 0.4));
+  const pendingLabel = text('edit isteği', 20, {offset: [0, 0], y: 5, fill: accent, opacity: 0});
+  const pendingText = text('beş dakika\ngecikeceğim.', 31, {offset: [0, 0], y: 53, lineHeight: '115%', fill: accent, opacity: 0});
+  shared.add([pendingLabel, pendingText]);
+  yield* all(pendingLabel.opacity(1, 0.4), pendingText.opacity(1, 0.4));
 
   yield* waitUntil('failures');
   yield* replaceText(question, 'yanıt gelmedi. mesaj kaydedildi mi?');
-  yield* all(phone.root.opacity(0, 0.4), names.opacity(0, 0.4));
-  phone.root.remove();
+  yield* all(writer.root.opacity(0, 0.4), names.opacity(0, 0.4), shared.opacity(0, 0.4), operations.opacity(0, 0.4), readerLoading.opacity(0, 0.4));
+  readerLoading.remove();
+  writer.root.remove();
   names.remove();
-  writer.contact.text('deniz');
-  writer.status.text('çevrimiçi');
-  edited.text.text('tamam, haber ver.');
-  edited.stamp.text('14:34');
-  edited.checks.opacity(0);
-  const service = new Layout({position: [455, 130], opacity: 0});
-  service.add(text('mesaj servisi', 30, {position: [0, -190], offset: [0, 0]}));
-  for (let index = 0; index < 3; index++) {
-    const rack = new Rect({position: [0, -85 + index * 78], size: [280, 64], radius: 13, stroke: foreground, lineWidth: 3, fill: background});
-    rack.add([
-      new Rect({position: [-104, 0], size: 9, radius: 4.5, fill: accent}),
-      new Line({points: [[-65, 0], [95, 0]], stroke: foreground, lineWidth: 3, opacity: 0.45}),
-    ]);
-    service.add(rack);
-  }
+  shared.remove();
+  operations.remove();
+  yield* all(phone.root.position([-620, 145], 0.8), service.position([530, 150], 0.8), service.scale(1, 0.8), incoming.root.opacity(0, 0.3));
+  phone.clock.text('14:40');
+  outgoing.root.position([25, -75]);
+  outgoing.body.height(108);
+  outgoing.text.fontSize(30);
+  outgoing.text.text('tamam, haber ver.');
+  outgoing.stamp.text('14:40');
+  outgoing.stamp.y(32);
+  outgoing.checks.opacity(0);
+  yield* outgoing.root.opacity(1, 0.3);
   const delivery = new Layout({opacity: 0});
-  const sendPath = new Line({points: [[-210, 90], [295, 90]], stroke: accent, lineWidth: 3, endArrow: true, arrowSize: 16});
-  const returnPath = new Line({points: [[295, 190], [-210, 190]], stroke: foreground, lineWidth: 3, endArrow: true, arrowSize: 16});
+  const sendPath = new Line({points: [[-450, 90], [385, 90]], stroke: accent, lineWidth: 3, endArrow: true, arrowSize: 16});
+  const returnPath = new Line({points: [[385, 190], [-450, 190]], stroke: foreground, lineWidth: 3, endArrow: true, arrowSize: 16});
   const sendLabel = text('write', 26, {position: [10, 45], fill: accent});
   const returnLabel = text('yanıt', 26, {position: [20, 235]});
-  const packet = new Rect({position: [-210, 90], size: [24, 12], radius: 4, fill: accent});
+  const packet = new Rect({position: [-450, 90], size: [24, 12], radius: 4, fill: accent});
   const interruption = text('×', 56, {position: [25, 190], offset: [0, 0], fill: accent, opacity: 0});
   delivery.add([sendPath, returnPath, sendLabel, returnLabel, packet, interruption]);
-  view.add([service, delivery]);
+  view.add(delivery);
   yield* all(service.opacity(1, 0.5), delivery.opacity(1, 0.5));
-  yield* packet.x(295, 0.85);
-  packet.position([295, 190]);
+  yield* packet.x(385, 0.85);
+  packet.position([385, 190]);
   yield* packet.x(45, 0.65);
   yield* all(packet.opacity(0, 0.2), interruption.opacity(1, 0.25), returnPath.opacity(0.25, 0.25));
   returnLabel.text('yanıt ulaşmadı');
   returnLabel.x(-40);
 
   yield* waitUntil('availability');
-  yield* replaceText(question, 'peki, konuşmaya ulaşabiliyor muyuz?');
-  yield* edited.root.opacity(0, 0.4);
-  writer.status.text('bağlanıyor…');
+  yield* replaceText(question, 'sohbeti açamıyoruz.');
+  yield* outgoing.root.opacity(0, 0.4);
+  phone.status.text('bağlanıyor…');
   const reconnecting = text('bağlanıyor…', 30, {offset: [0, 0], opacity: 0});
-  writer.chat.add(reconnecting);
+  phone.chat.add(reconnecting);
   sendLabel.text('read');
   interruption.position([25, 90]);
   interruption.opacity(0);
   returnLabel.opacity(0);
   returnPath.opacity(0);
-  packet.position([-210, 90]);
+  packet.position([-450, 90]);
   packet.opacity(1);
   yield* all(packet.x(0, 0.85), service.opacity(0.35, 0.85), reconnecting.opacity(1, 0.5));
   yield* all(packet.opacity(0, 0.2), interruption.opacity(1, 0.25), sendPath.opacity(0.25, 0.25));
 
   yield* waitUntil('compute-intensive');
   yield* all(
-    writer.root.opacity(0, 0.6), service.opacity(0, 0.6), delivery.opacity(0, 0.6),
+    phone.root.opacity(0, 0.6), service.opacity(0, 0.6), delivery.opacity(0, 0.6),
     opening.opacity(0, 0.6), question.opacity(0, 0.45),
   );
-  writer.root.remove();
+  phone.root.remove();
   service.remove();
   delivery.remove();
   opening.remove();

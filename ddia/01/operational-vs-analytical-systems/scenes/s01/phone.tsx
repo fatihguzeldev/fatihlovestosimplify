@@ -41,7 +41,8 @@ export function createPhone(name: string) {
   root.add(stroke('M -234 -315 L -233 321 Q -234 414 -149 416', '#62676d', 1.5));
 
   screen.add(new Rect({position: [0, -320], size: [464, 180], fill: '#191c1f'}));
-  screen.add(label('14:34', 21, -156, -365));
+  const clock = label('14:32', 21, -156, -365);
+  screen.add(clock);
   screen.add(new Rect({position: [0, -367], size: [132, 35], radius: 20, fill: '#050505'}));
   screen.add(new Circle({position: [42, -367], size: 9, fill: '#1b2b3b'}));
   [8, 12, 17, 22].forEach((height, i) => {
@@ -106,10 +107,10 @@ export function createPhone(name: string) {
   send.add(new Path({data: 'M -13 -15 L 17 0 L -13 15 L -8 3 L 7 0 L -8 -3 Z', fill: '#101720', rotation: -12}));
   screen.add([composer, send]);
   screen.add(new Rect({position: [0, 394], size: [158, 5], radius: 3, fill: foreground}));
-  return {root, screen, chat, composer, input, send, keyboard, contact, status};
+  return {root, screen, chat, composer, input, send, keyboard, contact, status, clock};
 }
 
-export function createBubble(value: string, outgoing: boolean, width = 380) {
+export function createBubble(value: string, outgoing: boolean, time: string, width = 380) {
   const root = new Layout({});
   const fill = outgoing ? '#243e5a' : '#2a2e33';
   const body = new Rect({width, height: 108, radius: outgoing ? [23, 23, 6, 23] : [6, 23, 23, 23], fill});
@@ -121,7 +122,7 @@ export function createBubble(value: string, outgoing: boolean, width = 380) {
   });
   const text = label(value, 30, -width / 2 + 22, -12);
   text.offset([-1, 0]);
-  const stamp = label('14:32', 17, width / 2 - (outgoing ? 56 : 22), 32);
+  const stamp = label(time, 17, width / 2 - (outgoing ? 56 : 22), 32);
   stamp.offset([1, 0]);
   stamp.fill('#aeb7c1');
   stamp.y(() => body.height() / 2 - 22);
