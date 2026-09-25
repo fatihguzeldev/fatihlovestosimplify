@@ -2,6 +2,7 @@ export const theme = {
   fontFamily: {
     sans: 'IBM Plex Sans',
     mono: 'IBM Plex Mono',
+    serif: 'IBM Plex Serif',
   },
   colors: {
     background: '#0b0b0b',
