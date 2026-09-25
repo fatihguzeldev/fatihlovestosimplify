@@ -83,7 +83,7 @@ export default makeScene2D(function* (view) {
     lineCap: 'round',
     end: 0,
   });
-  opening.add([englishMask, turkishMask, underline]);
+  opening.add([englishMask, turkishMask]);
   view.add(opening);
 
   yield* fadeTransition(0.7);
@@ -92,6 +92,7 @@ export default makeScene2D(function* (view) {
   englishMask.remove();
 
   yield* waitUntil('focus-data');
+  opening.add(underline);
   turkishMask.clip(false);
   yield* all(
     intensiveWord.opacity(0, 0.5),
