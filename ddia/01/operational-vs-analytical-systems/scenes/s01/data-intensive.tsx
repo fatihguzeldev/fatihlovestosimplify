@@ -230,9 +230,12 @@ export default makeScene2D(function* (view) {
   const service = traffic.service;
 
   yield* waitUntil('changes');
-  service.remove();
-  view.add(service);
   yield* all(traffic.root.opacity(0, 0.35), question.opacity(0, 0.2));
+  service.remove();
+  service.opacity(0);
+  service.position([0, -15]);
+  service.scale(0.47);
+  view.add(service);
   traffic.root.remove();
   question.text('mesajı sonradan düzeltirsek?');
   const writer = createPhone('fatih');
@@ -256,7 +259,7 @@ export default makeScene2D(function* (view) {
   const recordId = text('mesaj #42', 25, {offset: [0, 0], y: -105, fontFamily: theme.fontFamily.mono, fill: accent});
   const recordStamp = text('14:32', 18, {position: [145, 52], offset: [1, 0], fill: theme.colors.muted});
   shared.add([record, recordId, storedText, recordStamp]);
-  const operations = new Layout({});
+  const operations = new Layout({opacity: 0});
   const editPath = new Line({points: [[-453, 95], [-190, 205]], stroke: accent, lineWidth: 3, endArrow: true, arrowSize: 14, end: 0});
   const editLabel = text('edit', 28, {position: [-340, 100], offset: [0, 0], fill: accent, opacity: 0});
   const editPacket = new Rect({position: [-453, 95], size: [24, 12], radius: 4, fill: accent, opacity: 0});
@@ -266,14 +269,14 @@ export default makeScene2D(function* (view) {
   operations.add([editPath, editLabel, editPacket, readPath, readLabel, readPacket]);
   view.add([writer.root, names, shared, operations]);
   yield* all(
-    question.opacity(1, 0.4), service.position([0, -15], 0.8), service.scale(0.47, 0.8),
-    phone.root.position([620, 145], 0.8), phone.root.opacity(0.6, 0.8),
-    writer.root.opacity(1, 0.7), writer.root.y(145, 0.8), names.opacity(1, 0.6), shared.opacity(1, 0.7),
+    question.opacity(1, 0.4), phone.root.position([620, 145], 0.8),
     ...extraMessages.map(bubble => bubble.root.opacity(0, 0.4)), outgoing.root.opacity(0, 0.4),
     incoming.root.y(-75, 0.7), incoming.body.height(108, 0.7),
     incoming.text.fontSize(30, 0.7), incoming.stamp.y(32, 0.7),
   );
   for (const bubble of extraMessages) bubble.root.remove();
+  yield* all(writer.root.opacity(1, 0.45), writer.root.y(145, 0.45), phone.root.opacity(0.6, 0.45));
+  yield* all(names.opacity(1, 0.3), service.opacity(1, 0.35), shared.opacity(1, 0.35), operations.opacity(1, 0.35));
   yield* editMode.opacity(1, 0.2);
   yield* writer.input.text('on dakika gecikeceğim.', 0.8);
   yield* writer.send.scale(0.84, 0.12).to(1, 0.18);
