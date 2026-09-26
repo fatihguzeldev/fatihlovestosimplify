@@ -167,8 +167,8 @@ export default makeScene2D(function* (view) {
   yield* outgoing.checks.opacity(1, 0.35);
 
   yield* waitUntil('intensive-question');
+  underline.opacity(0);
   yield* all(
-    underline.opacity(0, 0.4),
     intensiveWord.x(322, 0.65, easeOutCubic), intensiveWord.opacity(1, 0.65),
     opening.y(-340, 0.8, easeInOutCubic), opening.scale(0.6, 0.8),
     phone.root.position([430, 65], 0.8), phone.root.scale(0.82, 0.8),
