@@ -8,7 +8,7 @@ import { searchIndex, searchProducts } from './search-index';
 
 export function* showSearch(view: View2D) {
   const root = new Layout({ opacity: 0 });
-  const title = heading('muz yazınca, ', 'neler geliyor?');
+  const title = heading('muz yazınca ', 'neler geliyor?');
   const market = createMarket();
   market.body.removeChildren();
   market.root.position([-490, 95]);
