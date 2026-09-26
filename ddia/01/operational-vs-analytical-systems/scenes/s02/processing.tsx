@@ -39,11 +39,18 @@ export function* showProcessing(view: View2D) {
     alignItems: 'center',
     gap: 18,
   });
-  const hand = new Path({ ...ink, stroke: accent, rotation: 30, data: 'M 0 -17 L 0 0' });
-  const clock = new Layout({ width: 60, height: 68, layout: false });
+  const hand = new Path({
+    ...ink,
+    layout: false,
+    stroke: accent,
+    rotation: 30,
+    data: 'M 0 -17 L 0 0',
+  });
+  const clock = new Layout({ width: 60, height: 68 });
   clock.add([
     new Path({
       ...ink,
+      layout: false,
       stroke: accent,
       lineWidth: 2.3,
       data: 'M -2 -26 C -37 -28 -34 28 0 27 C 34 28 36 -26 -2 -26 M -10 -34 L 10 -34 M 0 -34 L 0 -27 M 0 0 L -11 -6',
