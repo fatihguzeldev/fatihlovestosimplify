@@ -1,0 +1,46 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "order",
+      "targetTime": 8
+    },
+    {
+      "name": "operational",
+      "targetTime": 16
+    },
+    {
+      "name": "engineer",
+      "targetTime": 26
+    },
+    {
+      "name": "analytical",
+      "targetTime": 38
+    },
+    {
+      "name": "report",
+      "targetTime": 47
+    },
+    {
+      "name": "bi",
+      "targetTime": 58
+    },
+    {
+      "name": "compare",
+      "targetTime": 68
+    },
+    {
+      "name": "recommendation",
+      "targetTime": 78
+    },
+    {
+      "name": "return",
+      "targetTime": 100
+    },
+    {
+      "name": "end",
+      "targetTime": 114
+    }
+  ],
+  "seed": 104204
+}
