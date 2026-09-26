@@ -1,0 +1,42 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "etl",
+      "targetTime": 3
+    },
+    {
+      "name": "elt",
+      "targetTime": 9
+    },
+    {
+      "name": "transform",
+      "targetTime": 23
+    },
+    {
+      "name": "return",
+      "targetTime": 36
+    },
+    {
+      "name": "crm",
+      "targetTime": 47
+    },
+    {
+      "name": "connector",
+      "targetTime": 59
+    },
+    {
+      "name": "own-analysis",
+      "targetTime": 73
+    },
+    {
+      "name": "next",
+      "targetTime": 84
+    },
+    {
+      "name": "end",
+      "targetTime": 96
+    }
+  ],
+  "seed": 104211
+}
