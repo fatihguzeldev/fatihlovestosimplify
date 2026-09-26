@@ -5,6 +5,7 @@ import {accent, background, banana, foreground, ink, muted, text} from './drawin
 export function createMarket() {
   const root = new Layout({});
   const body = new Layout({y: 32});
+  const label = text('application', 24, {position: [-325, -275], offset: [-1, 0], fontFamily: theme.fontFamily.mono, fill: muted});
   const shell = new Path({
     ...ink, fill: '#101315',
     data: 'M -303 -235 Q -326 -233 -325 -211 L -323 208 Q -325 233 -300 235 L 300 232 Q 324 233 325 208 L 323 -210 Q 324 -233 300 -234 Z',
@@ -13,7 +14,7 @@ export function createMarket() {
     shell,
     new Line({points: [[-323, -168], [322, -170]], ...ink, lineWidth: 2}),
     text('market', 30, {position: [-276, -203], offset: [-1, 0], fontStyle: 'italic'}),
-    text('application', 24, {position: [-325, -275], offset: [-1, 0], fontFamily: theme.fontFamily.mono, fill: muted}),
+    label,
     ...[232, 258, 284].map(x => new Circle({position: [x, -202], size: 9, fill: muted, opacity: 0.6})),
     body,
   ]);
@@ -38,13 +39,14 @@ export function createMarket() {
   ]);
   body.add(cart);
   const receipt = new Layout({opacity: 0});
+  const status = text('created', 26, {position: [-269, -20], offset: [-1, 0], fontFamily: theme.fontFamily.mono, fill: accent});
   receipt.add([
     text('sipariş #1042', 45, {position: [-269, -86], offset: [-1, 0], fontWeight: 500}),
-    text('created', 26, {position: [-269, -20], offset: [-1, 0], fontFamily: theme.fontFamily.mono, fill: accent}),
+    status,
     new Line({points: [[-270, 31], [270, 31]], stroke: foreground, opacity: 0.2}),
     text('muz · süt', 30, {position: [-269, 80], offset: [-1, 0]}),
     text('185 ₺', 32, {position: [269, 80], offset: [1, 0], fontFamily: theme.fontFamily.mono}),
   ]);
   body.add(receipt);
-  return {root, body, cart, receipt, button, shell};
+  return {root, body, cart, receipt, button, shell, label, status};
 }

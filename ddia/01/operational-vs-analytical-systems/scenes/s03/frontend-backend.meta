@@ -1,0 +1,42 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "frontend",
+      "targetTime": 5
+    },
+    {
+      "name": "request",
+      "targetTime": 12
+    },
+    {
+      "name": "query",
+      "targetTime": 22
+    },
+    {
+      "name": "response",
+      "targetTime": 31
+    },
+    {
+      "name": "stateless",
+      "targetTime": 43
+    },
+    {
+      "name": "client-data",
+      "targetTime": 58
+    },
+    {
+      "name": "backend-focus",
+      "targetTime": 72
+    },
+    {
+      "name": "next",
+      "targetTime": 83
+    },
+    {
+      "name": "end",
+      "targetTime": 90
+    }
+  ],
+  "seed": 104203
+}
