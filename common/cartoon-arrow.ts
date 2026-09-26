@@ -1,10 +1,9 @@
 import {Layout, Path} from '@motion-canvas/2d';
 import {Color, createSignal, linear, Vector2, type PossibleVector2} from '@motion-canvas/core';
-import {theme} from '../../theme';
+import {theme} from './theme';
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 
-// FNV-1a name hash + Mulberry32: local state, independent of frame and creation order.
 function seededRandom(name: string) {
   let seed = 2166136261;
   for (const char of name) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619);
@@ -16,7 +15,6 @@ function seededRandom(name: string) {
   };
 }
 
-/** The channel's C.2 arrow: outlined silhouette, ink hatching, traveling hatch wave. */
 export function cartoonArrow(name: string, from: PossibleVector2, to: PossibleVector2, accent: string, end = 1) {
   const start = new Vector2(from);
   const delta = new Vector2(to).sub(start);
@@ -24,7 +22,6 @@ export function cartoonArrow(name: string, from: PossibleVector2, to: PossibleVe
   const angle = Math.atan2(delta.y, delta.x) * 180 / Math.PI;
   const root = new Layout({position: start, rotation: angle});
   const art = new Layout({});
-  // Sample the drawing once. Signals animate this fixed ink, never resample it.
   const random = seededRandom(name);
   const thickness = random(0.85, 1.16);
   const bow = random(-10, 10);
@@ -49,7 +46,6 @@ export function cartoonArrow(name: string, from: PossibleVector2, to: PossibleVe
     end: () => clamp((reveal() - 0.5) / 0.25), opacity: () => reveal() > 0.5 ? 1 : 0,
   });
   const hatching = new Path({
-    // The clip follows the same silhouette, keeping even bright wave strokes inside.
     data: `M ${body(7, -1)} Q ${body(81, -12)} ${body(157, -19)} Q ${body(210, -22)} ${head(254, -14)} L ${head(250, -41)} Q ${head(275, -21)} ${head(293, 0)} Q ${head(276, 20)} ${head(254, 36)} L ${head(256, 10)} Q ${body(191, 9)} ${body(141, 11)} Q ${body(75, 13)} ${body(9, 12)} Q ${body(6, 7)} ${body(7, -1)} Z`,
     clip: true,
   });
@@ -90,7 +86,6 @@ export function cartoonArrow(name: string, from: PossibleVector2, to: PossibleVe
   root.add([art, arrival]);
 
   function* travel(duration: number, stop = 1) {
-    // Separate overlays let concurrent queries share an arrow without resetting each other's animation.
     const progress = createSignal(0);
     const wave = new Layout({});
     for (const mark of marks) {

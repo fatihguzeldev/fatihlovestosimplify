@@ -12,7 +12,7 @@ import {theme} from '../../theme';
 import {showCompute} from './compute';
 import {createBubble, createPhone} from './phone';
 import {showQueryRate} from './traffic';
-import {cartoonArrow} from './arrow';
+import {cartoonArrow} from '../../../../../common/cartoon-arrow';
 
 const {background, foreground, accent} = theme.colors;
 const left = -960 + 1920 * theme.spacing.xl / 100;
