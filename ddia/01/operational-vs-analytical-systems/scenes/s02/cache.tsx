@@ -7,7 +7,7 @@ import { createMarket } from '../shared/market';
 
 export function* showCache(view: View2D) {
   const root = new Layout({ opacity: 0 });
-  const title = heading('bu hesabı ', 'tekrar yapmayalım.');
+  const title = heading('bir daha sorulursa, cevabımız ', 'hazır olsun.');
   const market = createMarket();
   market.body.removeChildren();
   market.root.position([-600, 95]);
