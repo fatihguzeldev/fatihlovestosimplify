@@ -171,9 +171,10 @@ export default makeScene2D(function* (view) {
   cache.calculation.position([-470, 85]);
   cache.calculation.scale(1.25);
   cache.calculation.opacity(1);
+  cache.calculationResult.opacity(0);
   cache.route.end(1);
   const fresh = text('24 dk', 46, {
-    position: [-470, 305],
+    position: [-470, 330],
     fill: accent,
     opacity: 0,
     fontFamily: theme.fontFamily.mono,

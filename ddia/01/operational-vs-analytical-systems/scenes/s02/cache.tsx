@@ -1,106 +1,129 @@
-import { Circle, Layout, Path, Rect, type View2D } from '@motion-canvas/2d';
-import { all, waitUntil } from '@motion-canvas/core';
+import { Layout, Path, type View2D } from '@motion-canvas/2d';
+import { all, easeOutCubic, waitUntil } from '@motion-canvas/core';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
 import { accent, foreground, heading, ink, muted, paper, text } from '../shared/drawing';
 import { createMarket } from '../shared/market';
+import { deliveryMap, deliveryPair, home, storefront } from './delivery';
 
 export function* showCache(view: View2D) {
   const root = new Layout({ opacity: 0 });
   const title = heading('bir daha sorulursa, cevabımız ', 'hazır olsun.');
   const market = createMarket();
   market.body.removeChildren();
-  market.root.position([-600, 95]);
-  market.root.scale(0.58);
-  const estimate = text('—', 64, { position: [0, 86], fill: accent, opacity: 0 });
+  market.root.position([-600, 85]);
+  market.root.scale(0.66);
+  market.label.fontSize(() => 28 / market.root.scale.x());
+  market.label.position(() => [0, -235 - 40 / market.root.scale.x()]);
+  market.label.offset([0, 0]);
+  market.label.fill(foreground);
+  const delivery = deliveryPair();
+  delivery.y(-51);
+  const estimate = text('18 dk', 62, { position: [0, 123], fill: accent, opacity: 0 });
   market.body.add([
-    text('teslimat', 40, { y: -117 }),
-    text('A → B', 64, { y: -36, fontFamily: theme.fontFamily.mono }),
+    text('teslimat', 31, { position: [-270, -147], offset: [-1, 0], fontWeight: 500 }),
+    delivery,
+    text('market', 28, { position: [-168, 8] }),
+    text('ev', 28, { position: [168, 8] }),
+    new Path({ ...ink, opacity: 0.2, lineWidth: 1.5, data: 'M -266 48 L 266 47' }),
+    text('tahmini süre', 27, { y: 78, fill: muted }),
     estimate,
   ]);
   const calculation = new Layout({ position: [0, 85] });
-  const map = paper(310, 248);
-  for (const [x, y] of [
-    [-62, -39],
-    [55, -39],
-    [-62, 51],
-    [55, 51],
-  ]) {
-    map.root.add(
-      new Rect({
-        position: [x, y],
-        size: [72, 53],
-        radius: 5,
-        stroke: foreground,
-        lineWidth: 1.5,
-        opacity: 0.2,
-      }),
-    );
-  }
-  const route = new Path({
-    data: 'M -113 74 L -113 -83 Q -113 -95 -99 -95 L 106 -93 L 110 74',
-    stroke: accent,
-    lineWidth: 5,
-    lineJoin: 'round',
-    end: 0,
+  const map = deliveryMap();
+  const { route, traffic } = map;
+  const calculationResult = text('18 dk', 36, {
+    y: 196,
+    fontFamily: theme.fontFamily.mono,
+    fill: accent,
+    opacity: 0,
   });
-  const traffic = new Layout({ opacity: 0 });
-  [-53, 1, 55].forEach((x, i) => {
-    const car = new Layout({ position: [x, -90], rotation: i === 1 ? -3 : 2 });
-    car.add([
-      new Path({
-        ...ink,
-        lineWidth: 1.8,
-        fill: '#13191f',
-        data: 'M -19 5 L -19 -4 L -11 -5 L -5 -14 L 7 -14 L 13 -5 L 21 -2 L 21 5 Z',
-      }),
-      new Path({
-        stroke: accent,
-        lineWidth: 2,
-        data: 'M -8 -6 L -4 -11 L 5 -11 L 9 -6 M -14 0 L -3 0 M 3 0 L 15 0',
-      }),
-      ...[-11, 13].map(
-        (wheel) =>
-          new Circle({
-            position: [wheel, 6],
-            size: 8,
-            fill: '#13191f',
-            stroke: foreground,
-            lineWidth: 1.8,
-          }),
-      ),
-    ]);
-    traffic.add(car);
-  });
-  map.root.add([
-    route,
-    traffic,
-    ...[-113, 110].map((x) => new Circle({ position: [x, 74], size: 12, fill: accent })),
-    text('A', 22, { position: [-113, 102], fontFamily: theme.fontFamily.mono }),
-    text('B', 22, { position: [110, 102], fontFamily: theme.fontFamily.mono }),
-  ]);
   calculation.add([
     map.root,
-    text('calculateETA()', 24, { y: -168, fontFamily: theme.fontFamily.mono }),
+    text('calculateETA()', 28, { y: -195, fontFamily: theme.fontFamily.mono }),
+    calculationResult,
   ]);
-  const cache = paper(340, 242, '#13191f');
-  cache.root.position([570, 85]);
-  const cachedValue = text('—', 62, { y: 30, fill: muted });
-  cache.root.add([
-    text('cache', 36, { y: -166 }),
-    text('eta:A→B', 26, { y: -60, fontFamily: theme.fontFamily.mono, fill: accent }),
-    new Path({ ...ink, opacity: 0.22, lineWidth: 1.5, data: 'M -141 -23 L 141 -23' }),
-    cachedValue,
-  ]);
-  const compute = cartoonArrow('s02-calculate-route', [-386, 90], [-184, 90], accent, 0);
-  const save = cartoonArrow('s02-cache-save', [192, 90], [368, 90], accent, 0);
-  const computeLabel = text('A → B', 25, {
-    position: compute.pointAt(0.5).addY(-88),
+  const cache = paper(350, 300, '#101519');
+  cache.root.position([590, 85]);
+  const cacheLabel = text('cache', 30, { y: -195 });
+  cacheLabel.fontSize(() => 30 / cache.root.scale.x());
+  cache.face.data(
+    'M -175 -147 L -73 -147 L -59 -165 L 36 -163 L 50 -147 L 175 -147 L 173 150 Q 0 153 -174 149 Z',
+  );
+  const slot = new Path({
+    ...ink,
+    opacity: 0.22,
+    lineWidth: 2,
+    lineDash: [7, 9],
+    data: 'M -140 -117 L 138 -116 L 139 116 L -138 118 Z',
+  });
+  const ticket = new Layout({ opacity: 0, y: -22, rotation: -4 });
+  const cachedValue = text('18 dk', 50, {
+    position: [26, 43],
     fontFamily: theme.fontFamily.mono,
+    fill: accent,
+  });
+  const cacheShop = storefront();
+  const cacheHome = home();
+  cacheShop.position([-86, -67]);
+  cacheHome.position([86, -67]);
+  cacheShop.scale(0.52);
+  cacheHome.scale(0.52);
+  ticket.add([
+    new Path({
+      ...ink,
+      fill: '#17222d',
+      lineWidth: 2.3,
+      data: 'M -145 -123 L 108 -126 L 143 -90 L 140 121 L 121 114 L 103 123 L 83 115 L 63 124 L 44 117 L 23 125 L 2 117 L -18 124 L -39 117 L -60 125 L -81 118 L -103 125 L -124 117 L -143 123 Z M 108 -126 L 107 -88 L 143 -90',
+    }),
+    cacheShop,
+    cacheHome,
+    new Path({
+      ...ink,
+      stroke: accent,
+      opacity: 0.7,
+      lineWidth: 2,
+      lineDash: [4, 6],
+      data: 'M -47 -65 Q -22 -79 0 -65 T 48 -65',
+    }),
+    text('market', 21, { position: [-86, -26] }),
+    text('ev', 21, { position: [86, -26] }),
+    new Path({ ...ink, opacity: 0.2, lineWidth: 1.5, data: 'M -120 -5 L 121 -6' }),
+    new Path({
+      ...ink,
+      stroke: accent,
+      lineWidth: 2.5,
+      x: -15,
+      data: 'M -82 18 C -117 13 -119 67 -83 68 C -48 69 -45 15 -82 18 M -83 28 L -83 45 L -70 49 M -91 11 L -77 10',
+    }),
+    cachedValue,
+    new Path({
+      ...ink,
+      stroke: accent,
+      lineWidth: 2,
+      opacity: 0.6,
+      data: 'M 94 91 L 105 78 M 108 93 L 120 79 M 122 93 L 132 81',
+    }),
+  ]);
+  cache.root.add([
+    cacheLabel,
+    slot,
+    ticket,
+    new Path({
+      ...ink,
+      fill: '#101519',
+      lineWidth: 2.3,
+      data: 'M -175 112 L -48 116 L -34 135 L 37 133 L 50 114 L 173 111 L 173 150 Q 0 153 -174 149 Z',
+    }),
+  ]);
+  const compute = cartoonArrow('s02-calculate-route', [-354, 90], [-205, 90], accent, 0);
+  const save = cartoonArrow('s02-cache-save', [211, 90], [385, 90], accent, 0);
+  const computeLabel = text('kaç dakika?', 25, {
+    position: compute.pointAt(0.5).addY(-86),
     opacity: 0,
   });
   const saveLabel = text('set()', 25, {
-    position: save.pointAt(0.5).addY(-88),
+    position: save.pointAt(0.5).addY(-86),
     fontFamily: theme.fontFamily.mono,
     opacity: 0,
   });
@@ -119,14 +142,16 @@ export function* showCache(view: View2D) {
   yield* all(compute.reveal(1, 0.4), computeLabel.opacity(1, 0.3));
   yield* compute.travel(0.5);
   yield* all(compute.arrive(), route.end(1, 1.4));
+  yield* calculationResult.opacity(1, 0.25);
   yield* waitUntil('cache-store');
   yield* all(save.reveal(1, 0.4), saveLabel.opacity(1, 0.3));
   yield* save.travel(0.5);
-  cachedValue.text('18 dk');
-  cachedValue.fill(accent);
-  estimate.text('18 dk');
+  slot.opacity(0);
   yield* all(
     save.arrive(),
+    ticket.opacity(1, 0.15),
+    ticket.y(0, 0.4, easeOutCubic),
+    ticket.rotation(-1, 0.4, easeOutCubic),
     estimate.opacity(1, 0.25),
     cache.face.stroke(accent, 0.15).to(foreground, 0.25),
   );
@@ -146,10 +171,11 @@ export function* showCache(view: View2D) {
     market.root.position([-480, 95], 0.65),
     market.root.scale(0.82, 0.65),
     cache.root.position([430, 95], 0.65),
+    cache.root.scale(1.2, 0.65),
   );
-  const lookup = cartoonArrow('s02-cache-lookup', [-180, 45], [220, 45], accent, 0);
-  const hit = cartoonArrow('s02-cache-hit', [220, 195], [-180, 195], accent, 0);
-  const lookupLabel = text('get("eta:A→B")', 25, {
+  const lookup = cartoonArrow('s02-cache-lookup', [-180, 45], [185, 45], accent, 0);
+  const hit = cartoonArrow('s02-cache-hit', [185, 195], [-180, 195], accent, 0);
+  const lookupLabel = text('get()', 25, {
     position: lookup.pointAt(0.5).addY(-65),
     fontFamily: theme.fontFamily.mono,
     opacity: 0,
@@ -160,6 +186,7 @@ export function* showCache(view: View2D) {
   yield* all(
     lookup.arrive(),
     cache.face.stroke(accent, 0.1).to(foreground, 0.3),
+    ticket.y(-9, 0.16).to(0, 0.2),
     hit.reveal(1, 0.3),
   );
   yield* hit.travel(0.5);
@@ -169,6 +196,7 @@ export function* showCache(view: View2D) {
     title,
     market,
     calculation,
+    calculationResult,
     route,
     traffic,
     cache,
