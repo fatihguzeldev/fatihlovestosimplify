@@ -29,12 +29,11 @@ export function* showCompute(view: View2D) {
     ],
   });
   const caption = new Txt({
-    text: 'bir görüntü\noluşturalım.',
+    text: 'bir görüntü oluşturalım.',
     position: [left, -75],
     offset: [-1, 0],
     fontFamily: theme.fontFamily.sans,
     fontSize: 58,
-    lineHeight: '125%',
     fill: foreground,
     textWrap: false,
   });
