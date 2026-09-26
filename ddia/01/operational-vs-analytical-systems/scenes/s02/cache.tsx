@@ -2,8 +2,8 @@ import {Circle, Layout, Path, Rect, type View2D} from '@motion-canvas/2d';
 import {all, waitUntil} from '@motion-canvas/core';
 import {cartoonArrow} from '../../../../../common/cartoon-arrow';
 import {theme} from '../../theme';
-import {accent, foreground, heading, ink, muted, paper, text} from './drawing';
-import {createMarket} from './market';
+import {accent, foreground, heading, ink, muted, paper, text} from '../shared/drawing';
+import {createMarket} from '../shared/market';
 
 export function* showCache(view: View2D) {
   const root = new Layout({opacity: 0});

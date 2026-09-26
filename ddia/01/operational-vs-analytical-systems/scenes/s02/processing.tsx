@@ -3,7 +3,7 @@ import {all, waitFor, waitUntil} from '@motion-canvas/core';
 import {cartoonArrow} from '../../../../../common/cartoon-arrow';
 import {cartoonService} from '../../../../../common/cartoon-system';
 import {theme} from '../../theme';
-import {accent, foreground, heading, muted, paper, text} from './drawing';
+import {accent, foreground, heading, muted, paper, text} from '../shared/drawing';
 
 const orders = [
   {id: 1042, amount: 185, time: '10:00'},
