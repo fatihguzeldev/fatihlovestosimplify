@@ -188,8 +188,8 @@ export default makeScene2D(function* (view) {
 
   yield* waitUntil('volume');
   yield* replaceText(question, 'mesajlar biriktikçe mi?');
-  const historyCount = text('2 mesaj', 38, {position: [left, 90], fill: accent, opacity: 0});
-  view.add(historyCount);
+  const historyCount = text('2 mesaj', 38, {position: [0, 480], offset: [0, 0], fill: accent, opacity: 0});
+  phone.root.add(historyCount);
   yield* historyCount.opacity(1, 0.5);
   const extraMessages = [
     'konumu paylaştım.', 'gördüm, teşekkürler.', 'ana girişteyim.', 'yaklaşınca haber veririm.',
