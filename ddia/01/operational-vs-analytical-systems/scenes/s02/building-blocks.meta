@@ -10,8 +10,56 @@
       "targetTime": 13
     },
     {
-      "name": "end",
+      "name": "cache",
       "targetTime": 22
+    },
+    {
+      "name": "cache-store",
+      "targetTime": 28
+    },
+    {
+      "name": "cache-hit",
+      "targetTime": 34
+    },
+    {
+      "name": "search",
+      "targetTime": 43
+    },
+    {
+      "name": "search-results",
+      "targetTime": 48
+    },
+    {
+      "name": "stream",
+      "targetTime": 56
+    },
+    {
+      "name": "stream-events",
+      "targetTime": 60
+    },
+    {
+      "name": "batch",
+      "targetTime": 72
+    },
+    {
+      "name": "batch-run",
+      "targetTime": 79
+    },
+    {
+      "name": "tradeoffs",
+      "targetTime": 88
+    },
+    {
+      "name": "cache-stale",
+      "targetTime": 94
+    },
+    {
+      "name": "next",
+      "targetTime": 102
+    },
+    {
+      "name": "end",
+      "targetTime": 110
     }
   ],
   "seed": 104202

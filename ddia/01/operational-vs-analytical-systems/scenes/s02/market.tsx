@@ -20,7 +20,7 @@ export function createMarket() {
   const fruit = banana();
   fruit.position([-245, -93]);
   const milk = new Path({...ink, position: [-245, 5], data: 'M -23 -23 L -9 -37 L 19 -36 L 27 -21 L 27 30 L -23 31 Z M -23 -23 L 27 -21 M -9 -37 L -8 -22 L -8 30', fill: '#182638'});
-  const button = new Rect({position: [0, 145], size: [558, 61], radius: 9, fill: accent});
+  const button = new Rect({position: [0, 156], size: [558, 58], radius: 9, fill: accent});
   button.add(text('siparişi ver', 28, {fill: background, fontWeight: 500}));
   const cart = new Layout({});
   cart.add([
@@ -32,8 +32,8 @@ export function createMarket() {
     text('1 litre', 22, {position: [-188, 30], offset: [-1, 0], fill: muted}),
     text('65 ₺', 28, {position: [278, 8], offset: [1, 0], fontFamily: theme.fontFamily.mono}),
     new Line({points: [[-278, 70], [278, 70]], stroke: foreground, opacity: 0.2}),
-    text('toplam', 24, {position: [-278, 100], offset: [-1, 0], fill: muted}),
-    text('185 ₺', 28, {position: [278, 100], offset: [1, 0], fontFamily: theme.fontFamily.mono}),
+    text('toplam', 24, {position: [-278, 95], offset: [-1, 0], fill: muted}),
+    text('185 ₺', 28, {position: [278, 95], offset: [1, 0], fontFamily: theme.fontFamily.mono}),
     button,
   ]);
   body.add(cart);

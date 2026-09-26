@@ -48,6 +48,7 @@ export function cartoonDatabase(label: string, accent: string) {
   for (const y of [-28, -7, 15, 38, 61, 80]) {
     root.add(new Path({data: `M 96 ${y + 10} Q 103 ${y + 4} 108 ${y - 3}`, stroke: accent, opacity: 0.65, lineWidth: 1.8, lineCap: 'round'}));
   }
-  root.add(new Txt({text: label, y: 153, fontFamily: theme.fontFamily.sans, fontSize: 28, fill: foreground}));
-  return {root, top};
+  const caption = new Txt({text: label, y: 153, fontFamily: theme.fontFamily.sans, fontSize: 28, fill: foreground});
+  root.add(caption);
+  return {root, top, caption};
 }
