@@ -1,0 +1,38 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "sync",
+      "targetTime": 5
+    },
+    {
+      "name": "model",
+      "targetTime": 25
+    },
+    {
+      "name": "deploy",
+      "targetTime": 39
+    },
+    {
+      "name": "inference",
+      "targetTime": 51
+    },
+    {
+      "name": "serving",
+      "targetTime": 70
+    },
+    {
+      "name": "outputs",
+      "targetTime": 86
+    },
+    {
+      "name": "next",
+      "targetTime": 96
+    },
+    {
+      "name": "end",
+      "targetTime": 108
+    }
+  ],
+  "seed": 104216
+}

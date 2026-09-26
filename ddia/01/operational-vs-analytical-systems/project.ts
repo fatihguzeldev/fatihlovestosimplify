@@ -22,7 +22,9 @@ import dataLake from './scenes/s14/data-lake?scene';
 
 import dataOperations from './scenes/s15/data-operations?scene';
 
+import analyticalOutputs from './scenes/s16/analytical-outputs?scene';
+
 export default makeProject({
   name: 'ddia_chapter1_operational_vs_analytical_systems',
-  scenes: [intro, dataIntensive, buildingBlocks, frontendBackend, differentJobs, transactions, analytics, workloadPatterns, productAnalytics, dataWarehousing, etl, eltAndConnectors, htap, dataScience, dataLake, dataOperations],
+  scenes: [intro, dataIntensive, buildingBlocks, frontendBackend, differentJobs, transactions, analytics, workloadPatterns, productAnalytics, dataWarehousing, etl, eltAndConnectors, htap, dataScience, dataLake, dataOperations, analyticalOutputs],
 });
