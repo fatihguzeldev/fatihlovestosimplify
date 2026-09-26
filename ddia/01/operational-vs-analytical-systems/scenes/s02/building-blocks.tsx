@@ -206,15 +206,6 @@ export default makeScene2D(function* (view) {
   read.root.opacity(0);
   writeLabel.opacity(0);
   readLabel.opacity(0);
-  const responsibility = text('neyi yönetmek gerekiyor?', 44, {
-    position: [-806, 420],
-    offset: [-1, 0],
-    fontFamily: theme.fontFamily.serif,
-    fontStyle: 'italic',
-    opacity: 0,
-  });
-  stage.add(responsibility);
   yield* stage.opacity(1, 0.5);
-  yield* responsibility.opacity(1, 0.5);
   yield* waitUntil('end');
 });

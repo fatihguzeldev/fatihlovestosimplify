@@ -24,23 +24,12 @@ export default makeScene2D(function* (view) {
   database.scale(1.4);
   databaseCaption.fontSize(28 / 1.4);
   const bridgeArrow = cartoonArrow('s02-save-order', [-108, 80], [354, 80], accent);
-  const bridgeCaption = text('neyi yönetmek gerekiyor?', 44, {
-    position: [-806, 420],
-    offset: [-1, 0],
-    fontFamily: theme.fontFamily.serif,
-    fontStyle: 'italic',
-  });
-  stage.add([title, market.root, database, bridgeArrow.root, bridgeCaption]);
+  stage.add([title, market.root, database, bridgeArrow.root]);
   view.add(stage);
   yield loadFonts();
   yield* waitFor(0.6);
-  yield* all(
-    title.opacity(0, 0.25),
-    bridgeArrow.root.opacity(0, 0.25),
-    bridgeCaption.opacity(0, 0.25),
-  );
+  yield* all(title.opacity(0, 0.25), bridgeArrow.root.opacity(0, 0.25));
   bridgeArrow.root.remove();
-  bridgeCaption.remove();
   yield* market.label.opacity(0, 0.15);
   yield* all(
     market.root.position([-580, 110], 0.75),
