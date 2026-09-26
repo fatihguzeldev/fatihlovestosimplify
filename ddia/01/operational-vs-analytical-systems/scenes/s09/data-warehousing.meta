@@ -1,0 +1,70 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "part",
+      "targetTime": 2
+    },
+    {
+      "name": "workloads",
+      "targetTime": 10
+    },
+    {
+      "name": "recompute",
+      "targetTime": 17
+    },
+    {
+      "name": "stored",
+      "targetTime": 29
+    },
+    {
+      "name": "reuse",
+      "targetTime": 43
+    },
+    {
+      "name": "responsibility",
+      "targetTime": 55
+    },
+    {
+      "name": "return",
+      "targetTime": 67
+    },
+    {
+      "name": "contention",
+      "targetTime": 75
+    },
+    {
+      "name": "release",
+      "targetTime": 90
+    },
+    {
+      "name": "sources",
+      "targetTime": 103
+    },
+    {
+      "name": "layouts",
+      "targetTime": 118
+    },
+    {
+      "name": "access",
+      "targetTime": 137
+    },
+    {
+      "name": "warehouse",
+      "targetTime": 155
+    },
+    {
+      "name": "decisions",
+      "targetTime": 164
+    },
+    {
+      "name": "next",
+      "targetTime": 174
+    },
+    {
+      "name": "end",
+      "targetTime": 186
+    }
+  ],
+  "seed": 104209
+}

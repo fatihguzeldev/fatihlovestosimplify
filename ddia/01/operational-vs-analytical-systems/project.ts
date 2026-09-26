@@ -8,8 +8,9 @@ import transactions from './scenes/s05/transactions?scene';
 import analytics from './scenes/s06/analytics?scene';
 import workloadPatterns from './scenes/s07/workload-patterns?scene';
 import productAnalytics from './scenes/s08/product-analytics?scene';
+import dataWarehousing from './scenes/s09/data-warehousing?scene';
 
 export default makeProject({
   name: 'ddia_chapter1_operational_vs_analytical_systems',
-  scenes: [intro, dataIntensive, buildingBlocks, frontendBackend, differentJobs, transactions, analytics, workloadPatterns, productAnalytics],
+  scenes: [intro, dataIntensive, buildingBlocks, frontendBackend, differentJobs, transactions, analytics, workloadPatterns, productAnalytics, dataWarehousing],
 });
