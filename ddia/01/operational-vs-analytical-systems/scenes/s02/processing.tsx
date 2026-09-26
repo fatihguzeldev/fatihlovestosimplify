@@ -31,9 +31,16 @@ export function* showProcessing(view: View2D) {
   );
   const batchInput = cartoonArrow('s02-batch-orders', [-366, 80], [-182, 80], accent, 0);
   const output = cartoonArrow('s02-stream-total-update', [197, 80], [400, 80], accent, 0);
-  const schedule = new Layout({ position: [0, 407], opacity: 0 });
+  const schedule = new Layout({
+    position: [0, 407],
+    opacity: 0,
+    layout: true,
+    direction: 'row',
+    alignItems: 'center',
+    gap: 18,
+  });
   const hand = new Path({ ...ink, stroke: accent, rotation: 30, data: 'M 0 -17 L 0 0' });
-  const clock = new Layout({ x: -116 });
+  const clock = new Layout({ width: 60, height: 68, layout: false });
   clock.add([
     new Path({
       ...ink,
@@ -43,16 +50,24 @@ export function* showProcessing(view: View2D) {
     }),
     hand,
   ]);
-  const scheduleLabel = text('10:05’te çalışacak', 24, { x: 35 });
+  const scheduleLabel = text('10:05’te çalışacak', 24);
   schedule.add([clock, scheduleLabel]);
   const bundle = new Path({
     ...ink,
-    stroke: accent,
-    lineWidth: 2.5,
-    data: 'M -409 -110 Q -391 -111 -391 -92 L -391 53 Q -391 80 -383 80 Q -391 80 -391 107 L -391 263 Q -391 280 -409 280',
+    position: [-399, 80],
+    lineWidth: 2.4,
+    data: 'M -17 -192 C 6 -198 13 -186 11 -165 L 7 -100 C 5 -59 4 -20 16 -4 L 20 0 L 14 7 C 2 25 7 64 7 104 L 11 177 C 13 197 0 205 -18 199 L -17 189 C -3 192 -3 177 -3 164 L -7 100 C -10 62 -7 25 2 0 C -10 -21 -9 -58 -7 -100 L -2 -166 C -1 -180 -8 -182 -17 -181 Z',
     end: 0,
   });
   bundle.opacity(() => (bundle.end() > 0 ? 1 : 0));
+  const bundleHatching = new Path({
+    ...ink,
+    stroke: accent,
+    lineWidth: 1.7,
+    opacity: 0,
+    data: 'M -9 -185 L -5 -190 M 1 -163 L 8 -173 M 0 -142 L 7 -153 M -2 -119 L 5 -131 M -3 -94 L 3 -104 M -3 -67 L 2 -79 M -2 -42 L 4 -54 M 2 -17 L 8 -28 M 8 1 L 14 -5 M 0 34 L 5 23 M -3 61 L 2 49 M -3 86 L 3 75 M -2 113 L 4 102 M 0 138 L 6 127 M 1 163 L 7 152 M 1 186 L 7 175 M -10 195 L -5 190',
+  });
+  bundle.add(bundleHatching);
   root.add([
     title,
     source,
@@ -146,6 +161,7 @@ export function* showProcessing(view: View2D) {
     yield* waitFor(0.5);
   }
   yield* bundle.end(1, 0.35);
+  yield* bundleHatching.opacity(1, 0.12);
   yield* waitUntil('batch-run');
   scheduleLabel.text('10:05');
   yield* all(clock.scale(1.08, 0.15).to(1, 0.2), scheduleLabel.fill(accent, 0.3));
