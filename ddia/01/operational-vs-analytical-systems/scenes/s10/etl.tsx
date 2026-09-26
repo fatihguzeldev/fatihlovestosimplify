@@ -100,8 +100,8 @@ export default makeScene2D(function* (view) {
     const extract = cartoonArrow(`s10-source-${i}-extract`, [-531, y], [-259, y], accent, 0);
     const load = cartoonArrow(`s10-source-${i}-load`, [98, y], [385, -54 + i * 80], accent, 0);
     overview.root.add([transform.root, extract.root, load.root,
-      text('extract', 23, {position: [-395, y - 70]}),
-      text('load', 23, {position: [241, (y - 54 + i * 80) / 2 - 68]}),
+      text('extract', 23, {position: [-395, y - 70], opacity: () => extract.reveal()}),
+      text('load', 23, {position: [241, (y - 54 + i * 80) / 2 - 68], opacity: () => load.reveal()}),
     ]);
     const table = text(['sales', 'inventory', 'geo'][i], 27, {y: -12 + i * 41, fill: accent, fontFamily: theme.fontFamily.mono, opacity: 0});
     overview.warehouse.root.add(table);
@@ -139,8 +139,8 @@ export default makeScene2D(function* (view) {
   const query = cartoonArrow('s10-warehouse-analysis-query', [141, 22], [-285, 22], accent, 0);
   const reply = cartoonArrow('s10-warehouse-analysis-result', [-285, 184], [141, 184], accent, 0);
   analysis.add([pipeline.warehouse.root, chart.root, analyst, query.root, reply.root,
-    text('SUM(amount)', 26, {position: [-72, -59], fontFamily: theme.fontFamily.mono}),
-    text('query result', 25, {position: [-72, 268], fill: muted}),
+    text('SUM(amount)', 26, {position: [-72, -59], fontFamily: theme.fontFamily.mono, opacity: () => query.reveal()}),
+    text('query result', 25, {position: [-72, 268], fill: muted, opacity: () => reply.reveal()}),
   ]);
   view.add(analysis);
   yield* all(title.opacity(1, 0.3), analysis.opacity(1, 0.5));

@@ -68,7 +68,7 @@ export default makeScene2D(function* (view) {
   olap.root.scale(0.7);
   olap.caption.fontSize(38);
   const internalFlow = cartoonArrow('s12-htap-internal-update', [-219, 270], [219, 270], accent, 0);
-  internals.add([oltp.root, olap.root, internalFlow.root, text('iç akış', 26, {position: [0, 190], fill: muted})]);
+  internals.add([oltp.root, olap.root, internalFlow.root, text('iç akış', 26, {position: [0, 190], fill: muted, opacity: () => internalFlow.reveal()})]);
   htap.add(internals);
   yield* all(title.opacity(1, 0.3), internals.opacity(1, 0.4));
   yield* internalFlow.reveal(1, 0.4);

@@ -46,7 +46,7 @@ export default makeScene2D(function* (view) {
   const sourceLabel = text('lake’ten gelen yeni kayıt', 27, {position: [-600, -140], fill: muted});
   const fresh = text('şubat 2026', 25, {position: [-600, 286], fill: muted});
   quality.add([input.root, validate.root, warehouse.root, review.root, read.root, accepted.root, rejected.root, sourceLabel, fresh,
-    text('geçerli kayıtlar', 25, {position: [271, -106], fill: muted}),
+    text('geçerli kayıtlar', 25, {position: [271, -106], fill: muted, opacity: () => accepted.reveal()}),
   ]);
   view.add(quality);
   yield* all(title.opacity(1, 0.3), quality.opacity(1, 0.5));

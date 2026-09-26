@@ -41,9 +41,9 @@ export function etlPipeline() {
   const load = cartoonArrow('etl-sales-load', [282, 100], [482, 100], accent);
   const labels = new Layout({});
   labels.add([
-    text('extract', 28, {position: [-382, 20]}),
-    text('transform', 28, {position: [0, -88], fill: accent}),
-    text('load', 28, {position: [382, 20]}),
+    text('extract', 28, {position: [-382, 20], opacity: () => extract.reveal()}),
+    text('transform', 28, {position: [0, -88], fill: accent, opacity: () => transform.root.opacity()}),
+    text('load', 28, {position: [382, 20], opacity: () => load.reveal()}),
   ]);
   root.add([source.root, warehouse.root, transform.root, extract.root, load.root, labels]);
   return {root, source, warehouse, stored, transform, fields, region, extract, load, labels};

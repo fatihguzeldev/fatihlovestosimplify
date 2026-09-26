@@ -45,7 +45,7 @@ export default makeScene2D(function* (view) {
   const write = cartoonArrow('s17-original-write-recall', [-244, 35], [249, 35], accent, 0);
   const authority = text('system of record', 42, {position: [465, 350], fill: accent, fontStyle: 'italic', opacity: 0});
   original.add([service.root, database.root, write.root, authority,
-    text('createOrder()', 31, {position: [0, -72], fontFamily: theme.fontFamily.mono}),
+    text('saveOrder()', 31, {position: [0, -72], fontFamily: theme.fontFamily.mono, opacity: () => write.reveal()}),
   ]);
   view.add(original);
   yield* all(title.opacity(1, 0.3), original.opacity(1, 0.5));

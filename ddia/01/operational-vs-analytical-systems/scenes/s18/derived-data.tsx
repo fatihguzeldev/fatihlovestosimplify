@@ -50,7 +50,7 @@ export default makeScene2D(function* (view) {
   const cached = text('preparing', 44, {y: 24, fill: accent, fontFamily: theme.fontFamily.mono, opacity: 0});
   cache.root.add([text('cache · order:1042', 29, {y: -73, fontFamily: theme.fontFamily.mono}), cached]);
   const save = cartoonArrow('s18-order-status-cache', [-167, 65], [171, 65], accent, 0);
-  cacheExample.add([order.root, cache.root, save.root, text('set()', 29, {position: [0, -32], fontFamily: theme.fontFamily.mono}), text('aynı okumayı her seferinde kaynağa götürmeyiz.', 32, {position: [0, 346], fill: muted})]);
+  cacheExample.add([order.root, cache.root, save.root, text('set()', 29, {position: [0, -32], fontFamily: theme.fontFamily.mono, opacity: () => save.reveal()}), text('aynı okumayı her seferinde kaynağa götürmeyiz.', 32, {position: [0, 346], fill: muted})]);
   view.add(cacheExample);
   yield* all(title.opacity(1, 0.3), cacheExample.opacity(1, 0.5));
   yield* save.reveal(1, 0.3);
@@ -69,7 +69,7 @@ export default makeScene2D(function* (view) {
   const entry = text('muz → p17, p42', 34, {y: 18, fill: accent, fontFamily: theme.fontFamily.mono, opacity: 0});
   index.root.add([text('search index', 33, {y: -98}), entry]);
   const build = cartoonArrow('s18-product-index-build', [-167, 65], [171, 65], accent, 0);
-  search.add([products.root, index.root, build.root, text('index', 29, {position: [0, -32]}), text('terimden ilgili ürünlere ulaşırız.', 32, {position: [0, 346], fill: muted})]);
+  search.add([products.root, index.root, build.root, text('index', 29, {position: [0, -32], opacity: () => build.reveal()}), text('terimden ilgili ürünlere ulaşırız.', 32, {position: [0, 346], fill: muted})]);
   view.add(search);
   yield* all(title.opacity(1, 0.3), search.opacity(1, 0.5));
   yield* build.reveal(1, 0.3);

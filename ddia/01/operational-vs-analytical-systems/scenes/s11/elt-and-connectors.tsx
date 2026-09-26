@@ -55,8 +55,8 @@ export default makeScene2D(function* (view) {
   const extract = cartoonArrow('s11-elt-extract', [-550, 100], [-383, 100], accent, 0);
   const load = cartoonArrow('s11-elt-load', [-63, 100], [211, 100], accent, 0);
   alternative.add([source.root, copy.root, warehouse.root, inside.root, transformLabel, extract.root, load.root,
-    text('extract', 26, {position: [-467, 20]}),
-    text('load', 26, {position: [74, 20]}),
+    text('extract', 26, {position: [-467, 20], opacity: () => extract.reveal()}),
+    text('load', 26, {position: [74, 20], opacity: () => load.reveal()}),
   ]);
   view.add(alternative);
   yield* alternative.opacity(1, 0.5);

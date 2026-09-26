@@ -40,7 +40,7 @@ export default makeScene2D(function* (view) {
   const derive = cartoonArrow('s16-derived-customer-segment', [-445, 90], [-235, 90], accent, 0);
   const transfer = cartoonArrow('s16-crm-segment-sync', [235, 90], [418, 90], accent, 0);
   sync.add([warehouse.root, segment.root, crm.root, derive.root, transfer.root,
-    text('hesapla', 27, {position: [-340, 6]}), text('sync', 27, {position: [326, 6], fill: accent}),
+    text('hesapla', 27, {position: [-340, 6], opacity: () => derive.reveal()}), text('sync', 27, {position: [326, 6], fill: accent, opacity: () => transfer.reveal()}),
     text('reverse ETL', 34, {position: [0, 358], fill: accent, fontStyle: 'italic'}),
   ]);
   view.add(sync);
@@ -74,7 +74,7 @@ export default makeScene2D(function* (view) {
   const output = cartoonArrow('s16-trained-model-artifact', [-428, 90], [-213, 90], accent, 0);
   const deploy = cartoonArrow('s16-model-deployment', [214, 90], [439, 90], accent, 0);
   deployment.add([train.root, artifact.root, service.root, output.root, deploy.root,
-    text('deploy', 28, {position: [326, 6], fill: accent}),
+    text('deploy', 28, {position: [326, 6], fill: accent, opacity: () => deploy.reveal()}),
   ]);
   view.add(deployment);
   yield* all(title.opacity(1, 0.3), deployment.opacity(1, 0.5));
@@ -112,8 +112,8 @@ export default makeScene2D(function* (view) {
   const response = cartoonArrow('s16-recommendation-response', [367, 199], [-195, 199], accent, 0);
   const inference = new Layout({});
   inference.add([app.root, service.root, request.root, response.root,
-    text('getRecommendations()', 26, {position: [86, -77], fontFamily: theme.fontFamily.mono}),
-    text('recommendations', 27, {position: [86, 286], fill: accent}),
+    text('getRecommendations()', 26, {position: [86, -77], fontFamily: theme.fontFamily.mono, opacity: () => request.reveal()}),
+    text('recommendations', 27, {position: [86, 286], fill: accent, opacity: () => response.reveal()}),
   ]);
   view.add(inference);
   title.children(heading('kullanıcı ', 'öneri istediğinde…').children());

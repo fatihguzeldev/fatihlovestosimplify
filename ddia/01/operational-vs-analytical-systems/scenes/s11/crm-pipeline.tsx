@@ -27,9 +27,9 @@ export function crmPipeline() {
   const load = cartoonArrow('crm-connector-load', [190, 95], [465, 95], accent, 0);
   const labels = new Layout({});
   labels.add([
-    text('getCustomers()', 23, {position: [-310, -67], fontFamily: theme.fontFamily.mono}),
-    text('records', 25, {position: [-310, 267], fill: muted}),
-    text('load', 28, {position: [327, 12]}),
+    text('getCustomers()', 23, {position: [-310, -67], fontFamily: theme.fontFamily.mono, opacity: () => request.reveal()}),
+    text('records', 25, {position: [-310, 267], fill: muted, opacity: () => response.reveal()}),
+    text('load', 28, {position: [327, 12], opacity: () => load.reveal()}),
   ]);
   root.add([crm.root, connector.root, warehouse.root, request.root, response.root, load.root, labels]);
   return {root, crm, connector, warehouse, customers, request, response, load};
