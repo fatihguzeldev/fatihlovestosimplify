@@ -1,7 +1,10 @@
 {
   "version": 0,
   "timeEvents": [
-    {"name": "start-video", "targetTime": 8}
+    {
+      "name": "start-video",
+      "targetTime": 8
+    }
   ],
   "seed": 16628796
 }
