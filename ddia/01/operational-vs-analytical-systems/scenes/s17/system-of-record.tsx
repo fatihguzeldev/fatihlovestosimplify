@@ -1,12 +1,12 @@
-import {Layout, makeScene2D, Path} from '@motion-canvas/2d';
-import {all, waitUntil} from '@motion-canvas/core';
-import {loadFonts} from '../../../../../common/fonts';
-import {cartoonArrow} from '../../../../../common/cartoon-arrow';
-import {cartoonDatabase, cartoonService} from '../../../../../common/cartoon-system';
-import {theme} from '../../theme';
-import {accent, background, heading, muted, paper, text} from '../shared/drawing';
-import {recordAndModel} from '../shared/record-and-model';
-import {recordChain} from '../shared/record-chain';
+import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
+import { all, waitUntil } from '@motion-canvas/core';
+import { loadFonts } from '../../../../../common/fonts';
+import { cartoonArrow } from '../../../../../common/cartoon-arrow';
+import { cartoonDatabase, cartoonService } from '../../../../../common/cartoon-system';
+import { theme } from '../../theme';
+import { accent, background, heading, muted, paper, text } from '../shared/drawing';
+import { recordAndModel } from '../shared/record-and-model';
+import { recordChain } from '../shared/record-chain';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -17,13 +17,39 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('part');
   yield* all(title.opacity(0, 0.2), previous.root.opacity(0, 0.4));
   previous.root.remove();
-  const card = new Layout({opacity: 0});
-  const first = text('asıl kayıt ve ', 104, {position: [-806, -35], offset: [-1, 0]});
-  const second = text('türevleri.', 104, {position: () => [-806 + first.width() + 24, -35], offset: [-1, 0], fill: accent, fontStyle: 'italic', fontWeight: 500});
-  const line = new Path({data: () => `M 2 0 Q ${second.width() * 0.45} 10 ${second.width() - 4} 1`, position: () => second.position().addY(78), stroke: accent, lineWidth: 5, lineCap: 'round', end: 0});
-  card.add([first, second, line,
-    text('part 3', 29, {position: [-800, -203], offset: [-1, 0], fill: muted, fontFamily: theme.fontFamily.mono}),
-    text('source & derived data', 32, {position: [-800, 144], offset: [-1, 0], fontFamily: theme.fontFamily.serif, fontStyle: 'italic'}),
+  const card = new Layout({ opacity: 0 });
+  const first = text('asıl kayıt ve ', 104, { position: [-806, -35], offset: [-1, 0] });
+  const second = text('türevleri.', 104, {
+    position: () => [-806 + first.width() + 24, -35],
+    offset: [-1, 0],
+    fill: accent,
+    fontStyle: 'italic',
+    fontWeight: 500,
+  });
+  const line = new Path({
+    data: () => `M 2 0 Q ${second.width() * 0.45} 10 ${second.width() - 4} 1`,
+    position: () => second.position().addY(78),
+    stroke: accent,
+    lineWidth: 5,
+    lineCap: 'round',
+    end: 0,
+  });
+  card.add([
+    first,
+    second,
+    line,
+    text('part 3', 29, {
+      position: [-800, -203],
+      offset: [-1, 0],
+      fill: muted,
+      fontFamily: theme.fontFamily.mono,
+    }),
+    text('source & derived data', 32, {
+      position: [-800, 144],
+      offset: [-1, 0],
+      fontFamily: theme.fontFamily.serif,
+      fontStyle: 'italic',
+    }),
   ]);
   view.add(card);
   yield* card.opacity(1, 0.4);
@@ -32,20 +58,36 @@ export default makeScene2D(function* (view) {
   yield* card.opacity(0, 0.4);
   card.remove();
   title.children(heading('ilk yazımı ', 'hatırlayalım.').children());
-  const original = new Layout({opacity: 0});
+  const original = new Layout({ opacity: 0 });
   const service = cartoonService('order service', accent);
   service.root.position([-505, 35]);
   service.root.scale(1.45);
   const database = cartoonDatabase('sales database', accent);
   database.root.position([465, 35]);
   database.root.scale(1.45);
-  const record = new Layout({opacity: 0});
-  record.add([text('#1042', 32, {y: -6, fontFamily: theme.fontFamily.mono}), text('amount: 185', 23, {y: 55, fill: accent, fontFamily: theme.fontFamily.mono})]);
+  const record = new Layout({ opacity: 0 });
+  record.add([
+    text('#1042', 32, { y: -6, fontFamily: theme.fontFamily.mono }),
+    text('amount: 185', 23, { y: 55, fill: accent, fontFamily: theme.fontFamily.mono }),
+  ]);
   database.root.add(record);
   const write = cartoonArrow('s17-original-write-recall', [-244, 35], [249, 35], accent, 0);
-  const authority = text('system of record', 42, {position: [465, 350], fill: accent, fontStyle: 'italic', opacity: 0});
-  original.add([service.root, database.root, write.root, authority,
-    text('saveOrder()', 31, {position: [0, -72], fontFamily: theme.fontFamily.mono, opacity: () => write.reveal()}),
+  const authority = text('system of record', 42, {
+    position: [465, 350],
+    fill: accent,
+    fontStyle: 'italic',
+    opacity: 0,
+  });
+  original.add([
+    service.root,
+    database.root,
+    write.root,
+    authority,
+    text('saveOrder()', 31, {
+      position: [0, -72],
+      fontFamily: theme.fontFamily.mono,
+      opacity: () => write.reveal(),
+    }),
   ]);
   view.add(original);
   yield* all(title.opacity(1, 0.3), original.opacity(1, 0.5));
@@ -60,18 +102,27 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(0, 0.2), original.opacity(0, 0.4));
   original.remove();
   title.children(heading('çelişirlerse ', 'hangisini esas alacağız?').children());
-  const pair = new Layout({opacity: 0});
+  const pair = new Layout({ opacity: 0 });
   const pairCards = ['sales database', 'warehouse'].map((name, i) => {
     const surface = paper(570, 280, i === 0 ? '#17232f' : '#101315');
     surface.root.position([-415 + i * 830, 50]);
-    surface.root.add([text(name, 31, {y: -91}), text('#1042 · amount: 185', 31, {y: -5, fontFamily: theme.fontFamily.mono}),
-      text(i === 0 ? 'esas aldığımız kayıt' : 'ondan ürettiğimiz görünüm', 28, {y: 83, fill: i === 0 ? accent : muted}),
+    surface.root.add([
+      text(name, 31, { y: -91 }),
+      text('#1042 · amount: 185', 31, { y: -5, fontFamily: theme.fontFamily.mono }),
+      text(i === 0 ? 'esas aldığımız kayıt' : 'ondan ürettiğimiz görünüm', 28, {
+        y: 83,
+        fill: i === 0 ? accent : muted,
+      }),
     ]);
     pair.add(surface.root);
     return surface;
   });
   pairCards[0].face.stroke(accent);
-  const caution = text('hatalı girilen bir tutarı yine bizim düzeltmemiz gerekir.', 31, {position: [0, 326], fill: muted, opacity: 0});
+  const caution = text('hatalı girilen bir tutarı yine bizim düzeltmemiz gerekir.', 31, {
+    position: [0, 326],
+    fill: muted,
+    opacity: 0,
+  });
   pair.add(caution);
   view.add(pair);
   yield* all(title.opacity(1, 0.3), pair.opacity(1, 0.5));
@@ -80,17 +131,29 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(0, 0.2), pair.opacity(0, 0.4));
   pair.remove();
   title.children(heading('hangi kayıt için ', 'asıl kaynak?').children());
-  const scopes = new Layout({opacity: 0});
+  const scopes = new Layout({ opacity: 0 });
   ['sales database', 'inventory database'].forEach((name, i) => {
     const db = cartoonDatabase(name, accent);
     db.root.position([-415 + i * 830, 5]);
     db.root.scale(1.45);
-    db.root.add([text(i === 0 ? 'sales' : 'stock', 29, {y: -4, fontFamily: theme.fontFamily.mono}), text(i === 0 ? '#1042 · 185 ₺' : 'muz', 23, {y: 54, fill: accent})]);
-    scopes.add([db.root,
-      text(i === 0 ? 'satış tutarı' : 'stok miktarı', 39, {position: [-415 + i * 830, 295], fill: accent}),
+    db.root.add([
+      text(i === 0 ? 'sales' : 'stock', 29, { y: -4, fontFamily: theme.fontFamily.mono }),
+      text(i === 0 ? '#1042 · 185 ₺' : 'muz', 23, { y: 54, fill: accent }),
+    ]);
+    scopes.add([
+      db.root,
+      text(i === 0 ? 'satış tutarı' : 'stok miktarı', 39, {
+        position: [-415 + i * 830, 295],
+        fill: accent,
+      }),
     ]);
   });
-  scopes.add(text('bu bir rol; tek bir sunucu ya da database ürünü değil.', 31, {position: [0, 423], fill: muted}));
+  scopes.add(
+    text('bu bir rol; tek bir sunucu ya da database ürünü değil.', 31, {
+      position: [0, 423],
+      fill: muted,
+    }),
+  );
   view.add(scopes);
   yield* all(title.opacity(1, 0.3), scopes.opacity(1, 0.5));
   yield* waitUntil('upstream');
@@ -100,7 +163,11 @@ export default makeScene2D(function* (view) {
   chain.root.opacity(0);
   view.add(chain.root);
   title.children(heading('lake bir sonraki adımın ', 'girdisi.').children());
-  const distinction = text('upstream olmak, asıl kayıt olmak demek değil.', 31, {position: [0, 449], fill: muted, opacity: 0});
+  const distinction = text('upstream olmak, asıl kayıt olmak demek değil.', 31, {
+    position: [0, 449],
+    fill: muted,
+    opacity: 0,
+  });
   view.add(distinction);
   yield* all(title.opacity(1, 0.3), chain.root.opacity(1, 0.5));
   yield* chain.copy.travel(0.8);

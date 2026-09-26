@@ -1,12 +1,16 @@
 <!doctype html>
 <html lang="tr">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>aynı data. farklı işler. — ddia #01</title>
-    <link rel="icon" href="data:,">
+    <link rel="icon" href="data:," />
     <style>
-      html, body { margin: 0; background: var(--background); }
+      html,
+      body {
+        margin: 0;
+        background: var(--background);
+      }
       .thumbnail {
         box-sizing: border-box;
         width: 100vw;
@@ -18,8 +22,15 @@
         font-family: var(--font-sans), sans-serif;
         font-weight: 400;
       }
-      .composition { width: 100%; display: flex; flex-direction: column; gap: 4.2vw; }
-      .chapter { position: relative; }
+      .composition {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 4.2vw;
+      }
+      .chapter {
+        position: relative;
+      }
       .chapter-label {
         position: absolute;
         left: 0;
@@ -32,9 +43,21 @@
         text-underline-offset: var(--space-s);
         text-decoration-skip-ink: none;
       }
-      .hero { margin: 0; font-size: 11.2vw; font-weight: 500; line-height: 1.07; letter-spacing: -.035em; }
-      .accent { color: var(--chapter-accent); }
-      .byline { margin: 0; font-size: 4vw; line-height: 1.3; }
+      .hero {
+        margin: 0;
+        font-size: 11.2vw;
+        font-weight: 500;
+        line-height: 1.07;
+        letter-spacing: -0.035em;
+      }
+      .accent {
+        color: var(--chapter-accent);
+      }
+      .byline {
+        margin: 0;
+        font-size: 4vw;
+        line-height: 1.3;
+      }
     </style>
   </head>
   <body>
@@ -42,14 +65,14 @@
       <div class="composition">
         <div class="chapter">
           <p class="chapter-label">chapter 1</p>
-          <h1 class="hero">aynı data.<br><span class="accent">farklı işler.</span></h1>
+          <h1 class="hero">aynı data.<br /><span class="accent">farklı işler.</span></h1>
         </div>
         <p class="byline">operational vs. analytical systems</p>
       </div>
     </main>
     <script>
       window.thumbnailReady = (async () => {
-        const [{theme}, {loadFonts}] = await Promise.all([
+        const [{ theme }, { loadFonts }] = await Promise.all([
           import('../theme.ts'),
           import('../../../../common/fonts.ts'),
         ]);

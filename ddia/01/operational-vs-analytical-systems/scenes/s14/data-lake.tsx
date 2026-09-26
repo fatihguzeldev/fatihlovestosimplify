@@ -1,13 +1,13 @@
-import {Layout, makeScene2D} from '@motion-canvas/2d';
-import {all, waitUntil} from '@motion-canvas/core';
-import {loadFonts} from '../../../../../common/fonts';
-import {cartoonArrow} from '../../../../../common/cartoon-arrow';
-import {cartoonDatabase} from '../../../../../common/cartoon-system';
-import {theme} from '../../theme';
-import {accent, background, heading, muted, paper, text} from '../shared/drawing';
-import {analysisInputs, dataFile} from '../shared/data-files';
-import {etlPipeline} from '../shared/etl-pipeline';
-import {lakeConsumers, lakeStorage} from '../shared/lake-system';
+import { Layout, makeScene2D } from '@motion-canvas/2d';
+import { all, waitUntil } from '@motion-canvas/core';
+import { loadFonts } from '../../../../../common/fonts';
+import { cartoonArrow } from '../../../../../common/cartoon-arrow';
+import { cartoonDatabase } from '../../../../../common/cartoon-system';
+import { theme } from '../../theme';
+import { accent, background, heading, muted, paper, text } from '../shared/drawing';
+import { analysisInputs, dataFile } from '../shared/data-files';
+import { etlPipeline } from '../shared/etl-pipeline';
+import { lakeConsumers, lakeStorage } from '../shared/lake-system';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -22,8 +22,15 @@ export default makeScene2D(function* (view) {
   const collection = paper(1100, 660, '#101315');
   collection.root.position([0, 90]);
   collection.root.opacity(0);
-  collection.root.add(text('data lake', 37, {position: [-480, -276], offset: [-1, 0], fill: accent}));
-  const collectionFiles = [dataFile('sales.parquet', 'records'), dataFile('reviews.json', 'review'), dataFile('product.jpg', 'image'), dataFile('readings.csv', 'sensor')];
+  collection.root.add(
+    text('data lake', 37, { position: [-480, -276], offset: [-1, 0], fill: accent }),
+  );
+  const collectionFiles = [
+    dataFile('sales.parquet', 'records'),
+    dataFile('reviews.json', 'review'),
+    dataFile('product.jpg', 'image'),
+    dataFile('readings.csv', 'sensor'),
+  ];
   collectionFiles.forEach((file, i) => {
     file.root.position([-260 + (i % 2) * 520, -101 + Math.floor(i / 2) * 274]);
     file.root.scale(0.77);
@@ -46,23 +53,35 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(0, 0.2), direct.root.opacity(0, 0.4));
   direct.root.remove();
   title.children(heading('bu örnekte ', 'lake’i araya alıyoruz.').children());
-  const ingest = new Layout({opacity: 0});
+  const ingest = new Layout({ opacity: 0 });
   const source = cartoonDatabase('sales database', accent);
   source.root.position([-570, 75]);
   source.root.scale(1.5);
-  source.root.add([text('#1042', 30, {y: 0, fontFamily: theme.fontFamily.mono}), text('store A', 25, {y: 62, fill: accent, fontFamily: theme.fontFamily.mono})]);
+  source.root.add([
+    text('#1042', 30, { y: 0, fontFamily: theme.fontFamily.mono }),
+    text('store A', 25, { y: 62, fill: accent, fontFamily: theme.fontFamily.mono }),
+  ]);
   const storage = lakeStorage();
   storage.root.position([420, 75]);
   storage.files[0].root.opacity(0);
   storage.files[3].root.opacity(0);
   const copy = cartoonArrow('s14-sales-copy-to-lake', [-345, 75], [120, 75], accent, 0);
-  const note = text('siparişin ürün satırlarını da taşıyoruz.', 31, {position: [0, 389], fill: muted, opacity: 0});
+  const note = text('siparişin ürün satırlarını da taşıyoruz.', 31, {
+    position: [0, 389],
+    fill: muted,
+    opacity: 0,
+  });
   ingest.add([source.root, storage.root, copy.root, note]);
   view.add(ingest);
   yield* all(title.opacity(1, 0.3), ingest.opacity(1, 0.5));
   yield* copy.reveal(1, 0.4);
   yield* copy.travel(0.8);
-  yield* all(copy.arrive(), storage.files[0].root.opacity(1, 0.3), storage.files[3].root.opacity(1, 0.3), note.opacity(1, 0.3));
+  yield* all(
+    copy.arrive(),
+    storage.files[0].root.opacity(1, 0.3),
+    storage.files[3].root.opacity(1, 0.3),
+    note.opacity(1, 0.3),
+  );
   yield* waitUntil('consumers');
   yield* all(title.opacity(0, 0.2), ingest.opacity(0, 0.4));
   ingest.remove();
@@ -95,13 +114,22 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('raw');
   yield* title.opacity(0, 0.2);
   title.children(heading('kaynak biçimini ', 'koruyabiliriz.').children());
-  const sushi = text('sushi principle', 31, {position: [-540, 381], fill: accent, fontStyle: 'italic', opacity: 0});
+  const sushi = text('sushi principle', 31, {
+    position: [-540, 381],
+    fill: accent,
+    fontStyle: 'italic',
+    opacity: 0,
+  });
   view.add(sushi);
   yield* all(title.opacity(1, 0.3), sushi.opacity(1, 0.3));
   yield* waitUntil('meaning');
   yield* all(title.opacity(0, 0.2), sushi.opacity(0, 0.2));
   title.children(heading('alanların anlamını ', 'yine bilmeliyiz.').children());
-  const meaning = text('store A hangi mağaza?', 29, {position: [-540, 381], fill: muted, opacity: 0});
+  const meaning = text('store A hangi mağaza?', 29, {
+    position: [-540, 381],
+    fill: muted,
+    opacity: 0,
+  });
   view.add(meaning);
   yield* all(title.opacity(1, 0.3), meaning.opacity(1, 0.3));
   yield* waitUntil('next');

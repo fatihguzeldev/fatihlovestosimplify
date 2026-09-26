@@ -1,7 +1,7 @@
-import {Layout, makeScene2D, Node, Path, Txt} from '@motion-canvas/2d';
-import {createRef, waitUntil} from '@motion-canvas/core';
-import {loadFonts} from '../../../../../common/fonts';
-import {theme} from '../../theme';
+import { Layout, makeScene2D, Node, Path, Txt } from '@motion-canvas/2d';
+import { createRef, waitUntil } from '@motion-canvas/core';
+import { loadFonts } from '../../../../../common/fonts';
+import { theme } from '../../theme';
 
 export default makeScene2D(function* (view) {
   yield loadFonts();
@@ -71,12 +71,16 @@ export default makeScene2D(function* (view) {
             <Path
               layout={false}
               fill={theme.colors.accent}
-              data={'M17 22Q93 9 174 15T363 14L357 21 371 25 358 30 368 35 358 41 369 46 359 58 370 62 363 77 369 85 359 96 367 105 358 117 365 125 354 134 360 143Q264 157 170 153T15 151L21 143 11 138 19 128 12 120 20 109 10 99 17 90 11 79 19 65 10 55 18 44 12 32Z'}
+              data={
+                'M17 22Q93 9 174 15T363 14L357 21 371 25 358 30 368 35 358 41 369 46 359 58 370 62 363 77 369 85 359 96 367 105 358 117 365 125 354 134 360 143Q264 157 170 153T15 151L21 143 11 138 19 128 12 120 20 109 10 99 17 90 11 79 19 65 10 55 18 44 12 32Z'
+              }
             />
             <Path
               layout={false}
               fill={theme.colors.background}
-              data={'M18 26Q99 18 139 22L77 25 21 29ZM164 20L244 18 252 20 187 23ZM22 141L84 146 61 148 20 143ZM157 148Q234 143 343 145L343 148 258 149 197 151ZM13 49L46 48 21 51ZM345 72L371 70 370 73 352 75ZM18 113L40 114 19 116ZM283 16L343 12 340 15 311 18ZM82 31L117 29 102 31ZM224 139L281 137 274 139ZM16 131L43 132 29 134Z'}
+              data={
+                'M18 26Q99 18 139 22L77 25 21 29ZM164 20L244 18 252 20 187 23ZM22 141L84 146 61 148 20 143ZM157 148Q234 143 343 145L343 148 258 149 197 151ZM13 49L46 48 21 51ZM345 72L371 70 370 73 352 75ZM18 113L40 114 19 116ZM283 16L343 12 340 15 311 18ZM82 31L117 29 102 31ZM224 139L281 137 274 139ZM16 131L43 132 29 134Z'
+              }
             />
           </Node>
           <Txt text={'offs'} fill={theme.colors.background} />

@@ -1,4 +1,4 @@
-import {theme as chapterTheme} from '../theme';
+import { theme as chapterTheme } from '../theme';
 
 export const theme = {
   ...chapterTheme,

@@ -1,13 +1,13 @@
-import {Layout, makeScene2D} from '@motion-canvas/2d';
-import {all, waitUntil} from '@motion-canvas/core';
-import {loadFonts} from '../../../../../common/fonts';
-import {cartoonArrow} from '../../../../../common/cartoon-arrow';
-import {cartoonDatabase} from '../../../../../common/cartoon-system';
-import {theme} from '../../theme';
-import {accent, background, foreground, heading, muted, paper, text} from '../shared/drawing';
-import {lakeConsumers} from '../shared/lake-system';
-import {batchAndStream} from './batch-and-stream';
-import {accessExample} from './access';
+import { Layout, makeScene2D } from '@motion-canvas/2d';
+import { all, waitUntil } from '@motion-canvas/core';
+import { loadFonts } from '../../../../../common/fonts';
+import { cartoonArrow } from '../../../../../common/cartoon-arrow';
+import { cartoonDatabase } from '../../../../../common/cartoon-system';
+import { theme } from '../../theme';
+import { accent, background, foreground, heading, muted, paper, text } from '../shared/drawing';
+import { lakeConsumers } from '../shared/lake-system';
+import { batchAndStream } from './batch-and-stream';
+import { accessExample } from './access';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -19,19 +19,41 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(0, 0.2), consumers.root.opacity(0, 0.4));
   consumers.root.remove();
   title.children(heading('bu kaydın ', 'mağazası eksik.').children());
-  const quality = new Layout({opacity: 0});
+  const quality = new Layout({ opacity: 0 });
   const input = paper(400, 280, '#101315');
   input.root.position([-600, 70]);
   input.root.add([
-    text('#1047', 39, {position: [-150, -87], offset: [-1, 0], fontFamily: theme.fontFamily.mono}),
-    text('store_id', 25, {position: [-150, -9], offset: [-1, 0], fill: muted, fontFamily: theme.fontFamily.mono}),
-    text('null', 29, {position: [110, -9], offset: [1, 0], fill: accent, fontFamily: theme.fontFamily.mono}),
-    text('amount', 25, {position: [-150, 56], offset: [-1, 0], fill: muted, fontFamily: theme.fontFamily.mono}),
-    text('90', 29, {position: [110, 56], offset: [1, 0], fontFamily: theme.fontFamily.mono}),
+    text('#1047', 39, {
+      position: [-150, -87],
+      offset: [-1, 0],
+      fontFamily: theme.fontFamily.mono,
+    }),
+    text('store_id', 25, {
+      position: [-150, -9],
+      offset: [-1, 0],
+      fill: muted,
+      fontFamily: theme.fontFamily.mono,
+    }),
+    text('null', 29, {
+      position: [110, -9],
+      offset: [1, 0],
+      fill: accent,
+      fontFamily: theme.fontFamily.mono,
+    }),
+    text('amount', 25, {
+      position: [-150, 56],
+      offset: [-1, 0],
+      fill: muted,
+      fontFamily: theme.fontFamily.mono,
+    }),
+    text('90', 29, { position: [110, 56], offset: [1, 0], fontFamily: theme.fontFamily.mono }),
   ]);
   const validate = paper(280, 160, '#101315');
   validate.root.position([0, 70]);
-  validate.root.add([text('validate', 35, {y: -22, fill: accent, fontFamily: theme.fontFamily.mono}), text('store_id gerekli', 24, {y: 35})]);
+  validate.root.add([
+    text('validate', 35, { y: -22, fill: accent, fontFamily: theme.fontFamily.mono }),
+    text('store_id gerekli', 24, { y: 35 }),
+  ]);
   const warehouse = cartoonDatabase('data warehouse', accent);
   warehouse.root.position([600, -111]);
   warehouse.root.scale(0.88);
@@ -39,15 +61,34 @@ export default makeScene2D(function* (view) {
   const review = paper(400, 148, '#182638');
   review.root.position([600, 266]);
   review.root.opacity(0);
-  review.root.add([text('needs review', 30, {y: -33, fill: accent, fontFamily: theme.fontFamily.mono}), text('#1047 · store_id: null', 24, {y: 28, fontFamily: theme.fontFamily.mono})]);
+  review.root.add([
+    text('needs review', 30, { y: -33, fill: accent, fontFamily: theme.fontFamily.mono }),
+    text('#1047 · store_id: null', 24, { y: 28, fontFamily: theme.fontFamily.mono }),
+  ]);
   const read = cartoonArrow('s15-validate-new-record', [-350, 70], [-185, 70], accent, 0);
   const accepted = cartoonArrow('s15-only-valid-records', [190, 44], [456, -103], accent, 0);
   const rejected = cartoonArrow('s15-record-needs-review', [190, 102], [354, 248], accent, 0);
   accepted.root.opacity(0.27);
-  const sourceLabel = text('lake’ten gelen yeni kayıt', 27, {position: [-600, -140], fill: muted});
-  const fresh = text('şubat 2026', 25, {position: [-600, 286], fill: muted});
-  quality.add([input.root, validate.root, warehouse.root, review.root, read.root, accepted.root, rejected.root, sourceLabel, fresh,
-    text('geçerli kayıtlar', 25, {position: [271, -106], fill: muted, opacity: () => accepted.reveal()}),
+  const sourceLabel = text('lake’ten gelen yeni kayıt', 27, {
+    position: [-600, -140],
+    fill: muted,
+  });
+  const fresh = text('şubat 2026', 25, { position: [-600, 286], fill: muted });
+  quality.add([
+    input.root,
+    validate.root,
+    warehouse.root,
+    review.root,
+    read.root,
+    accepted.root,
+    rejected.root,
+    sourceLabel,
+    fresh,
+    text('geçerli kayıtlar', 25, {
+      position: [271, -106],
+      fill: muted,
+      opacity: () => accepted.reveal(),
+    }),
   ]);
   view.add(quality);
   yield* all(title.opacity(1, 0.3), quality.opacity(1, 0.5));
@@ -61,7 +102,11 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('incomplete');
   yield* title.opacity(0, 0.2);
   title.children(heading('ayırdık; ', 'rapora henüz katamadık.').children());
-  const caveat = text('1 kayıt inceleme bekliyor.', 29, {position: [600, 410], fill: accent, opacity: 0});
+  const caveat = text('1 kayıt inceleme bekliyor.', 29, {
+    position: [600, 410],
+    fill: accent,
+    opacity: 0,
+  });
   quality.add(caveat);
   yield* all(title.opacity(1, 0.3), caveat.opacity(1, 0.3));
   yield* waitUntil('operations');
@@ -71,12 +116,12 @@ export default makeScene2D(function* (view) {
   systems.root.opacity(0);
   view.add(systems.root);
   title.children(heading('bu akışın ', 'sorumluluğu', ' bizde.').children());
-  const tags = new Layout({opacity: 0});
+  const tags = new Layout({ opacity: 0 });
   tags.add([
-    text('access', 29, {position: [-540, -255], fill: accent, fontStyle: 'italic'}),
-    text('quality', 29, {position: [115, -205], fill: accent, fontStyle: 'italic'}),
-    text('monitoring', 29, {position: [650, -255], fill: accent, fontStyle: 'italic'}),
-    text('data ops', 24, {position: [0, 426], fill: muted, fontFamily: theme.fontFamily.mono}),
+    text('access', 29, { position: [-540, -255], fill: accent, fontStyle: 'italic' }),
+    text('quality', 29, { position: [115, -205], fill: accent, fontStyle: 'italic' }),
+    text('monitoring', 29, { position: [650, -255], fill: accent, fontStyle: 'italic' }),
+    text('data ops', 24, { position: [0, 426], fill: muted, fontFamily: theme.fontFamily.mono }),
   ]);
   view.add(tags);
   yield* all(title.opacity(1, 0.3), systems.root.opacity(1, 0.5));
@@ -101,7 +146,10 @@ export default makeScene2D(function* (view) {
   const result = paper(600, 260, '#17232f');
   result.root.position([0, 75]);
   result.root.opacity(0);
-  result.root.add([text('risk sinyali', 49, {y: -24, fill: accent}), text('analytical output', 27, {y: 56, fill: muted, fontFamily: theme.fontFamily.mono})]);
+  result.root.add([
+    text('risk sinyali', 49, { y: -24, fill: accent }),
+    text('analytical output', 27, { y: 56, fill: muted, fontFamily: theme.fontFamily.mono }),
+  ]);
   view.add(result.root);
   yield* all(title.opacity(1, 0.3), result.root.opacity(1, 0.5));
   yield* waitUntil('end');

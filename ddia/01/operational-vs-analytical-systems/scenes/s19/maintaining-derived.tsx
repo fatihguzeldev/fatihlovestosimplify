@@ -1,13 +1,13 @@
-import {Layout, makeScene2D, Path} from '@motion-canvas/2d';
-import {all, waitFor, waitUntil} from '@motion-canvas/core';
-import {loadFonts} from '../../../../../common/fonts';
-import {theme} from '../../theme';
-import {accent, background, foreground, heading, muted, text} from '../shared/drawing';
-import {recordChain} from '../shared/record-chain';
-import {storedTotals} from '../shared/stored-totals';
-import {monthlyChart} from '../shared/workloads';
-import {report} from './report';
-import {updateCache} from './cache-update';
+import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
+import { all, waitFor, waitUntil } from '@motion-canvas/core';
+import { loadFonts } from '../../../../../common/fonts';
+import { theme } from '../../theme';
+import { accent, background, foreground, heading, muted, text } from '../shared/drawing';
+import { recordChain } from '../shared/record-chain';
+import { storedTotals } from '../shared/stored-totals';
+import { monthlyChart } from '../shared/workloads';
+import { report } from './report';
+import { updateCache } from './cache-update';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -31,20 +31,36 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('stale-query');
   yield* title.opacity(0, 0.2);
   title.children(heading('aynı sorgu, ', 'yine 400.').children());
-  yield* all(title.opacity(1, 0.3), comparison.chart.root.opacity(0.18, 0.3), comparison.sql.fill(accent, 0.2));
+  yield* all(
+    title.opacity(1, 0.3),
+    comparison.chart.root.opacity(0.18, 0.3),
+    comparison.sql.fill(accent, 0.2),
+  );
   yield* comparison.cards[1].face.stroke(accent, 0.2);
   yield* waitFor(0.7);
-  yield* all(comparison.cards[1].face.stroke(foreground, 0.3), comparison.sql.fill(foreground, 0.3), comparison.chart.root.opacity(1, 0.3));
+  yield* all(
+    comparison.cards[1].face.stroke(foreground, 0.3),
+    comparison.sql.fill(foreground, 0.3),
+    comparison.chart.root.opacity(1, 0.3),
+  );
   yield* waitUntil('diagnosis');
   yield* title.opacity(0, 0.2);
   title.children(heading('hesap doğru. ', 'data eski.').children());
-  yield* all(title.opacity(1, 0.3), comparison.cards[1].amount.fill(accent, 0.2), comparison.transfer.fill(accent, 0.2));
+  yield* all(
+    title.opacity(1, 0.3),
+    comparison.cards[1].amount.fill(accent, 0.2),
+    comparison.transfer.fill(accent, 0.2),
+  );
   yield* waitUntil('pipeline');
   yield* all(title.opacity(0, 0.2), comparison.root.opacity(0, 0.4));
   chain.records[0].amount.text('165');
   chain.records[0].face.stroke(accent);
   title.children(heading('düzeltmeyi ', 'akış boyunca', ' taşıyalım.').children());
-  const note = text('bu örnekte aktarım asenkron.', 30, {position: [0, 449], fill: muted, opacity: 0});
+  const note = text('bu örnekte aktarım asenkron.', 30, {
+    position: [0, 449],
+    fill: muted,
+    opacity: 0,
+  });
   view.add(note);
   yield* all(title.opacity(1, 0.3), chain.root.opacity(1, 0.5), note.opacity(1, 0.3));
   yield* waitUntil('lake');
@@ -77,9 +93,17 @@ export default makeScene2D(function* (view) {
   bar.value.text('380 ₺');
   bar.value.y(110 - 380 * 0.43 - 28);
   bar.bar.height(380 * 0.43);
-  const math = text('60 + 165 + 155 = 380', 35, {position: [-435, 266], fill: accent, opacity: 0});
+  const math = text('60 + 165 + 155 = 380', 35, {
+    position: [-435, 266],
+    fill: accent,
+    opacity: 0,
+  });
   comparison.root.add(math);
-  yield* all(comparison.chart.root.opacity(1, 0.3), comparison.sql.fill(foreground, 0.3), math.opacity(1, 0.3));
+  yield* all(
+    comparison.chart.root.opacity(1, 0.3),
+    comparison.sql.fill(foreground, 0.3),
+    math.opacity(1, 0.3),
+  );
   yield* waitUntil('materialized');
   yield* all(title.opacity(0, 0.2), comparison.root.opacity(0, 0.4));
   title.children(heading('aynı database içinde de ', 'güncelleme gerekiyor.').children());
@@ -103,9 +127,9 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('cache');
   yield* all(title.opacity(0, 0.2), aggregate.root.opacity(0, 0.4));
   aggregate.root.remove();
-  const cacheStage = new Layout({opacity: 0});
+  const cacheStage = new Layout({ opacity: 0 });
   view.add(cacheStage);
-  const {market} = yield* updateCache(cacheStage, title);
+  const { market } = yield* updateCache(cacheStage, title);
   yield* waitUntil('closing');
   yield* all(title.opacity(0, 0.2), cacheStage.opacity(0, 0.4));
   market.root.remove();
@@ -118,10 +142,12 @@ export default makeScene2D(function* (view) {
   chart.bars[0].value.text('380 ₺');
   chart.bars[0].value.y(110 - 380 * 0.43 - 28);
   chart.bars[0].bar.height(380 * 0.43);
-  const finish = new Layout({opacity: 0});
-  finish.add([market.root, chart.root,
-    text('operational', 34, {position: [-455, 372], fill: accent, fontStyle: 'italic'}),
-    text('analytical', 34, {position: [455, 372], fill: accent, fontStyle: 'italic'}),
+  const finish = new Layout({ opacity: 0 });
+  finish.add([
+    market.root,
+    chart.root,
+    text('operational', 34, { position: [-455, 372], fill: accent, fontStyle: 'italic' }),
+    text('analytical', 34, { position: [455, 372], fill: accent, fontStyle: 'italic' }),
   ]);
   view.add(finish);
   title.children(heading('aynı işletme, ', 'farklı işler.').children());
@@ -129,19 +155,45 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('recap');
   yield* all(title.opacity(0, 0.2), finish.opacity(0, 0.4));
   title.children(heading('tasarlarken ', 'bunları birlikte', ' düşünüyoruz.').children());
-  const recap = new Layout({opacity: 0});
-  [['hangi iş?', 'sipariş durumu · aylık satış'], ['hangi temsil?', 'kayıt · cache · analytical görünüm'], ['hangi kaynak?', 'asıl kayıt ve ona bağlı girdiler'], ['nasıl güncellenecek?', 'aktarım · refresh · invalidate']].forEach(([question, detail], i) => {
+  const recap = new Layout({ opacity: 0 });
+  [
+    ['hangi iş?', 'sipariş durumu · aylık satış'],
+    ['hangi temsil?', 'kayıt · cache · analytical görünüm'],
+    ['hangi kaynak?', 'asıl kayıt ve ona bağlı girdiler'],
+    ['nasıl güncellenecek?', 'aktarım · refresh · invalidate'],
+  ].forEach(([question, detail], i) => {
     const y = -141 + 147 * i;
-    recap.add([text(question, 37, {position: [-706, y], offset: [-1, 0], fill: accent, fontStyle: 'italic'}), text(detail, 33, {position: [-188, y], offset: [-1, 0]})]);
+    recap.add([
+      text(question, 37, {
+        position: [-706, y],
+        offset: [-1, 0],
+        fill: accent,
+        fontStyle: 'italic',
+      }),
+      text(detail, 33, { position: [-188, y], offset: [-1, 0] }),
+    ]);
   });
   view.add(recap);
   yield* all(title.opacity(1, 0.3), recap.opacity(1, 0.5));
   yield* waitUntil('next');
   yield* all(title.opacity(0, 0.2), recap.opacity(0, 0.4));
-  const end = new Layout({opacity: 0});
-  end.add([text('bu sistemleri kim geliştiriyor?', 62, {position: [-806, -188], offset: [-1, 0]}), text('kim işletiyor?', 78, {position: [-806, -72], offset: [-1, 0], fill: accent, fontStyle: 'italic'}),
-    new Path({data: 'M -800 30 Q -451 38 -120 31', stroke: accent, lineWidth: 4, lineCap: 'round'}),
-    text('sonraki video', 26, {position: [-800, 180], offset: [-1, 0], fill: muted}), text('cloud vs. self-hosting', 46, {position: [-800, 250], offset: [-1, 0]}),
+  const end = new Layout({ opacity: 0 });
+  end.add([
+    text('bu sistemleri kim geliştiriyor?', 62, { position: [-806, -188], offset: [-1, 0] }),
+    text('kim işletiyor?', 78, {
+      position: [-806, -72],
+      offset: [-1, 0],
+      fill: accent,
+      fontStyle: 'italic',
+    }),
+    new Path({
+      data: 'M -800 30 Q -451 38 -120 31',
+      stroke: accent,
+      lineWidth: 4,
+      lineCap: 'round',
+    }),
+    text('sonraki video', 26, { position: [-800, 180], offset: [-1, 0], fill: muted }),
+    text('cloud vs. self-hosting', 46, { position: [-800, 250], offset: [-1, 0] }),
   ]);
   view.add(end);
   yield* end.opacity(1, 0.6);

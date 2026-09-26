@@ -1,5 +1,5 @@
 import './fonts.css';
-import {theme} from './theme';
+import { theme } from './theme';
 
 export const fontFamily = theme.fontFamily;
 

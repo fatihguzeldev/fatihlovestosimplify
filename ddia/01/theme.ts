@@ -1,4 +1,4 @@
-import {theme as commonTheme} from '../../common/theme';
+import { theme as commonTheme } from '../../common/theme';
 
 export const theme = {
   ...commonTheme,

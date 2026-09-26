@@ -1,12 +1,12 @@
-import {Layout, makeScene2D, Rect} from '@motion-canvas/2d';
-import {all, waitFor, waitUntil} from '@motion-canvas/core';
-import {loadFonts} from '../../../../../common/fonts';
-import {cartoonArrow} from '../../../../../common/cartoon-arrow';
-import {cartoonDatabase} from '../../../../../common/cartoon-system';
-import {theme} from '../../theme';
-import {accent, background, heading, muted, paper, text} from '../shared/drawing';
-import {createMarket} from '../shared/market';
-import {orderTable} from '../shared/records';
+import { Layout, makeScene2D, Rect } from '@motion-canvas/2d';
+import { all, waitFor, waitUntil } from '@motion-canvas/core';
+import { loadFonts } from '../../../../../common/fonts';
+import { cartoonArrow } from '../../../../../common/cartoon-arrow';
+import { cartoonDatabase } from '../../../../../common/cartoon-system';
+import { theme } from '../../theme';
+import { accent, background, heading, muted, paper, text } from '../shared/drawing';
+import { createMarket } from '../shared/market';
+import { orderTable } from '../shared/records';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -15,7 +15,7 @@ export default makeScene2D(function* (view) {
   market.root.position([-470, 100]);
   market.cart.remove();
   market.receipt.opacity(1);
-  const {root: database, caption} = cartoonDatabase('sales database', accent);
+  const { root: database, caption } = cartoonDatabase('sales database', accent);
   database.position([550, 110]);
   database.scale(1.4);
   caption.fontSize(28 / 1.4);
@@ -26,28 +26,54 @@ export default makeScene2D(function* (view) {
   yield* all(bridge.root.opacity(0, 0.25), database.opacity(0, 0.3), market.label.opacity(0, 0.25));
   database.remove();
   bridge.root.remove();
-  yield* all(market.root.position([-575, 100], 0.7), market.root.scale(0.66, 0.7), market.status.fontSize(40, 0.7));
+  yield* all(
+    market.root.position([-575, 100], 0.7),
+    market.root.scale(0.66, 0.7),
+    market.status.fontSize(40, 0.7),
+  );
   const table = orderTable();
   table.root.position([420, 90]);
   table.root.opacity(0);
   const sql = paper(1610, 96, '#101315');
   sql.root.position([0, 408]);
   sql.root.opacity(0);
-  const code = text('SELECT status FROM orders WHERE id = 1042;', 27, {position: [-764, 0], offset: [-1, 0], fontFamily: theme.fontFamily.mono});
+  const code = text('SELECT status FROM orders WHERE id = 1042;', 27, {
+    position: [-764, 0],
+    offset: [-1, 0],
+    fontFamily: theme.fontFamily.mono,
+  });
   sql.root.add(code);
   const request = cartoonArrow('s05-select-order', [-318, 84], [-2, 84], accent, 0);
   const response = cartoonArrow('s05-selected-status', [-2, 218], [-318, 218], accent, 0);
-  const queryLabel = text('read', 29, {position: request.pointAt(0.5).addY(-80), fill: accent, opacity: 0});
-  const responseLabel = text('created', 26, {position: response.pointAt(0.5).addY(76), fill: accent, fontFamily: theme.fontFamily.mono, opacity: 0});
+  const queryLabel = text('read', 29, {
+    position: request.pointAt(0.5).addY(-80),
+    fill: accent,
+    opacity: 0,
+  });
+  const responseLabel = text('created', 26, {
+    position: response.pointAt(0.5).addY(76),
+    fill: accent,
+    fontFamily: theme.fontFamily.mono,
+    opacity: 0,
+  });
   view.add([table.root, sql.root, request.root, response.root, queryLabel, responseLabel]);
   yield* table.root.opacity(1, 0.4);
   yield* waitUntil('read');
   yield* title.opacity(0, 0.2);
   title.children(heading('aradığımız sipariş: ', '#1042').children());
   market.status.text('…');
-  yield* all(title.opacity(1, 0.3), sql.root.opacity(1, 0.3), request.reveal(1, 0.4), queryLabel.opacity(1, 0.3));
+  yield* all(
+    title.opacity(1, 0.3),
+    sql.root.opacity(1, 0.3),
+    request.reveal(1, 0.4),
+    queryLabel.opacity(1, 0.3),
+  );
   yield* request.travel(0.65);
-  yield* all(request.arrive(), table.rows[1].highlight.opacity(1, 0.25), ...table.rows.filter((_, i) => i !== 1).map(row => row.root.opacity(0.32, 0.3)));
+  yield* all(
+    request.arrive(),
+    table.rows[1].highlight.opacity(1, 0.25),
+    ...table.rows.filter((_, i) => i !== 1).map((row) => row.root.opacity(0.32, 0.3)),
+  );
   yield* all(response.reveal(1, 0.4), responseLabel.opacity(1, 0.3));
   yield* response.travel(0.65);
   market.status.text('created');
@@ -57,12 +83,24 @@ export default makeScene2D(function* (view) {
   queryLabel.text('point query');
   yield* queryLabel.opacity(1, 0.3);
   yield* waitUntil('update');
-  yield* all(title.opacity(0, 0.2), sql.root.opacity(0, 0.2), response.root.opacity(0, 0.25), responseLabel.opacity(0, 0.2), queryLabel.opacity(0, 0.2));
+  yield* all(
+    title.opacity(0, 0.2),
+    sql.root.opacity(0, 0.2),
+    response.root.opacity(0, 0.25),
+    responseLabel.opacity(0, 0.2),
+    queryLabel.opacity(0, 0.2),
+  );
   title.children(heading('şimdi siparişi ', 'hazırlayalım.').children());
   market.label.text('görevli ekranı');
   market.label.fontSize(34);
-  const action = new Rect({position: [0, 158], size: [558, 58], radius: 9, fill: accent, opacity: 0});
-  action.add(text('hazırlamaya başla', 28, {fill: background, fontWeight: 500}));
+  const action = new Rect({
+    position: [0, 158],
+    size: [558, 58],
+    radius: 9,
+    fill: accent,
+    opacity: 0,
+  });
+  action.add(text('hazırlamaya başla', 28, { fill: background, fontWeight: 500 }));
   market.body.add(action);
   queryLabel.text('update');
   code.text("UPDATE orders SET status = 'preparing' WHERE id = 1042;");
@@ -85,12 +123,25 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('crud');
   yield* all(title.opacity(0, 0.2), sql.root.opacity(0, 0.2));
   title.children(heading('kayıtlarla ', 'ne yapıyoruz?').children());
-  const crud = new Layout({y: 408, opacity: 0});
-  crud.add(['create', 'read', 'update', 'delete'].map((word, i) => text(word, 38, {x: -495 + i * 330, fill: i === 1 || i === 2 ? accent : muted, fontFamily: theme.fontFamily.mono})));
+  const crud = new Layout({ y: 408, opacity: 0 });
+  crud.add(
+    ['create', 'read', 'update', 'delete'].map((word, i) =>
+      text(word, 38, {
+        x: -495 + i * 330,
+        fill: i === 1 || i === 2 ? accent : muted,
+        fontFamily: theme.fontFamily.mono,
+      }),
+    ),
+  );
   view.add(crud);
   yield* all(title.opacity(1, 0.3), crud.opacity(1, 0.4));
   yield* waitUntil('latency');
-  yield* all(title.opacity(0, 0.2), crud.opacity(0, 0.2), queryLabel.opacity(0, 0.2), responseLabel.opacity(0, 0.2));
+  yield* all(
+    title.opacity(0, 0.2),
+    crud.opacity(0, 0.2),
+    queryLabel.opacity(0, 0.2),
+    responseLabel.opacity(0, 0.2),
+  );
   title.children(heading('ekran başında ', 'yanıtı bekliyoruz.').children());
   const latency = heading('latency: ', 'yanıtı beklediğimiz süre');
   latency.position([-806, 405]);
@@ -112,8 +163,18 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('oltp');
   yield* all(title.opacity(0, 0.2), latency.opacity(0, 0.2));
   title.children(heading('bu işin adı: ', 'OLTP').children());
-  const expansion = text('online transaction processing', 36, {position: [-806, -283], offset: [-1, 0], fill: muted, fontFamily: theme.fontFamily.mono, opacity: 0});
-  const pattern = text('az sayıda kayda, etkileşim sırasında erişmek', 35, {position: [-806, 405], offset: [-1, 0], opacity: 0});
+  const expansion = text('online transaction processing', 36, {
+    position: [-806, -283],
+    offset: [-1, 0],
+    fill: muted,
+    fontFamily: theme.fontFamily.mono,
+    opacity: 0,
+  });
+  const pattern = text('az sayıda kayda, etkileşim sırasında erişmek', 35, {
+    position: [-806, 405],
+    offset: [-1, 0],
+    opacity: 0,
+  });
   view.add([expansion, pattern]);
   yield* all(title.opacity(1, 0.3), expansion.opacity(1, 0.35), pattern.opacity(1, 0.35));
   yield* waitUntil('transaction');
@@ -122,9 +183,17 @@ export default makeScene2D(function* (view) {
   pattern.text('birlikte ele alınan read / write işlemleri');
   yield* all(title.opacity(1, 0.3), pattern.opacity(1, 0.35));
   yield* waitUntil('next');
-  yield* all(title.opacity(0, 0.2), pattern.opacity(0, 0.25), market.root.opacity(0, 0.35), request.root.opacity(0, 0.25), response.root.opacity(0, 0.25), queryLabel.opacity(0, 0.2), responseLabel.opacity(0, 0.2));
+  yield* all(
+    title.opacity(0, 0.2),
+    pattern.opacity(0, 0.25),
+    market.root.opacity(0, 0.35),
+    request.root.opacity(0, 0.25),
+    response.root.opacity(0, 0.25),
+    queryLabel.opacity(0, 0.2),
+    responseLabel.opacity(0, 0.2),
+  );
   title.children(heading('peki, ', 'bütün satışlara', ' bakarsak?').children());
   yield* table.root.position([0, 85], 0.7);
-  yield* all(title.opacity(1, 0.3), ...table.rows.map(row => row.root.opacity(1, 0.3)));
+  yield* all(title.opacity(1, 0.3), ...table.rows.map((row) => row.root.opacity(1, 0.3)));
   yield* waitUntil('end');
 });
