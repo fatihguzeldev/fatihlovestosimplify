@@ -38,7 +38,7 @@ export default makeScene2D(function* (view) {
   market.body.add([text('son 5 dakika', 27, {y: -139}), count, stamp,
     new Line({points: [[-250, 93], [250, 93]], stroke: muted, lineWidth: 1.5}),
   ]);
-  const database = cartoonDatabase('sales db', accent);
+  const database = cartoonDatabase('sales database', accent);
   database.root.position([-540, 100]);
   database.root.scale(1.4);
   database.caption.fontSize(28 / 1.4);

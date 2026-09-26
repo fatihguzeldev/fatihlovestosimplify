@@ -15,13 +15,10 @@ export default makeScene2D(function* (view) {
   market.root.position([-470, 100]);
   market.cart.remove();
   market.receipt.opacity(1);
-  const {root: database, top, caption: databaseCaption} = cartoonDatabase('database', accent);
+  const {root: database, top, caption: databaseCaption} = cartoonDatabase('sales database', accent);
   database.position([550, 110]);
   database.scale(1.4);
   databaseCaption.fontSize(28 / 1.4);
-  database.add(text('sales db', 22, {y: -5, fontFamily: theme.fontFamily.mono}));
-  const saved = text('#1042 · created', 25, {y: 60, scale: 1 / 1.4, fill: accent, fontFamily: theme.fontFamily.mono});
-  database.add(saved);
   const bridgeArrow = cartoonArrow('s02-save-order', [-108, 80], [354, 80], accent);
   const bridgeCaption = text('neyi yönetmek gerekiyor?', 44, {position: [-806, 420], offset: [-1, 0], fontFamily: theme.fontFamily.serif, fontStyle: 'italic'});
   stage.add([title, market.root, database, bridgeArrow.root, bridgeCaption]);
@@ -37,9 +34,6 @@ export default makeScene2D(function* (view) {
   market.label.fontSize(38);
   market.label.fill(foreground);
   market.status.fontSize(34);
-  saved.fontSize(19);
-  saved.scale(1);
-  saved.x(-6);
   databaseCaption.fontSize(28 / 1.08);
   const zone = new Path({data: 'M -168 -50 L -167 -85 Q -170 -123 -130 -123 L 785 -120 Q 825 -121 822 -79 L 820 351 Q 821 386 782 385 L -131 387 Q -169 388 -168 353 L -168 310', stroke: muted, opacity: 0, lineWidth: 1.6, lineDash: [9, 10]});
   const backendLabel = text('backend', 30, {position: [325, -165], opacity: 0});

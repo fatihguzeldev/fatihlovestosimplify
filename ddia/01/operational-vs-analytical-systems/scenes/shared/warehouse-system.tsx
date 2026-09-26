@@ -5,7 +5,7 @@ import {accent, text} from './drawing';
 
 export function warehouseSystem() {
   const root = new Layout({});
-  const sources = ['sales db', 'inventory db', 'geo db'].map((name, i) => {
+  const sources = ['sales database', 'inventory database', 'geo database'].map((name, i) => {
     const database = cartoonDatabase(name, accent);
     database.root.position([-570 + i * 570, -150]);
     database.root.scale(0.95);

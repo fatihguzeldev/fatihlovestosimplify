@@ -30,7 +30,7 @@ export function* updateCache(root: Layout, title: Txt) {
   cache.root.position([530, -75]);
   const cached = text('preparing', 39, {y: 37, fill: accent, fontFamily: theme.fontFamily.mono});
   cache.root.add([text('cache · order:1042', 28, {y: -46, fontFamily: theme.fontFamily.mono}), cached]);
-  const db = cartoonDatabase('sales db / orders', accent);
+  const db = cartoonDatabase('sales database / orders', accent);
   db.root.position([530, 290]);
   db.root.scale(1.1);
   db.caption.fontSize(25);

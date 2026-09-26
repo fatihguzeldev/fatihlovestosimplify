@@ -36,7 +36,7 @@ export default makeScene2D(function* (view) {
   const service = cartoonService('order service', accent);
   service.root.position([-505, 35]);
   service.root.scale(1.45);
-  const database = cartoonDatabase('sales db', accent);
+  const database = cartoonDatabase('sales database', accent);
   database.root.position([465, 35]);
   database.root.scale(1.45);
   const record = new Layout({opacity: 0});
@@ -61,7 +61,7 @@ export default makeScene2D(function* (view) {
   original.remove();
   title.children(heading('çelişirlerse ', 'hangisini esas alacağız?').children());
   const pair = new Layout({opacity: 0});
-  const pairCards = ['sales db', 'warehouse'].map((name, i) => {
+  const pairCards = ['sales database', 'warehouse'].map((name, i) => {
     const surface = paper(570, 280, i === 0 ? '#17232f' : '#101315');
     surface.root.position([-415 + i * 830, 50]);
     surface.root.add([text(name, 31, {y: -91}), text('#1042 · amount: 185', 31, {y: -5, fontFamily: theme.fontFamily.mono}),
@@ -81,7 +81,7 @@ export default makeScene2D(function* (view) {
   pair.remove();
   title.children(heading('hangi kayıt için ', 'asıl kaynak?').children());
   const scopes = new Layout({opacity: 0});
-  ['sales db', 'inventory db'].forEach((name, i) => {
+  ['sales database', 'inventory database'].forEach((name, i) => {
     const db = cartoonDatabase(name, accent);
     db.root.position([-415 + i * 830, 5]);
     db.root.scale(1.45);

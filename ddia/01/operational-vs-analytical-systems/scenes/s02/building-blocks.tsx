@@ -1,5 +1,5 @@
-import {Layout, makeScene2D, Txt} from '@motion-canvas/2d';
-import {all, waitFor, waitUntil} from '@motion-canvas/core';
+import {Layout, makeScene2D, Path, Txt} from '@motion-canvas/2d';
+import {all, easeOutCubic, waitFor, waitUntil} from '@motion-canvas/core';
 import {loadFonts} from '../../../../../common/fonts';
 import {cartoonArrow} from '../../../../../common/cartoon-arrow';
 import {cartoonDatabase} from '../../../../../common/cartoon-system';
@@ -26,13 +26,31 @@ export default makeScene2D(function* (view) {
   const title = heading('bu siparişi ', 'kaydedelim.');
   const market = createMarket();
   market.root.position([-470, 100]);
-  const {root: database, top, caption: databaseCaption} = cartoonDatabase('database', accent);
+  const {root: database, top, caption: databaseCaption} = cartoonDatabase('sales database', accent);
   database.position([550, 110]);
   database.scale(1.4);
   databaseCaption.fontSize(28 / 1.4);
   database.opacity(0);
-  database.add(text('sales db', 22, {y: -5, fontFamily: theme.fontFamily.mono}));
-  const saved = text('#1042 · created', 25, {position: [550, 194], fill: accent, fontFamily: theme.fontFamily.mono, opacity: 0});
+  const saved = new Layout({position: [638, -172], rotation: -7, scale: 0.76, opacity: 0});
+  const outline = 'M -149 -58 C -99 -70 79 -73 148 -61 Q 171 -56 173 -26 L 167 44 Q 164 67 136 69 L -45 72 L -108 114 L -89 70 Q -141 73 -159 50 C -166 20 -164 -32 -149 -58 Z';
+  const ink = {stroke: foreground, lineWidth: 3, lineCap: 'round' as const, lineJoin: 'round' as const};
+  saved.add(new Path({...ink, data: outline, fill: background}));
+  for (const [x, y] of [[143, -22], [145, -4], [143, 15], [139, 34]]) {
+    saved.add(new Path({data: `M ${x - 5} ${y + 10} Q ${x + 1} ${y + 4} ${x + 10} ${y - 4}`, stroke: accent, lineWidth: 2.1, lineCap: 'round'}));
+  }
+  const tick = new Path({data: 'M -127 1 Q -115 8 -108 22 Q -92 -5 -72 -25', stroke: accent, lineWidth: 7, lineCap: 'round', lineJoin: 'round', end: 0});
+  const burst = new Layout({opacity: 0});
+  burst.add([
+    new Path({...ink, stroke: accent, data: 'M 184 -42 Q 195 -48 205 -54'}),
+    new Path({...ink, stroke: accent, data: 'M 190 -14 L 214 -17'}),
+    new Path({...ink, stroke: accent, data: 'M 68 -83 Q 70 -94 74 -103'}),
+  ]);
+  saved.add([
+    tick,
+    text('#1042', 38, {position: [-38, -21], offset: [-1, 0], fontFamily: theme.fontFamily.mono}),
+    text('created', 24, {position: [-36, 24], offset: [-1, 0], fill: accent, fontFamily: theme.fontFamily.mono}),
+    burst,
+  ]);
   const write = cartoonArrow('s02-save-order', [-108, 80], [354, 80], accent, 0);
   const read = cartoonArrow('s02-load-order', [354, 215], [-108, 215], accent, 0);
   const writeLabel = text('saveOrder()', 25, {position: write.pointAt(0.5).addY(-60), fontFamily: theme.fontFamily.mono, opacity: 0});
@@ -42,13 +60,26 @@ export default makeScene2D(function* (view) {
   yield* stage.opacity(1, 0.65);
   yield* waitUntil('store');
   yield* market.button.scale(0.96, 0.12).to(1, 0.18);
-  yield* market.cart.opacity(0, 0.25);
-  market.cart.remove();
   yield* database.opacity(1, 0.45);
   yield* all(write.reveal(1, 0.45), writeLabel.opacity(1, 0.3));
   yield* write.travel(0.65);
-  yield* all(write.arrive(), top.stroke(accent, 0.1).to(foreground, 0.3), saved.opacity(1, 0.3));
+  yield* all(
+    write.arrive(),
+    top.stroke(accent, 0.1).to(foreground, 0.3),
+    saved.opacity(1, 0.1),
+    saved.scale(1.045, 0.22, easeOutCubic).to(1, 0.18),
+    saved.rotation(2.4, 0.22, easeOutCubic).to(-1.3, 0.18),
+    saved.y(-185, 0.3, easeOutCubic),
+    burst.opacity(1, 0.12),
+  );
+  yield* tick.end(1, 0.26, easeOutCubic);
+  yield* burst.opacity(0, 0.2);
+  yield* market.cart.opacity(0, 0.25);
+  market.cart.remove();
   yield* market.receipt.opacity(1, 0.35);
+  yield* waitFor(2.1);
+  yield* all(saved.opacity(0, 0.18), saved.scale(0.96, 0.18), saved.y(-178, 0.18));
+  saved.remove();
   yield* waitUntil('retrieve');
   yield* all(title.opacity(0, 0.2), writeLabel.opacity(0, 0.2), market.receipt.opacity(0, 0.3));
   title.children(heading('siparişi ', 'tekrar açalım.').children());

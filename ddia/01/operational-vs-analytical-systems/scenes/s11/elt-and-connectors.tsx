@@ -28,7 +28,7 @@ export default makeScene2D(function* (view) {
   yield* all(letters[1].x(60, 0.55), letters[2].x(0, 0.55));
   yield* all(letters[1].y(-226, 0.25), letters[2].y(-226, 0.25));
   const alternative = new Layout({opacity: 0});
-  const source = cartoonDatabase('sales db', accent);
+  const source = cartoonDatabase('sales database', accent);
   source.root.position([-705, 100]);
   source.root.add([
     text('#1042', 27, {y: 0, fontFamily: theme.fontFamily.mono}),

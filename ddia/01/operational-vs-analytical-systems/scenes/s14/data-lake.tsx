@@ -47,7 +47,7 @@ export default makeScene2D(function* (view) {
   direct.root.remove();
   title.children(heading('bu örnekte ', 'lake’i araya alıyoruz.').children());
   const ingest = new Layout({opacity: 0});
-  const source = cartoonDatabase('sales db', accent);
+  const source = cartoonDatabase('sales database', accent);
   source.root.position([-570, 75]);
   source.root.scale(1.5);
   source.root.add([text('#1042', 30, {y: 0, fontFamily: theme.fontFamily.mono}), text('store A', 25, {y: 62, fill: accent, fontFamily: theme.fontFamily.mono})]);

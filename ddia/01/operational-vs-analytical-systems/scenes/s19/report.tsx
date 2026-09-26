@@ -5,7 +5,7 @@ import {monthlyChart} from '../shared/workloads';
 
 export function report() {
   const root = new Layout({});
-  const cards = ['sales db / sales', 'warehouse / sales'].map((label, i) => {
+  const cards = ['sales database / sales', 'warehouse / sales'].map((label, i) => {
     const card = paper(570, 230, '#101315');
     card.root.position([-435 + 870 * i, -38]);
     const amount = text('185', 48, {position: [90, 51], fill: accent, fontFamily: theme.fontFamily.mono});

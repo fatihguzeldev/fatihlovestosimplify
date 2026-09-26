@@ -4,7 +4,7 @@ import {accent, muted, paper, text} from './drawing';
 
 export function recordAndModel() {
   const root = new Layout({});
-  const cards = ['sales db', 'warehouse', 'recommendation service'].map((name, i) => {
+  const cards = ['sales database', 'warehouse', 'recommendation service'].map((name, i) => {
     const card = paper(450, 270, '#101315');
     card.root.position([-575 + i * 575, 75]);
     card.root.add([

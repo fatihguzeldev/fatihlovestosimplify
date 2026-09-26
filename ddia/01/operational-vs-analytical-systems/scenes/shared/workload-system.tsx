@@ -16,7 +16,7 @@ export function workloadSystem() {
   market.status.text('preparing');
   market.status.fontSize(38);
   market.label.opacity(0);
-  const database = cartoonDatabase('sales db', accent);
+  const database = cartoonDatabase('sales database', accent);
   database.root.position([0, 95]);
   database.root.scale(1.12);
   database.root.add([

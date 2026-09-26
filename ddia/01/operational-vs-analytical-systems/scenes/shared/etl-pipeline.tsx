@@ -6,7 +6,7 @@ import {accent, foreground, muted, paper, text} from './drawing';
 
 export function etlPipeline() {
   const root = new Layout({});
-  const source = cartoonDatabase('sales db', accent);
+  const source = cartoonDatabase('sales database', accent);
   source.root.position([-645, 100]);
   source.root.scale(1.15);
   source.root.add([

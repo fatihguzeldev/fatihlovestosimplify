@@ -6,7 +6,7 @@ import {accent, muted, paper, text} from './drawing';
 
 export function recordChain(seed: string, showDerived = false) {
   const root = new Layout({});
-  const source = cartoonDatabase('sales db', accent);
+  const source = cartoonDatabase('sales database', accent);
   source.root.position([-650, -45]);
   source.root.scale(0.87);
   const warehouse = cartoonDatabase('data warehouse', accent);

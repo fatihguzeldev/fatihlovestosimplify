@@ -41,7 +41,7 @@ export default makeScene2D(function* (view) {
   market.label.opacity(0);
   market.status.fontSize(38);
   market.status.text('…');
-  const {root: database, top, caption} = cartoonDatabase('sales db', accent);
+  const {root: database, top, caption} = cartoonDatabase('sales database', accent);
   database.position([0, 95]);
   database.scale(1.12);
   caption.fontSize(28 / 1.12);
@@ -120,17 +120,12 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('return');
   yield* all(title.opacity(0, 0.25), report.root.opacity(0, 0.35), scientist.opacity(0, 0.3), engineer.opacity(0, 0.3), orderQuestion.opacity(0, 0.25), operational.opacity(0, 0.25), analytical.opacity(0, 0.25), request.root.opacity(0, 0.25), response.root.opacity(0, 0.25), readLabel.opacity(0, 0.25), record.opacity(0, 0.25), state.opacity(0, 0.25));
   title.children(heading('bu siparişe ', 'yakından bakalım.').children());
-  record.text('sales db');
-  record.fontSize(22);
-  state.text('#1042 · created');
-  state.fontSize(25 / 1.4);
-  state.y(60);
   yield* all(market.root.opacity(1, 0.3), market.root.position([-470, 100], 0.75), market.root.scale(1, 0.75), market.status.fontSize(26, 0.75), database.position([550, 110], 0.75), database.scale(1.4, 0.75));
   market.label.text('application');
-  caption.text('database');
+  caption.text('sales database');
   caption.fontSize(28 / 1.4);
   const closer = cartoonArrow('s04-return-to-order', [-108, 80], [354, 80], accent, 0);
   stage.add(closer.root);
-  yield* all(title.opacity(1, 0.35), market.label.opacity(1, 0.35), record.opacity(1, 0.35), state.opacity(1, 0.35), closer.reveal(1, 0.5));
+  yield* all(title.opacity(1, 0.35), market.label.opacity(1, 0.35), closer.reveal(1, 0.5));
   yield* waitUntil('end');
 });

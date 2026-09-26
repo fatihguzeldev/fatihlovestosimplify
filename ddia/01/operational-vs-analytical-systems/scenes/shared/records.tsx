@@ -14,7 +14,7 @@ export const sales = [
 export function recordTable(name: string, columns: {name: string; x: number}[], data: string[][], width = 780) {
   const height = 100 + data.length * 62;
   const surface = paper(width, height, '#101315');
-  const label = text(`sales db / ${name}`, 27, {position: [-width / 2, -height / 2 - 35], offset: [-1, 0], fontFamily: theme.fontFamily.mono});
+  const label = text(`sales database / ${name}`, 27, {position: [-width / 2, -height / 2 - 35], offset: [-1, 0], fontFamily: theme.fontFamily.mono});
   const headerY = -height / 2 + 37;
   surface.root.add([
     label,

@@ -9,7 +9,7 @@ import {monthlyChart} from '../shared/workloads';
 export function* storedResult(stage: Layout) {
   const title = heading('sonucu ', 'hazır tutsak?');
   const context = text('başka bir seçenek · aynı database içinde', 28, {position: [-806, -283], offset: [-1, 0], fill: muted});
-  const database = cartoonDatabase('sales db', accent);
+  const database = cartoonDatabase('sales database', accent);
   database.root.position([-440, 80]);
   database.root.scale(1.9);
   database.caption.fontSize(30 / 1.9);

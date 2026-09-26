@@ -9,7 +9,7 @@ export function storedTotals() {
   const boundary = paper(1660, 530);
   boundary.root.position([0, 65]);
   boundary.face.stroke(muted);
-  boundary.root.add(text('sales db', 29, {position: [-778, -228], offset: [-1, 0]}));
+  boundary.root.add(text('sales database', 29, {position: [-778, -228], offset: [-1, 0]}));
   const rows = paper(680, 338, '#101315');
   rows.root.position([-420, 75]);
   rows.root.add(text('sales · ocak satırları', 26, {y: -199, fill: muted}));

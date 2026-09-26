@@ -79,14 +79,14 @@ export default makeScene2D(function* (view) {
   yield* all(htap.scale(0.72, 0.65), htap.position([-310, 55], 0.65));
   title.children(heading('diğer kaynaklar ', 'hala ayrı.').children());
   const outside = new Layout({opacity: 0});
-  const inventory = cartoonDatabase('inventory db', accent);
+  const inventory = cartoonDatabase('inventory database', accent);
   inventory.root.position([630, -112]);
   inventory.root.scale(0.66);
   inventory.caption.fontSize(37);
   const crm = paper(220, 108, '#101315');
   crm.root.position([630, 133]);
   crm.root.add([text('CRM', 28, {y: -22}), text('API', 25, {y: 24, fill: accent, fontFamily: theme.fontFamily.mono})]);
-  const geo = cartoonDatabase('geo db', accent);
+  const geo = cartoonDatabase('geo database', accent);
   geo.root.position([630, 347]);
   geo.root.scale(0.66);
   geo.caption.fontSize(37);

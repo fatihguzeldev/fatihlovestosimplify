@@ -15,14 +15,10 @@ export default makeScene2D(function* (view) {
   market.root.position([-470, 100]);
   market.cart.remove();
   market.receipt.opacity(1);
-  const {root: database, caption} = cartoonDatabase('database', accent);
+  const {root: database, caption} = cartoonDatabase('sales database', accent);
   database.position([550, 110]);
   database.scale(1.4);
   caption.fontSize(28 / 1.4);
-  database.add([
-    text('sales db', 22, {y: -7, fontFamily: theme.fontFamily.mono}),
-    text('#1042 · created', 25 / 1.4, {y: 60, fill: accent, fontFamily: theme.fontFamily.mono}),
-  ]);
   const bridge = cartoonArrow('s04-return-to-order', [-108, 80], [354, 80], accent);
   view.add([title, market.root, database, bridge.root]);
   yield loadFonts();
