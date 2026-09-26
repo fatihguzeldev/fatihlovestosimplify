@@ -168,30 +168,36 @@ export default makeScene2D(function* (view) {
   cache.lookup.root.opacity(0);
   cache.hit.root.opacity(0);
   cache.lookupLabel.opacity(0);
-  cache.title.children(heading('ama ', 'trafik değişti.').children());
+  cache.title.children(heading('teslimat süresine ', 'geri dönelim.').children());
   cache.calculation.position([-470, 85]);
   cache.calculation.scale(1.25);
   cache.calculation.opacity(1);
-  cache.calculationResult.opacity(0);
+  cache.calculationResult.text('18 dk');
+  cache.calculationResult.opacity(1);
   cache.route.end(1);
-  const fresh = text('24 dk', 46, {
-    position: [-470, 330],
-    fill: accent,
-    opacity: 0,
-    fontFamily: theme.fontFamily.mono,
-  });
-  const refresh = heading('bu sonuç ne zaman ', 'yenilenecek?');
+  cache.traffic.opacity(0);
+  const refresh = heading('cache’teki tahmini ne zaman ', 'yenilemeliyiz?');
   refresh.position([-806, 410]);
   refresh.fontSize(48);
   refresh.opacity(0);
-  cache.root.add([fresh, refresh]);
+  cache.root.add(refresh);
   view.add(cache.root);
   yield* cache.root.opacity(1, 0.5);
+  yield* waitFor(1.6);
+  yield* cache.title.opacity(0, 0.15);
+  cache.title.children(heading('yolda trafik ', 'sıkıştı.').children());
+  yield* cache.title.opacity(1, 0.25);
   yield* cache.traffic.opacity(1, 0.65);
   yield* waitFor(0.35);
-  yield* fresh.opacity(1, 0.5);
+  yield* cache.calculationResult.opacity(0, 0.15);
+  cache.calculationResult.text('24 dk');
+  yield* cache.calculationResult.opacity(1, 0.35);
   yield* waitUntil('cache-stale');
-  yield* all(refresh.opacity(1, 0.4), cache.cache.face.stroke(accent, 0.4));
+  yield* cache.title.opacity(0, 0.15);
+  cache.title.children(heading('cache’teki tahmin ', 'güncel değil.').children());
+  yield* all(cache.title.opacity(1, 0.3), cache.cache.face.stroke(accent, 0.4));
+  yield* waitFor(0.8);
+  yield* refresh.opacity(1, 0.4);
   yield* waitUntil('next');
   yield* cache.root.opacity(0, 0.4);
   cache.root.remove();
