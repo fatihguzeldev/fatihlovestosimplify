@@ -1,0 +1,82 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "focus",
+      "targetTime": 7
+    },
+    {
+      "name": "correct",
+      "targetTime": 24
+    },
+    {
+      "name": "stale-query",
+      "targetTime": 40
+    },
+    {
+      "name": "diagnosis",
+      "targetTime": 54
+    },
+    {
+      "name": "pipeline",
+      "targetTime": 69
+    },
+    {
+      "name": "lake",
+      "targetTime": 83
+    },
+    {
+      "name": "load",
+      "targetTime": 96
+    },
+    {
+      "name": "new-query",
+      "targetTime": 112
+    },
+    {
+      "name": "materialized",
+      "targetTime": 128
+    },
+    {
+      "name": "refresh",
+      "targetTime": 145
+    },
+    {
+      "name": "cache",
+      "targetTime": 158
+    },
+    {
+      "name": "invalidate",
+      "targetTime": 173
+    },
+    {
+      "name": "miss",
+      "targetTime": 184
+    },
+    {
+      "name": "read",
+      "targetTime": 194
+    },
+    {
+      "name": "refill",
+      "targetTime": 206
+    },
+    {
+      "name": "closing",
+      "targetTime": 220
+    },
+    {
+      "name": "recap",
+      "targetTime": 238
+    },
+    {
+      "name": "next",
+      "targetTime": 254
+    },
+    {
+      "name": "end",
+      "targetTime": 270
+    }
+  ],
+  "seed": 104219
+}
