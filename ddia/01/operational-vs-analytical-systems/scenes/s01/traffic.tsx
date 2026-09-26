@@ -34,7 +34,7 @@ export function* showQueryRate(view: View2D) {
   root.add([
     requestArrow.root, queryArrow.root,
     new Txt({text: 'request', position: [requestCenter, 63], fontFamily: theme.fontFamily.sans, fontSize: 27, fill: foreground}),
-    new Txt({text: 'getMessages()', position: [requestCenter, 169], fontFamily: theme.fontFamily.mono, fontSize: 26, fill: foreground}),
+    new Txt({text: 'getMessages()', position: [requestCenter, 200], fontFamily: theme.fontFamily.mono, fontSize: 26, fill: foreground}),
     new Txt({text: 'query', position: [queryCenter, 63], fontFamily: theme.fontFamily.sans, fontSize: 27, fill: accent}),
   ]);
 
