@@ -11,7 +11,7 @@ import {loadFonts} from '../../../../../common/fonts';
 import {theme} from '../../theme';
 import {showCompute} from './compute';
 import {createBubble, createPhone} from './phone';
-import {showRequestRate} from './traffic';
+import {showQueryRate} from './traffic';
 
 const {background, foreground, accent} = theme.colors;
 const left = -960 + 1920 * theme.spacing.xl / 100;
@@ -210,7 +210,7 @@ export default makeScene2D(function* (view) {
   yield* all(question.opacity(0, 0.2), historyCount.opacity(0, 0.3));
   historyCount.remove();
   question.children([
-    new Txt({text: 'request/second', fill: accent, fontStyle: 'italic', fontWeight: 500}),
+    new Txt({text: 'query rate', fill: accent, fontStyle: 'italic', fontWeight: 500}),
     new Txt({text: ' arttığında mı?'}),
   ]);
   question.y(-285);
@@ -218,7 +218,7 @@ export default makeScene2D(function* (view) {
     question.opacity(1, 0.4), opening.y(-405, 0.8), opening.scale(0.45, 0.8),
     phone.root.position([-620, 145], 0.8), phone.root.scale(0.64, 0.8),
   );
-  const traffic = yield* showRequestRate(view);
+  const traffic = yield* showQueryRate(view);
   const service = traffic.service;
 
   yield* waitUntil('changes');
