@@ -32,9 +32,17 @@ function text(value: string, fontSize: number, props: TxtProps = {}) {
   });
 }
 
-function* replaceText(node: Txt, value: string) {
+function questionParts(before: string, emphasis: string, after = '') {
+  return [
+    new Txt({text: before}),
+    new Txt({text: emphasis, fill: accent, fontStyle: 'italic', fontWeight: 500}),
+    new Txt({text: after}),
+  ];
+}
+
+function* replaceQuestion(node: Txt, before: string, emphasis: string, after = '') {
   yield* node.opacity(0, 0.2);
-  node.text(value);
+  node.children(questionParts(before, emphasis, after));
   yield* node.opacity(1, 0.3);
 }
 
@@ -177,17 +185,13 @@ export default makeScene2D(function* (view) {
     position: [left, -85], offset: [-1, 0], fontFamily: theme.fontFamily.sans,
     fontSize: 50, fontWeight: 400, fill: foreground, textWrap: false,
     lineHeight: '125%', opacity: 0,
-    children: [
-      new Txt({text: 'peki, ne zaman '}),
-      new Txt({text: 'data-intensive', fill: accent, fontStyle: 'italic', fontWeight: 500}),
-      new Txt({text: ' diyoruz?'}),
-    ],
+    children: questionParts('peki, ne zaman ', 'data-intensive', ' diyoruz?'),
   });
   view.add(question);
   yield* question.opacity(1, 0.5);
 
   yield* waitUntil('volume');
-  yield* replaceText(question, 'mesajlar biriktikçe mi?');
+  yield* replaceQuestion(question, 'mesaj ', 'sayısı', ' arttığında mı?');
   const historyCount = text('2 mesaj', 38, {position: [0, 480], offset: [0, 0], fill: accent, opacity: 0});
   phone.root.add(historyCount);
   yield* historyCount.opacity(1, 0.5);
@@ -209,10 +213,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('query-rate');
   yield* all(question.opacity(0, 0.2), historyCount.opacity(0, 0.3));
   historyCount.remove();
-  question.children([
-    new Txt({text: 'query rate', fill: accent, fontStyle: 'italic', fontWeight: 500}),
-    new Txt({text: ' arttığında mı?'}),
-  ]);
+  question.children(questionParts('', 'query rate', ' arttığında mı?'));
   question.y(-285);
   yield* all(
     question.opacity(1, 0.4), opening.y(-405, 0.8), opening.scale(0.45, 0.8),
@@ -229,7 +230,7 @@ export default makeScene2D(function* (view) {
   service.scale(0.47);
   view.add(service);
   traffic.root.remove();
-  question.text('mesajı sonradan düzeltirsek?');
+  question.children(questionParts('gönderdiğimiz mesajı ', 'değiştirirsek?'));
   const writer = createPhone('fatih');
   writer.root.position([-620, 165]);
   writer.root.scale(0.64);
@@ -287,7 +288,7 @@ export default makeScene2D(function* (view) {
   yield* phone.root.opacity(1, 0.4);
 
   yield* waitUntil('concurrency');
-  yield* replaceText(question, 'fatih hangi hâlini görecek?');
+  yield* replaceQuestion(question, 'fatih ', 'hangi halini', ' görecek?');
   writer.clock.text('14:39');
   phone.clock.text('14:39');
   yield* editMode.opacity(1, 0.15);
@@ -311,7 +312,7 @@ export default makeScene2D(function* (view) {
   yield* all(pendingLabel.opacity(1, 0.4), pendingText.opacity(1, 0.4));
 
   yield* waitUntil('failures');
-  yield* replaceText(question, 'yanıt gelmedi. mesaj kaydedildi mi?');
+  yield* replaceQuestion(question, 'yanıt gelmedi. mesaj ', 'kaydedildi mi?');
   yield* all(writer.root.opacity(0, 0.4), names.opacity(0, 0.4), shared.opacity(0, 0.4), operations.opacity(0, 0.4), readerLoading.opacity(0, 0.4));
   readerLoading.remove();
   writer.root.remove();
@@ -343,7 +344,7 @@ export default makeScene2D(function* (view) {
   returnLabel.x(-40);
 
   yield* waitUntil('availability');
-  yield* replaceText(question, 'sohbeti açamıyoruz.');
+  yield* replaceQuestion(question, 'sohbeti ', 'açamıyoruz.');
   yield* outgoing.root.opacity(0, 0.4);
   phone.status.text('bağlanıyor…');
   const reconnecting = text('bağlanıyor…', 30, {offset: [0, 0], opacity: 0});
