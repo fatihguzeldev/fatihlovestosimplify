@@ -1,0 +1,46 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "compare",
+      "targetTime": 4
+    },
+    {
+      "name": "write",
+      "targetTime": 19
+    },
+    {
+      "name": "queries",
+      "targetTime": 35
+    },
+    {
+      "name": "workload",
+      "targetTime": 51
+    },
+    {
+      "name": "people",
+      "targetTime": 66
+    },
+    {
+      "name": "machines",
+      "targetTime": 79
+    },
+    {
+      "name": "time",
+      "targetTime": 93
+    },
+    {
+      "name": "size",
+      "targetTime": 109
+    },
+    {
+      "name": "next",
+      "targetTime": 124
+    },
+    {
+      "name": "end",
+      "targetTime": 138
+    }
+  ],
+  "seed": 104207
+}
