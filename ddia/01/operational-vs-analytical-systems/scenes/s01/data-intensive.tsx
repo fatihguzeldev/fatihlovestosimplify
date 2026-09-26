@@ -256,9 +256,9 @@ export default makeScene2D(function* (view) {
   const recordStamp = text('14:32', 18, {position: [145, 52], offset: [1, 0], fill: theme.colors.muted});
   shared.add([record, recordId, storedText, recordStamp]);
   const operations = new Layout({opacity: 0});
-  const editPath = cartoonArrow([-424, 95], [-207, 205], accent, 0);
+  const editPath = cartoonArrow('s01-edit', [-424, 95], [-207, 205], accent, 0);
   const editLabel = text('edit', 28, {position: [-340, 79], offset: [0, 0], fill: accent, opacity: 0});
-  const readPath = cartoonArrow([424, 95], [207, 205], accent, 0);
+  const readPath = cartoonArrow('s01-concurrent-read', [424, 95], [207, 205], accent, 0);
   const readLabel = text('read', 28, {position: [340, 79], offset: [0, 0], opacity: 0});
   operations.add([editPath.root, editLabel, readPath.root, readLabel]);
   view.add([writer.root, names, shared, operations]);
@@ -333,8 +333,8 @@ export default makeScene2D(function* (view) {
   outgoing.checks.opacity(0);
   yield* outgoing.root.opacity(1, 0.3);
   const delivery = new Layout({opacity: 0});
-  const sendPath = cartoonArrow([-424, 90], [356, 90], accent);
-  const returnPath = cartoonArrow([356, 215], [-424, 215], accent);
+  const sendPath = cartoonArrow('s01-write', [-424, 90], [356, 90], accent);
+  const returnPath = cartoonArrow('s01-response', [356, 215], [-424, 215], accent);
   const sendLabel = text('write', 26, {position: [10, 37], fill: accent});
   const returnLabel = text('yanıt', 26, {position: [20, 271]});
   const interruption = text('×', 56, {position: returnPath.pointAt(0.43), offset: [0, 0], fill: accent, opacity: 0});
