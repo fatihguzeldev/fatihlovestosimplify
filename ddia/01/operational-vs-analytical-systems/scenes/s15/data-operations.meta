@@ -18,6 +18,10 @@
       "targetTime": 46
     },
     {
+      "name": "write-access",
+      "targetTime": 52
+    },
+    {
       "name": "batch",
       "targetTime": 57
     },

@@ -7,6 +7,7 @@ import {theme} from '../../theme';
 import {accent, background, foreground, heading, muted, paper, text} from '../shared/drawing';
 import {lakeConsumers} from '../shared/lake-system';
 import {batchAndStream} from './batch-and-stream';
+import {accessExample} from './access';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -81,13 +82,15 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(1, 0.3), systems.root.opacity(1, 0.5));
   yield* tags.opacity(1, 0.4);
   yield* waitUntil('privacy');
-  yield* title.opacity(0, 0.2);
-  title.children(heading('kimin neye eriştiği de ', 'işin parçası.').children());
-  yield* title.opacity(1, 0.3);
-  yield* waitUntil('batch');
   yield* all(title.opacity(0, 0.2), systems.root.opacity(0, 0.4), tags.opacity(0, 0.3));
   systems.root.remove();
   tags.remove();
+  const access = new Layout({});
+  view.add(access);
+  yield* accessExample(access, title);
+  yield* waitUntil('batch');
+  yield* all(title.opacity(0, 0.2), access.opacity(0, 0.4));
+  access.remove();
   const timing = new Layout({});
   view.add(timing);
   yield* batchAndStream(timing, title);
