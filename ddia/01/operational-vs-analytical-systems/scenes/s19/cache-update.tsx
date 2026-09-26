@@ -1,4 +1,4 @@
-import {Layout, Line, Rect, type Txt} from '@motion-canvas/2d';
+import {Layout, Rect, type Txt} from '@motion-canvas/2d';
 import {all, waitFor, waitUntil} from '@motion-canvas/core';
 import {cartoonArrow} from '../../../../../common/cartoon-arrow';
 import {cartoonDatabase, cartoonService} from '../../../../../common/cartoon-system';
@@ -9,16 +9,15 @@ import {createMarket} from '../shared/market';
 export function* updateCache(root: Layout, title: Txt) {
   title.children(heading('sipariş ', 'yola çıktı.').children());
   const market = createMarket();
-  market.body.removeChildren();
+  market.cart.remove();
+  market.receipt.opacity(1);
+  market.receiptTotal.text('165 ₺');
   market.root.position([-545, 90]);
   market.root.scale(0.95);
   market.label.opacity(0);
-  const shown = text('preparing', 49, {position: [-269, -3], offset: [-1, 0], fill: accent, fontFamily: theme.fontFamily.mono});
-  market.body.add([text('sipariş #1042', 45, {position: [-269, -90], offset: [-1, 0], fontWeight: 500}), shown,
-    new Line({points: [[-270, 52], [270, 52]], stroke: muted, opacity: 0.3, lineWidth: 1.5}),
-    text('muz · süt', 30, {position: [-269, 107], offset: [-1, 0]}),
-    text('165 ₺', 32, {position: [269, 107], offset: [1, 0], fontFamily: theme.fontFamily.mono}),
-  ]);
+  const shown = market.status;
+  shown.text('preparing');
+  shown.fontSize(34);
   const service = cartoonService('order service', accent);
   service.root.position([-545, 95]);
   service.root.scale(1.65);
