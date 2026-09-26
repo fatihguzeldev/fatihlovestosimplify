@@ -6,6 +6,11 @@
     "start": "vite",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix --max-warnings 0",
+    "check": "npm run format:check && npm run lint && npm run typecheck",
     "thumbnails": "node scripts/render-thumbnails.mjs"
   },
   "dependencies": {
@@ -13,11 +18,17 @@
     "@motion-canvas/core": "3.17.2"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@motion-canvas/ffmpeg": "3.17.2",
     "@motion-canvas/ui": "3.17.2",
     "@motion-canvas/vite-plugin": "3.17.2",
+    "eslint": "10.11.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.12.0",
     "playwright": "1.63.0",
+    "prettier": "3.9.9",
     "typescript": "~5.9.3",
+    "typescript-eslint": "8.70.1",
     "vite": "~5.4.21"
   },
   "overrides": {

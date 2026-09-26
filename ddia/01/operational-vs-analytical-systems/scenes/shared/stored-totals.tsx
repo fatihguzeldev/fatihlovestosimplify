@@ -1,7 +1,7 @@
 import {Layout, Line} from '@motion-canvas/2d';
 import {cartoonArrow} from '../../../../../common/cartoon-arrow';
 import {theme} from '../../theme';
-import {accent, background, muted, paper, text} from './drawing';
+import {accent, muted, paper, text} from './drawing';
 import {sales} from './records';
 
 export function storedTotals() {

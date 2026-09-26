@@ -1,0 +1,8 @@
+**/node_modules/
+dist/
+output/
+plans/
+ilke/
+ne ulan bu/
+**/package-lock.json
+**/*.meta

@@ -3,7 +3,7 @@ import {all, waitUntil} from '@motion-canvas/core';
 import {loadFonts} from '../../../../../common/fonts';
 import {cartoonArrow} from '../../../../../common/cartoon-arrow';
 import {theme} from '../../theme';
-import {accent, background, foreground, heading, muted, paper, text} from '../shared/drawing';
+import {accent, background, heading, muted, paper, text} from '../shared/drawing';
 import {recordChain} from '../shared/record-chain';
 import {storedTotals} from '../shared/stored-totals';
 
