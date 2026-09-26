@@ -1,0 +1,42 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "filter",
+      "targetTime": 16
+    },
+    {
+      "name": "group",
+      "targetTime": 29
+    },
+    {
+      "name": "sum",
+      "targetTime": 43
+    },
+    {
+      "name": "chart",
+      "targetTime": 56
+    },
+    {
+      "name": "olap",
+      "targetTime": 69
+    },
+    {
+      "name": "promotion",
+      "targetTime": 84
+    },
+    {
+      "name": "together",
+      "targetTime": 101
+    },
+    {
+      "name": "compare",
+      "targetTime": 120
+    },
+    {
+      "name": "end",
+      "targetTime": 140
+    }
+  ],
+  "seed": 104206
+}
