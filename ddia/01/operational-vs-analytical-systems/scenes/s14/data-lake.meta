@@ -1,0 +1,42 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "files",
+      "targetTime": 5
+    },
+    {
+      "name": "choose",
+      "targetTime": 18
+    },
+    {
+      "name": "insert-lake",
+      "targetTime": 28
+    },
+    {
+      "name": "consumers",
+      "targetTime": 44
+    },
+    {
+      "name": "training",
+      "targetTime": 57
+    },
+    {
+      "name": "raw",
+      "targetTime": 69
+    },
+    {
+      "name": "meaning",
+      "targetTime": 80
+    },
+    {
+      "name": "next",
+      "targetTime": 94
+    },
+    {
+      "name": "end",
+      "targetTime": 106
+    }
+  ],
+  "seed": 104214
+}
