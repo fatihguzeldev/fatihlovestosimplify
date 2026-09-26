@@ -29,7 +29,7 @@ export function createPhone(name: string) {
     lineWidth: 4,
     lineJoin: 'round',
   });
-  const screen = new Rect({width: 464, height: 820, radius: 62, fill: ink, stroke: foreground, lineWidth: 0.7, clip: true});
+  const screen = new Rect({width: 464, height: 820, radius: 62, fill: ink, clip: true});
   root.add([
     new Rect({position: [-252, -250], size: [7, 36], radius: 3, fill: foreground}),
     new Rect({position: [-251, -169], size: [7, 66], radius: 3, fill: foreground}),
@@ -37,8 +37,8 @@ export function createPhone(name: string) {
     new Rect({position: [253, -144], size: [7, 105], radius: 3, fill: foreground}),
     body,
     screen,
+    new Rect({size: () => screen.size(), radius: () => screen.radius(), stroke: '#62676d', lineWidth: 2}),
   ]);
-  root.add(stroke('M -234 -315 L -233 321 Q -234 414 -149 416', '#62676d', 1.5));
 
   screen.add(new Rect({position: [0, -320], size: [464, 180], fill: '#191c1f'}));
   const clock = label('14:32', 21, -156, -365);
