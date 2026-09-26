@@ -37,7 +37,7 @@ export default makeScene2D(function* (view) {
     const card = paper(560, 122, '#101315');
     card.root.position([x, -173]);
     card.root.add([
-      text(i ? 'şüpheli işlem örüntüleri' : 'sipariş #1042', 30, {y: -25}),
+      text(i ? 'hangi işlemler şüpheli?' : 'sipariş #1042', 30, {y: -25}),
       text(i ? 'çok sayıda kaydı tara' : 'oku / güncelle', 25, {y: 26, fill: accent, fontFamily: theme.fontFamily.mono}),
     ]);
     const arrow = cartoonArrow(`s12-htap-input-${i}`, [0, 0], [0, 212], accent, 0);

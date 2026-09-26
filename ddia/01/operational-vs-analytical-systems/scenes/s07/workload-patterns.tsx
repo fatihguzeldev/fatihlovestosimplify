@@ -97,7 +97,7 @@ export default makeScene2D(function* (view) {
   drawings.add([user, analyst]);
   yield* all(user.opacity(1, 0.4), analyst.opacity(1, 0.4));
   yield* waitUntil('machines');
-  yield* show('yalnızca ', 'insanlar kullanmıyor.', ['authorization', 'fraud detection'], ['bu işleme izin var mı?', 'şüpheli bir örüntü var mı?'], 38);
+  yield* show('yalnızca ', 'insanlar kullanmıyor.', ['authorization', 'fraud detection'], ['bu işleme izin var mı?', 'hangi işlemler şüpheli?'], 38);
   const permission = paper(330, 90, '#17232f');
   permission.root.position([-460, 320]);
   permission.root.add(text('allow / deny', 27, {fontFamily: theme.fontFamily.mono}));
