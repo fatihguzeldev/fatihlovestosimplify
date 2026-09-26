@@ -19,14 +19,14 @@ export function* showCache(view: View2D) {
   market.label.fill(foreground);
   const delivery = deliveryPair();
   delivery.y(-51);
-  const estimate = text('18 dk', 62, { position: [0, 123], fill: accent, opacity: 0 });
+  const estimate = text('18 dk', 62, { position: [0, 135], fill: accent, opacity: 0 });
   market.body.add([
     text('teslimat', 31, { position: [-270, -147], offset: [-1, 0], fontWeight: 500 }),
     delivery,
     text('market', 28, { position: [-168, 8] }),
     text('ev', 28, { position: [168, 8] }),
     new Path({ ...ink, opacity: 0.2, lineWidth: 1.5, data: 'M -266 48 L 266 47' }),
-    text('tahmini süre', 27, { y: 78, fill: muted }),
+    text('tahmini süre', 27, { y: 68, fill: muted }),
     estimate,
   ]);
   const calculation = new Layout({ position: [0, 85] });
@@ -118,6 +118,12 @@ export function* showCache(view: View2D) {
   ]);
   const compute = cartoonArrow('s02-calculate-route', [-354, 90], [-205, 90], accent, 0);
   const save = cartoonArrow('s02-cache-save', [211, 90], [385, 90], accent, 0);
+  const reply = cartoonArrow('s02-calculated-eta-reply', [-205, 235], [-354, 235], accent, 0);
+  const replyLabel = text('18 dk', 25, {
+    position: [-279, 316],
+    fill: accent,
+    opacity: () => reply.reveal(),
+  });
   const computeLabel = text('kaç dakika?', 25, {
     position: compute.pointAt(0.5).addY(-86),
     opacity: 0,
@@ -136,6 +142,8 @@ export function* showCache(view: View2D) {
     save.root,
     computeLabel,
     saveLabel,
+    reply.root,
+    replyLabel,
   ]);
   view.add(root);
   yield* root.opacity(1, 0.5);
@@ -152,9 +160,11 @@ export function* showCache(view: View2D) {
     ticket.opacity(1, 0.15),
     ticket.y(0, 0.4, easeOutCubic),
     ticket.rotation(-1, 0.4, easeOutCubic),
-    estimate.opacity(1, 0.25),
     cache.face.stroke(accent, 0.15).to(foreground, 0.25),
   );
+  yield* reply.reveal(1, 0.3);
+  yield* reply.travel(0.5);
+  yield* all(reply.arrive(), estimate.opacity(1, 0.25));
 
   yield* waitUntil('cache-hit');
   yield* all(
@@ -162,6 +172,8 @@ export function* showCache(view: View2D) {
     calculation.opacity(0, 0.3),
     compute.root.opacity(0, 0.3),
     save.root.opacity(0, 0.3),
+    reply.root.opacity(0, 0.3),
+    replyLabel.opacity(0, 0.3),
     computeLabel.opacity(0, 0.2),
     saveLabel.opacity(0, 0.2),
     estimate.opacity(0, 0.3),

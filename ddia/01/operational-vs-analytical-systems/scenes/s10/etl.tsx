@@ -20,12 +20,12 @@ export default makeScene2D(function* (view) {
   yield* all(...landscape.sources.map((source) => source.root.y(270, 0.65)));
   title.children(heading('her kayıt, ', 'bir işin', ' parçası.').children());
   const actors = new Layout({ opacity: 0 });
-  const applications = ['ecommerce', 'stock-keeping', 'route planner'];
-  ['müşteri', 'depo çalışanı', 'sürücü'].forEach((name, i) => {
+  const applications = ['ecommerce', 'stock-keeping', 'store directory'];
+  ['müşteri', 'depo çalışanı', 'mağaza yöneticisi'].forEach((name, i) => {
     const x = -570 + i * 570;
     const person = role(
       name,
-      ['sipariş veriyor', 'stokları takip ediyor', 'rotasını planlıyor'][i],
+      ['sipariş veriyor', 'stokları takip ediyor', 'mağaza bilgilerini güncelliyor'][i],
       i,
     );
     person.position([x + 25, -165]);
@@ -33,9 +33,9 @@ export default makeScene2D(function* (view) {
     const application = paper(340, 86, '#101315');
     application.root.position([x, -35]);
     application.root.add(text(applications[i], 27, { fontFamily: theme.fontFamily.mono }));
-    const arrow = cartoonArrow(`s10-app-${i}-records`, [0, 0], [0, 210], accent, 0);
-    arrow.root.position([x, 39]);
-    arrow.root.scale(0.4);
+    const arrow = cartoonArrow(`s10-app-${i}-records`, [0, 0], [0, 126], accent, 0);
+    arrow.root.position([x, 29]);
+    arrow.root.scale(0.75);
     actors.add([person, application.root, arrow.root]);
     arrow.reveal(1);
   });
@@ -75,7 +75,7 @@ export default makeScene2D(function* (view) {
   lookup.root.position([0, -202]);
   lookup.root.opacity(0);
   lookup.root.add([
-    text('store lookup', 21, { y: -22, fill: muted, fontFamily: theme.fontFamily.mono }),
+    text('store database · lookup', 21, { y: -22, fill: muted, fontFamily: theme.fontFamily.mono }),
     text('A → Marmara', 27, { y: 18, fill: accent, fontFamily: theme.fontFamily.mono }),
   ]);
   view.add(lookup.root);
@@ -128,7 +128,7 @@ export default makeScene2D(function* (view) {
         opacity: () => load.reveal(),
       }),
     ]);
-    const table = text(['sales', 'inventory', 'geo'][i], 27, {
+    const table = text(['sales', 'inventory', 'stores'][i], 27, {
       y: -12 + i * 41,
       fill: accent,
       fontFamily: theme.fontFamily.mono,

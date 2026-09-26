@@ -37,18 +37,22 @@ export function* storedResult(stage: Layout) {
   const chart = monthlyChart();
   chart.root.position([440, 80]);
   chart.root.scale(0.85);
-  const ready = paper(305, 82, '#17232f');
-  ready.root.position([440, 316]);
-  ready.root.opacity(0);
-  ready.root.add(text('A 400 · B 300', 29, { fontFamily: theme.fontFamily.mono, fill: accent }));
-  stage.add([title, context, database.root, chart.root, ready.root]);
+  chart.root.opacity(0);
+  const calculate = text('SUM(amount) GROUP BY store', 26, {
+    position: [-440, -199],
+    fontFamily: theme.fontFamily.mono,
+    fill: accent,
+    opacity: 0,
+  });
+  stage.add([title, context, database.root, chart.root, calculate]);
   yield* stage.opacity(1, 0.45);
-  yield* ready.root.opacity(1, 0.3);
+  yield* calculate.opacity(1, 0.3);
+  yield* database.top.stroke(accent, 0.25);
   yield* waitFor(0.8);
-  yield* all(ready.root.position([-440, 167], 0.85), ready.root.scale(0.75, 0.85));
-  yield* all(ready.root.opacity(0, 0.15), totals.root.opacity(1, 0.25));
+  yield* totals.root.opacity(1, 0.35);
+  yield* all(calculate.opacity(0, 0.25), database.top.stroke(foreground, 0.3));
   yield* waitUntil('reuse');
-  yield* all(title.opacity(0, 0.2), chart.root.opacity(0.3, 0.25));
+  yield* title.opacity(0, 0.2);
   title.children(heading('bir sonraki okuma ', 'hazır sonucu', ' alır.').children());
   const read = cartoonArrow('s09-read-stored-total', [116, 45], [-182, 45], accent, 0);
   const reply = cartoonArrow('s09-stored-total-result', [-182, 207], [116, 207], accent, 0);

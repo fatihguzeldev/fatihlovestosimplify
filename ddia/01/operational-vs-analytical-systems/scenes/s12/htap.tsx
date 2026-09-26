@@ -55,7 +55,7 @@ export default makeScene2D(function* (view) {
     ]);
     const arrow = cartoonArrow(`s12-htap-input-${i}`, [0, 0], [0, 212], accent, 0);
     arrow.root.position([x, -80]);
-    arrow.root.scale(0.34);
+    arrow.root.scale(0.65);
     htap.add([card.root, arrow.root]);
     return arrow;
   });
@@ -66,6 +66,7 @@ export default makeScene2D(function* (view) {
     fill: muted,
   });
   htap.add([boundary.root, interfaceBar.root, name, promise]);
+  boundary.root.moveToBottom();
   view.add([htap, context]);
   context.opacity(0);
   yield* all(title.opacity(1, 0.3), htap.opacity(1, 0.5), context.opacity(1, 0.3));
@@ -111,7 +112,7 @@ export default makeScene2D(function* (view) {
     text('CRM', 28, { y: -22 }),
     text('API', 25, { y: 24, fill: accent, fontFamily: theme.fontFamily.mono }),
   ]);
-  const geo = cartoonDatabase('geo database', accent);
+  const geo = cartoonDatabase('store database', accent);
   geo.root.position([630, 347]);
   geo.root.scale(0.66);
   geo.caption.fontSize(37);

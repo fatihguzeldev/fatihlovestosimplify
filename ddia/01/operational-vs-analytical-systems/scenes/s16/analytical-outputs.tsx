@@ -23,63 +23,71 @@ export default makeScene2D(function* (view) {
   const result = paper(600, 260, '#17232f');
   result.root.position([0, 75]);
   result.root.add([
-    text('risk sinyali', 49, { y: -24, fill: accent }),
-    text('analytical output', 27, { y: 56, fill: muted, fontFamily: theme.fontFamily.mono }),
+    text('inceleme bekliyor', 43, { y: -24, fill: accent }),
+    text('customer #17 · 3 başarısız deneme', 25, {
+      y: 56,
+      fill: muted,
+      fontFamily: theme.fontFamily.mono,
+    }),
   ]);
   view.add([title, result.root]);
   yield loadFonts();
   yield* waitUntil('sync');
   yield* all(title.opacity(0, 0.2), result.root.opacity(0, 0.4));
   result.root.remove();
-  title.children(heading('örneğin, müşteri segmentini ', 'CRM’e taşıyalım.').children());
+  title.children(heading('bu uyarıyı ', 'CRM’e taşıyalım.').children());
   const sync = new Layout({ opacity: 0 });
   const warehouse = cartoonDatabase('data warehouse', accent);
   warehouse.root.position([-645, 90]);
   warehouse.root.scale(1.35);
   warehouse.root.add(
-    text('customers', 26, { y: 15, fill: accent, fontFamily: theme.fontFamily.mono }),
+    text('review_flags', 24, { y: 15, fill: accent, fontFamily: theme.fontFamily.mono }),
   );
-  const segment = paper(380, 220, '#17232f');
-  segment.root.position([0, 90]);
-  const segmentValue = text('frequent_buyer', 29, {
+  const flag = paper(380, 220, '#17232f');
+  flag.root.position([0, 90]);
+  const flagValue = text('review_required', 29, {
     y: 55,
     fill: accent,
     fontFamily: theme.fontFamily.mono,
     opacity: 0,
   });
-  segment.root.add([
+  flag.root.add([
     text('customer #17', 29, { y: -62, fontFamily: theme.fontFamily.mono }),
-    text('segment', 24, { y: -5, fill: muted, fontFamily: theme.fontFamily.mono }),
-    segmentValue,
+    text('30 sn · 3 başarısız ödeme', 22, {
+      y: -5,
+      fill: muted,
+      fontFamily: theme.fontFamily.mono,
+    }),
+    flagValue,
   ]);
   const crm = paper(360, 270, '#101315');
   crm.root.position([645, 90]);
-  const crmValue = text('—', 26, { y: 66, fill: accent, fontFamily: theme.fontFamily.mono });
+  const crmValue = text('—', 26, { y: 66, fill: accent });
   crm.root.add([
     text('CRM · #17', 33, { y: -82 }),
-    text('segment', 25, { y: -9, fill: muted, fontFamily: theme.fontFamily.mono }),
+    text('inceleme durumu', 25, { y: -9, fill: muted, fontFamily: theme.fontFamily.mono }),
     crmValue,
   ]);
-  const derive = cartoonArrow('s16-derived-customer-segment', [-445, 90], [-235, 90], accent, 0);
-  const transfer = cartoonArrow('s16-crm-segment-sync', [235, 90], [418, 90], accent, 0);
+  const readFlag = cartoonArrow('s16-read-review-flag', [-445, 90], [-235, 90], accent, 0);
+  const transfer = cartoonArrow('s16-crm-review-sync', [235, 90], [418, 90], accent, 0);
   sync.add([
     warehouse.root,
-    segment.root,
+    flag.root,
     crm.root,
-    derive.root,
+    readFlag.root,
     transfer.root,
-    text('hesapla', 27, { position: [-340, 6], opacity: () => derive.reveal() }),
+    text('oku', 27, { position: [-340, 6], opacity: () => readFlag.reveal() }),
     text('sync', 27, { position: [326, 6], fill: accent, opacity: () => transfer.reveal() }),
     text('reverse ETL', 34, { position: [0, 358], fill: accent, fontStyle: 'italic' }),
   ]);
   view.add(sync);
   yield* all(title.opacity(1, 0.3), sync.opacity(1, 0.5));
-  yield* derive.reveal(1, 0.3);
-  yield* derive.travel(0.7);
-  yield* all(derive.arrive(), segmentValue.opacity(1, 0.3));
+  yield* readFlag.reveal(1, 0.3);
+  yield* readFlag.travel(0.7);
+  yield* all(readFlag.arrive(), flagValue.opacity(1, 0.3));
   yield* transfer.reveal(1, 0.3);
   yield* transfer.travel(0.7);
-  crmValue.text('frequent_buyer');
+  crmValue.text('inceleme bekliyor');
   yield* transfer.arrive();
   yield* waitUntil('model');
   yield* all(title.opacity(0, 0.2), sync.opacity(0, 0.4));

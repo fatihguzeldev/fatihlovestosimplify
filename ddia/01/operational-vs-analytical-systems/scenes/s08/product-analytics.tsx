@@ -28,7 +28,11 @@ export default makeScene2D(function* (view) {
   market.label.text('satıcı ekranı');
   market.body.removeChildren();
   const count = text('20 sipariş', 43, { y: -85, fill: accent, fontFamily: theme.fontFamily.mono });
-  const stamp = text('son kayıt · 14:05:00', 21, { y: 165, fill: muted });
+  const stamp = text('14:00:00 < t ≤ 14:05:00', 21, {
+    y: 165,
+    fill: muted,
+    fontFamily: theme.fontFamily.mono,
+  });
   const bars = [10, 10].map((value, i) => {
     const bar = new Rect({
       position: [-132 + i * 264, 92],
@@ -73,12 +77,12 @@ export default makeScene2D(function* (view) {
   database.root.add([record, writtenAt]);
   const request = cartoonArrow('s08-live-count-query', [35, 55], [-332, 55], accent, 0);
   const response = cartoonArrow('s08-live-count-result', [-332, 198], [35, 198], accent, 0);
-  const queryLabel = text('COUNT(*)', 26, {
+  const queryLabel = text('countOrders(last5min)', 25, {
     position: request.pointAt(0.5).addY(-85),
     fontFamily: theme.fontFamily.mono,
     opacity: 0,
   });
-  const resultLabel = text('21 sipariş', 28, {
+  const resultLabel = text('11 + 9 = 20', 28, {
     position: response.pointAt(0.5).addY(83),
     fill: accent,
     opacity: 0,
@@ -88,7 +92,7 @@ export default makeScene2D(function* (view) {
   yield* all(stage.opacity(1, 0.5), title.opacity(1, 0.3));
   yield* waitUntil('fresh');
   yield* title.opacity(0, 0.2);
-  title.children(heading('yeni sipariş de ', 'hesaba katılmalı.').children());
+  title.children(heading('zaman ilerledikçe ', 'pencere de kayıyor.').children());
   const event = paper(310, 96, '#17232f');
   event.root.position([-540, -155]);
   event.root.opacity(0);
@@ -96,7 +100,14 @@ export default makeScene2D(function* (view) {
     text('yeni sipariş · #2001', 24, { y: -19 }),
     text('mağaza a · 14:05:20', 21, { y: 21, fill: accent }),
   ]);
-  stage.add(event.root);
+  const expired = paper(340, 100, '#101315');
+  expired.root.position([-540, 424]);
+  expired.root.opacity(0);
+  expired.root.add([
+    text('#1981 · mağaza b', 24, { y: -22 }),
+    text('14:00:10 · aralığın dışında', 21, { y: 23, fill: muted }),
+  ]);
+  stage.add([event.root, expired.root]);
   yield* all(title.opacity(1, 0.3), event.root.opacity(1, 0.3));
   yield* waitFor(1.2);
   yield* all(event.root.position([-540, -25], 0.7), event.root.scale(0.6, 0.7));
@@ -104,19 +115,23 @@ export default makeScene2D(function* (view) {
   record.text('#2001');
   writtenAt.text('14:05:20');
   yield* database.top.stroke(accent, 0.12).to(foreground, 0.3);
+  yield* expired.root.opacity(1, 0.4);
   yield* waitUntil('read');
   yield* all(request.reveal(1, 0.4), queryLabel.opacity(1, 0.3));
   yield* request.travel(0.7);
   yield* request.arrive();
   yield* all(response.reveal(1, 0.4), resultLabel.opacity(1, 0.3));
   yield* response.travel(0.7);
-  count.text('21 sipariş');
-  stamp.text('son kayıt · 14:05:20');
+  count.text('20 sipariş');
+  stamp.text('14:00:20 < t ≤ 14:05:20');
   bars[0].amount.text('11');
+  bars[1].amount.text('9');
   yield* all(
     response.arrive(),
     bars[0].bar.height(110, 0.35),
     bars[0].amount.y(-40, 0.35),
+    bars[1].bar.height(90, 0.35),
+    bars[1].amount.y(-20, 0.35),
     stamp.fill(accent, 0.25),
   );
   yield* waitUntil('latency');
@@ -129,7 +144,7 @@ export default makeScene2D(function* (view) {
   yield* request.arrive();
   yield* waitFor(0.25);
   yield* response.travel(0.6);
-  count.text('21 sipariş');
+  count.text('20 sipariş');
   count.fontSize(43);
   yield* response.arrive();
   yield* waitUntil('dimensions');
@@ -139,6 +154,7 @@ export default makeScene2D(function* (view) {
     response.root.opacity(0.25, 0.3),
     queryLabel.opacity(0, 0.2),
     resultLabel.opacity(0, 0.2),
+    expired.root.opacity(0, 0.3),
   );
   title.children(heading('iki ayrı ihtiyaç: ', 'güncellik ve hız.').children());
   const fresh = text('fresh data', 38, {
@@ -147,7 +163,7 @@ export default makeScene2D(function* (view) {
     fontStyle: 'italic',
     opacity: 0,
   });
-  const fast = text('low query latency', 38, {
+  const fast = text('low response time', 38, {
     position: [465, 398],
     fill: accent,
     fontStyle: 'italic',

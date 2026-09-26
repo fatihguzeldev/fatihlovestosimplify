@@ -147,8 +147,12 @@ export default makeScene2D(function* (view) {
   result.root.position([0, 75]);
   result.root.opacity(0);
   result.root.add([
-    text('risk sinyali', 49, { y: -24, fill: accent }),
-    text('analytical output', 27, { y: 56, fill: muted, fontFamily: theme.fontFamily.mono }),
+    text('inceleme bekliyor', 43, { y: -24, fill: accent }),
+    text('customer #17 · 3 başarısız deneme', 25, {
+      y: 56,
+      fill: muted,
+      fontFamily: theme.fontFamily.mono,
+    }),
   ]);
   view.add(result.root);
   yield* all(title.opacity(1, 0.3), result.root.opacity(1, 0.5));

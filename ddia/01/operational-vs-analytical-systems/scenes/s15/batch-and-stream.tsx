@@ -1,106 +1,187 @@
-import { Layout, type Txt } from '@motion-canvas/2d';
+import { Circle, Layout, Path, type Txt } from '@motion-canvas/2d';
 import { all, waitFor, waitUntil } from '@motion-canvas/core';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
-import { cartoonService } from '../../../../../common/cartoon-system';
 import { theme } from '../../theme';
-import { accent, heading, muted, paper, text } from '../shared/drawing';
+import { accent, foreground, heading, muted, paper, text } from '../shared/drawing';
 
 export function* batchAndStream(stage: Layout, title: Txt) {
-  const tray = paper(520, 235, '#101315');
-  tray.root.position([-535, 80]);
-  const mode = text('daily batch', 36, { position: [-535, -100], fill: accent });
-  const wait = text('sonraki çalıştırmayı bekliyor', 25, { position: [-535, 267], fill: muted });
-  const events = ['14:01', '14:02', '14:03'].map((time, i) => {
-    const card = paper(128, 118, '#182638');
-    card.root.position([-159 + i * 159, 0]);
-    card.root.opacity(0);
-    card.root.add([
-      text(`event ${i + 1}`, 21, { y: -23 }),
-      text(time, 23, { y: 28, fill: accent, fontFamily: theme.fontFamily.mono }),
-    ]);
-    tray.root.add(card.root);
-    return card;
-  });
-  const processing = cartoonService('processing', accent);
-  processing.root.position([75, 80]);
-  const schedule = text('ertesi gün · 02:00', 29, {
-    position: [75, -123],
+  const tray = paper(370, 350, '#101315');
+  tray.root.position([-635, 95]);
+  const mode = text('daily batch', 31, { position: [-635, -228], fill: accent });
+  const clock = text('ertesi gün · 02:00', 29, {
+    position: [0, -228],
+    fontFamily: theme.fontFamily.mono,
     fill: muted,
+  });
+  const times = ['14:01:00', '14:01:10', '14:01:20'];
+  const events = times.map((time, i) => {
+    const row = new Layout({ position: [0, -112 + i * 112], opacity: 0 });
+    const card = new Path({
+      position: [-120, 0],
+      data: 'M -28 -19 Q 0 -22 29 -18 L 27 19 Q 0 22 -28 18 Z M -27 -7 L 28 -8 M -17 9 L -5 9',
+      stroke: foreground,
+      fill: '#182638',
+      lineWidth: 2.5,
+      lineJoin: 'round',
+    });
+    row.add([
+      card,
+      text('reddedildi', 25, { position: [-55, -19], offset: [-1, 0] }),
+      text(time, 23, {
+        position: [-55, 22],
+        offset: [-1, 0],
+        fill: accent,
+        fontFamily: theme.fontFamily.mono,
+      }),
+      new Path({
+        position: [-96, 18],
+        data: 'M -8 -8 L 8 8 M -8 8 L 8 -8',
+        stroke: accent,
+        lineWidth: 3,
+        lineCap: 'round',
+      }),
+    ]);
+    tray.root.add(row);
+    return row;
+  });
+  const rule = paper(400, 300, '#101315');
+  rule.root.position([0, 95]);
+  const marks = [0, 1, 2].map((i) => {
+    const mark = new Circle({
+      position: [-70 + i * 70, 49],
+      size: 42,
+      stroke: muted,
+      lineWidth: 2.5,
+      fill: '#101315',
+    });
+    mark.add(text(String(i + 1), 24));
+    rule.root.add(mark);
+    return mark;
+  });
+  rule.root.add([
+    text('30 sn içinde', 36, { y: -76, fill: accent }),
+    text('3 başarısız ödeme', 29, { y: -20 }),
+    text('incelemeye al', 27, { y: 112, fill: muted }),
+  ]);
+  const notice = paper(320, 248, '#101315');
+  notice.root.position([650, 95]);
+  const bell = new Path({
+    position: [0, -55],
+    data: 'M -25 17 Q -16 4 -16 -13 Q -15 -36 5 -35 Q 24 -32 21 -11 Q 18 7 30 19 Z M -4 27 Q 3 40 12 28 M 1 -42 L 3 -49 M -37 -22 L -47 -29 M 40 -20 L 51 -26',
+    stroke: accent,
+    lineWidth: 3,
+    lineCap: 'round',
+    lineJoin: 'round',
+    opacity: 0,
+  });
+  const outcome = text('henüz sonuç yok', 27, { y: 26, fill: muted });
+  const customer = text('customer #17', 25, {
+    y: 81,
+    fontFamily: theme.fontFamily.mono,
+    opacity: 0,
+  });
+  notice.root.add([bell, outcome, customer]);
+  const consume = cartoonArrow('s15-payment-attempts-to-rule', [-416, 95], [-241, 95], accent, 0);
+  const emit = cartoonArrow('s15-review-notification', [242, 95], [450, 95], accent, 0);
+  const delay = text('sonraki çalıştırmayı bekliyor', 26, {
+    position: [-635, 335],
+    fill: muted,
+  });
+  const resultTime = text('', 24, {
+    position: [650, 285],
+    fill: accent,
     fontFamily: theme.fontFamily.mono,
   });
-  const result = paper(350, 210, '#101315');
-  result.root.position([650, 80]);
-  const count = text('0', 65, { y: -22, fill: accent, fontFamily: theme.fontFamily.mono });
-  result.root.add([count, text('event işlendi', 28, { y: 60 })]);
-  const consume = cartoonArrow('s15-event-processing', [0, 0], [300, 0], accent, 0);
-  consume.root.position([-230, 80]);
-  consume.root.scale(124 / 300);
-  const emit = cartoonArrow('s15-processing-result', [0, 0], [300, 0], accent, 0);
-  emit.root.position([268, 80]);
-  emit.root.scale(165 / 300);
   stage.add([
     tray.root,
     mode,
-    wait,
-    processing.root,
-    schedule,
-    result.root,
+    clock,
+    rule.root,
+    notice.root,
     consume.root,
     emit.root,
+    delay,
+    resultTime,
+    text('customer #17', 28, {
+      position: [-635, -132],
+      fontFamily: theme.fontFamily.mono,
+    }),
+    text('örnek inceleme kuralı', 29, { position: [0, -132] }),
+    text('inceleme kuyruğu', 29, { position: [650, -132] }),
   ]);
   stage.opacity(0);
-  title.children(heading('event’ler ', 'birikiyor.').children());
+  title.children(heading('aynı hesapta ', 'üç başarısız deneme.').children());
   yield* all(title.opacity(1, 0.3), stage.opacity(1, 0.5));
   for (const event of events) {
-    yield* event.root.opacity(1, 0.3);
+    yield* event.opacity(1, 0.3);
     yield* waitFor(0.5);
   }
   yield* waitUntil('batch-run');
   yield* title.opacity(0, 0.2);
-  title.children(heading('günlük çalıştırmada ', 'topluca işleniyor.').children());
-  yield* all(title.opacity(1, 0.3), wait.opacity(0, 0.2), schedule.fill(accent, 0.2));
+  title.children(heading('günlük iş çalışınca ', 'fark ediyoruz.').children());
+  yield* all(title.opacity(1, 0.3), delay.opacity(0, 0.2), clock.fill(accent, 0.2));
   yield* consume.reveal(1, 0.3);
   yield* consume.travel(0.7);
   yield* consume.arrive();
-  yield* all(...processing.lights.map((light) => light.opacity(1, 0.2).to(0.65, 0.3)));
+  for (const mark of marks) {
+    yield* all(mark.fill('#234b73', 0.18), mark.stroke(accent, 0.18));
+  }
   yield* emit.reveal(1, 0.3);
   yield* emit.travel(0.7);
-  count.text('3');
-  yield* emit.arrive();
+  outcome.text('inceleme bekliyor');
+  outcome.fill(accent);
+  resultTime.text('ertesi gün · 02:00');
+  yield* all(emit.arrive(), bell.opacity(1, 0.25), customer.opacity(1, 0.25));
   yield* waitUntil('stream');
   yield* all(title.opacity(0, 0.2), stage.opacity(0, 0.4));
   mode.text('event stream');
-  count.text('0');
-  schedule.text('14:01');
-  schedule.fill(muted);
-  wait.text('event geldikçe');
-  wait.opacity(1);
-  events.forEach((event) => event.root.opacity(0));
+  clock.text(times[0]);
+  clock.fill(muted);
+  delay.text('aynı olaylar · aynı kural');
+  delay.opacity(1);
+  resultTime.text('');
+  outcome.text('henüz sonuç yok');
+  outcome.fill(muted);
+  bell.opacity(0);
+  customer.opacity(0);
+  events.forEach((event) => event.opacity(0));
+  marks.forEach((mark) => {
+    mark.fill('#101315');
+    mark.stroke(muted);
+  });
   consume.reveal(0);
   emit.reveal(0);
-  title.children(heading('geldikçe de ', 'işleyebiliriz.').children());
+  title.children(heading('denemeleri ', 'geldikçe değerlendirelim.').children());
   yield* all(title.opacity(1, 0.3), stage.opacity(1, 0.5));
-  yield* all(consume.reveal(1, 0.3), emit.reveal(1, 0.3));
+  yield* consume.reveal(1, 0.3);
   for (let i = 0; i < events.length; i++) {
-    schedule.text(`14:0${i + 1}`);
-    yield* events[i].root.opacity(1, 0.25);
-    yield* consume.travel(0.6);
-    yield* consume.arrive();
-    yield* all(...processing.lights.map((light) => light.opacity(1, 0.1).to(0.65, 0.2)));
-    yield* emit.travel(0.6);
-    count.text(`${i + 1}`);
-    yield* emit.arrive();
-    yield* waitFor(0.5);
+    clock.text(times[i]);
+    yield* events[i].opacity(1, 0.25);
+    yield* consume.travel(0.65);
+    yield* all(consume.arrive(), marks[i].fill('#234b73', 0.2), marks[i].stroke(accent, 0.2));
+    yield* waitFor(0.4);
   }
+  yield* emit.reveal(1, 0.3);
+  yield* emit.travel(0.7);
+  clock.text('14:01:22');
+  resultTime.text('14:01:22');
+  outcome.text('inceleme bekliyor');
+  outcome.fill(accent);
+  yield* all(emit.arrive(), bell.opacity(1, 0.25), customer.opacity(1, 0.25));
   yield* waitUntil('timeliness');
   yield* title.opacity(0, 0.2);
-  title.children(heading('şüpheli işleme ', 'daha erken', ' tepki verebiliriz.').children());
-  const signal = text('risk sinyali', 29, { position: [650, 292], fill: accent, opacity: 0 });
-  stage.add(signal);
-  yield* all(title.opacity(1, 0.3), signal.opacity(1, 0.3));
+  title.children(heading('sonuç aynı, ', 'çok daha erken.').children());
+  const caution = text('bu sinyal inceleme içindir; dolandırıcılık kanıtı değil.', 29, {
+    position: [0, 425],
+    fill: muted,
+    opacity: 0,
+  });
+  stage.add(caution);
+  yield* all(title.opacity(1, 0.3), caution.opacity(1, 0.3));
   yield* waitUntil('latency');
   yield* title.opacity(0, 0.2);
   title.children(heading('bu da ', 'sıfır gecikme', ' demek değil.').children());
-  wait.text('işleme ve aktarım zaman alır');
+  delay.text('işleme ve aktarım zaman alır');
+  resultTime.text('bu örnekte · +2 sn');
   yield* title.opacity(1, 0.3);
 }

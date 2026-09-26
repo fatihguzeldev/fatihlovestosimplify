@@ -12,6 +12,7 @@ export function* updateCache(root: Layout, title: Txt) {
   market.cart.remove();
   market.receipt.opacity(1);
   market.receiptTotal.text('165 ₺');
+  market.receipt.add(text('tutar düzeltmesi · −20 ₺', 24, { y: 157, fill: accent }));
   market.root.position([-545, 90]);
   market.root.scale(0.95);
   market.label.opacity(0);
@@ -77,21 +78,21 @@ export function* updateCache(root: Layout, title: Txt) {
   yield* waitUntil('invalidate');
   yield* title.opacity(0, 0.2);
   title.children(heading('eski cache kaydını ', 'kaldıralım.').children());
-  const invalidate = text('invalidate', 29, {
-    position: [530, -236],
-    fill: accent,
-    fontStyle: 'italic',
-    opacity: 0,
-  });
-  root.add(invalidate);
-  yield* all(title.opacity(1, 0.3), invalidate.opacity(1, 0.3), cache.face.stroke(accent, 0.3));
+  cacheLabel.text('invalidate("order:1042")');
+  yield* all(title.opacity(1, 0.3), cacheLabel.opacity(1, 0.3), get.reveal(1, 0.3));
+  yield* get.travel(0.8);
+  yield* all(get.arrive(), cache.face.stroke(accent, 0.3));
   yield* cached.opacity(0, 0.2);
   cached.text('—');
   cached.fill(muted);
   yield* cached.opacity(1, 0.2);
+  yield* all(get.root.opacity(0, 0.25), cacheLabel.opacity(0, 0.25));
+  get.reveal(0);
+  get.root.opacity(1);
   yield* waitUntil('miss');
-  yield* all(title.opacity(0, 0.2), invalidate.opacity(0, 0.2));
+  yield* title.opacity(0, 0.2);
   title.children(heading('sonraki istekte ', 'cache miss.').children());
+  cacheLabel.text('get("order:1042")');
   shown.text('…');
   yield* all(title.opacity(1, 0.3), cacheLabel.opacity(1, 0.3), get.reveal(1, 0.3));
   yield* get.travel(0.8);

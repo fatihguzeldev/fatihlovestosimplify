@@ -143,7 +143,7 @@ export default makeScene2D(function* (view) {
     responseLabel.opacity(0, 0.2),
   );
   title.children(heading('ekran başında ', 'yanıtı bekliyoruz.').children());
-  const latency = heading('latency: ', 'yanıtı beklediğimiz süre');
+  const latency = heading('response time: ', 'yanıtı beklediğimiz süre');
   latency.position([-806, 405]);
   latency.fontSize(40);
   latency.opacity(0);

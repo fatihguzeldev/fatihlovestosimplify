@@ -3,7 +3,8 @@ import { all, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
-import { accent, background, heading, muted, paper, text } from '../shared/drawing';
+import { accent, background, banana, heading, muted, paper, text } from '../shared/drawing';
+import { searchIndex, searchProducts } from '../s02/search-index';
 import { recordChain } from '../shared/record-chain';
 import { storedTotals } from '../shared/stored-totals';
 
@@ -103,23 +104,23 @@ export default makeScene2D(function* (view) {
   const search = new Layout({ opacity: 0 });
   const products = paper(540, 290, '#101315');
   products.root.position([-485, 65]);
-  products.root.add([
-    text('products', 33, { y: -98, fontFamily: theme.fontFamily.mono }),
-    text('p17', 31, { position: [-190, -16], offset: [-1, 0], fontFamily: theme.fontFamily.mono }),
-    text('muz', 31, { position: [-57, -16], offset: [-1, 0] }),
-    text('p42', 31, { position: [-190, 64], offset: [-1, 0], fontFamily: theme.fontFamily.mono }),
-    text('yerli muz', 31, { position: [-57, 64], offset: [-1, 0] }),
-  ]);
-  const index = paper(540, 290, '#17232f');
-  index.root.position([485, 65]);
-  const entry = text('muz → p17, p42', 34, {
-    y: 18,
-    fill: accent,
-    fontFamily: theme.fontFamily.mono,
-    opacity: 0,
+  products.root.add(text('products', 30, { y: -246, fontFamily: theme.fontFamily.mono }));
+  searchProducts.forEach((product, i) => {
+    const y = -64 + i * 128;
+    const fruit = banana();
+    fruit.position([-193, y]);
+    fruit.rotation(product.tilt);
+    products.root.add([
+      fruit,
+      text(product.name, 33, { position: [-110, y], offset: [-1, 0] }),
+      text(product.id, 27, { position: [191, y], fontFamily: theme.fontFamily.mono, fill: muted }),
+    ]);
   });
-  index.root.add([text('search index', 33, { y: -98 }), entry]);
-  const build = cartoonArrow('s18-product-index-build', [-167, 65], [171, 65], accent, 0);
+  const index = searchIndex();
+  index.root.position([485, 65]);
+  index.documents.forEach((document) => document.root.opacity(0));
+  index.wordLabel.text('…');
+  const build = cartoonArrow('s18-product-index-build', [-167, 65], [191, 65], accent, 0);
   search.add([
     products.root,
     index.root,
@@ -131,7 +132,13 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(1, 0.3), search.opacity(1, 0.5));
   yield* build.reveal(1, 0.3);
   yield* build.travel(0.8);
-  yield* all(build.arrive(), entry.opacity(1, 0.3));
+  index.wordLabel.text('muz');
+  index.wordLabel.fill(accent);
+  yield* build.arrive();
+  yield* all(
+    ...index.links.map((link) => link.end(1, 0.45)),
+    ...index.documents.map((document) => document.root.opacity(1, 0.45)),
+  );
   yield* waitUntil('other');
   yield* all(title.opacity(0, 0.2), search.opacity(0, 0.4));
   search.remove();
@@ -239,6 +246,7 @@ export default makeScene2D(function* (view) {
     text('monthly_totals → derived', 28, { y: 91, fontFamily: theme.fontFamily.mono }),
   ]);
   roles.add([left.root, right.root]);
+  roles.add(text('bu örnekte', 27, { position: [0, 344], fill: muted }));
   view.add(roles);
   yield* all(title.opacity(1, 0.3), roles.opacity(1, 0.5));
   yield* waitUntil('return');

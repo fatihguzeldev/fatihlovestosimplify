@@ -1,8 +1,8 @@
-import { Layout } from '@motion-canvas/2d';
+import { Layout, Path } from '@motion-canvas/2d';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase } from '../../../../../common/cartoon-system';
 import { theme } from '../../theme';
-import { accent, muted, paper, text } from './drawing';
+import { accent, foreground, muted, paper, text } from './drawing';
 
 export function lakeStorage() {
   const surface = paper(500, 460, '#101315');
@@ -14,14 +14,18 @@ export function lakeStorage() {
     (name, i) => {
       const file = paper(202, 96);
       file.root.position([-116 + (i % 2) * 232, -42 + Math.floor(i / 2) * 144]);
-      if (i === 3) {
-        file.root.add([
-          text('order_items', 20, { y: -15, fontFamily: theme.fontFamily.mono }),
-          text('.parquet', 18, { y: 18, fill: muted, fontFamily: theme.fontFamily.mono }),
-        ]);
-      } else {
-        file.root.add(text(name, 20, { fontFamily: theme.fontFamily.mono }));
-      }
+      file.face.data('M -101 -46 Q 0 -49 76 -47 L 100 -23 L 99 48 Q 0 50 -100 47 Z');
+      const [base, extension] = name.split('.');
+      file.root.add([
+        new Path({
+          data: 'M 76 -47 L 75 -23 L 100 -23',
+          stroke: foreground,
+          lineWidth: 2,
+          lineJoin: 'round',
+        }),
+        text(base, 20, { y: -12, fontFamily: theme.fontFamily.mono }),
+        text(`.${extension}`, 18, { y: 22, fill: accent, fontFamily: theme.fontFamily.mono }),
+      ]);
       surface.root.add(file.root);
       return file;
     },
@@ -47,10 +51,7 @@ export function lakeConsumers() {
   train.root.position([650, 254]);
   train.root.add(text('train', 36, { fontFamily: theme.fontFamily.mono }));
   const arrow = (name: string, from: [number, number], to: [number, number]) => {
-    const flow = cartoonArrow(name, [0, 0], [300, 0], accent);
-    flow.root.position(from);
-    flow.root.scale((to[0] - from[0]) / 300);
-    return flow;
+    return cartoonArrow(name, from, to, accent);
   };
   const readSales = arrow('lake-sales-to-transform', [-251, -70], [-95, -70]);
   const load = arrow('lake-transformed-sales-to-warehouse', [329, -70], [488, -70]);

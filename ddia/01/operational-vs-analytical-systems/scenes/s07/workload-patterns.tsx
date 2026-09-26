@@ -73,7 +73,7 @@ export default makeScene2D(function* (view) {
     'data nasıl ',
     'yazılıyor?',
     ['record-level CRUD', 'bulk import / event stream'],
-    ['tek tek kayıtlar', 'ayrı analytical sistemin beslenmesi'],
+    ['tek tek kayıtlar', 'toplu yükleme veya olay akışı'],
     35,
   );
   const writes = [-460, 460].map((x, side) => {

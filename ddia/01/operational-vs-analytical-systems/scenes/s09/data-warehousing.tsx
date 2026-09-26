@@ -134,7 +134,7 @@ export default makeScene2D(function* (view) {
     reply.root.opacity(0, 0.3),
     orderReply.root.opacity(0, 0.3),
   );
-  title.children(heading('satış, stok ve konum ', 'farklı yerlerde.').children());
+  title.children(heading('satış, stok ve mağaza bilgileri ', 'farklı yerlerde.').children());
   const landscape = warehouseSystem();
   landscape.root.opacity(0);
   landscape.warehouse.root.opacity(0);

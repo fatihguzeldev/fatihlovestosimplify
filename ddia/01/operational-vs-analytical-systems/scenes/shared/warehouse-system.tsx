@@ -5,15 +5,15 @@ import { accent, text } from './drawing';
 
 export function warehouseSystem() {
   const root = new Layout({});
-  const sources = ['sales database', 'inventory database', 'geo database'].map((name, i) => {
+  const sources = ['sales database', 'inventory database', 'store database'].map((name, i) => {
     const database = cartoonDatabase(name, accent);
     database.root.position([-570 + i * 570, -150]);
     database.root.scale(0.95);
-    const first = text(['#1042', 'stock', 'route #7'][i], 27, {
+    const first = text(['#1042', 'stock', 'store A'][i], 27, {
       y: -4,
       fontFamily: theme.fontFamily.mono,
     });
-    const second = text(['store A', 'store A', '41.01,28.98'][i], 23, {
+    const second = text(['store A', 'store A', 'Marmara'][i], 23, {
       y: 56,
       fill: accent,
       fontFamily: theme.fontFamily.mono,

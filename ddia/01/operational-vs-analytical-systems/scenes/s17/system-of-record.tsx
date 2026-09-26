@@ -1,5 +1,5 @@
 import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
-import { all, waitUntil } from '@motion-canvas/core';
+import { all, waitFor, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase, cartoonService } from '../../../../../common/cartoon-system';
@@ -106,18 +106,23 @@ export default makeScene2D(function* (view) {
   const pairCards = ['sales database', 'warehouse'].map((name, i) => {
     const surface = paper(570, 280, i === 0 ? '#17232f' : '#101315');
     surface.root.position([-415 + i * 830, 50]);
+    const value = text(`#1042 · amount: ${i === 0 ? 185 : 180}`, 31, {
+      y: -5,
+      fontFamily: theme.fontFamily.mono,
+    });
     surface.root.add([
       text(name, 31, { y: -91 }),
-      text('#1042 · amount: 185', 31, { y: -5, fontFamily: theme.fontFamily.mono }),
+      value,
       text(i === 0 ? 'esas aldığımız kayıt' : 'ondan ürettiğimiz görünüm', 28, {
         y: 83,
         fill: i === 0 ? accent : muted,
       }),
     ]);
     pair.add(surface.root);
-    return surface;
+    return { ...surface, value };
   });
-  pairCards[0].face.stroke(accent);
+  const repair = cartoonArrow('s17-reconcile-from-authority', [-95, 50], [95, 50], accent, 0);
+  pair.add(repair.root);
   const caution = text('hatalı girilen bir tutarı yine bizim düzeltmemiz gerekir.', 31, {
     position: [0, 326],
     fill: muted,
@@ -126,6 +131,12 @@ export default makeScene2D(function* (view) {
   pair.add(caution);
   view.add(pair);
   yield* all(title.opacity(1, 0.3), pair.opacity(1, 0.5));
+  yield* waitFor(2);
+  yield* pairCards[0].face.stroke(accent, 0.3);
+  yield* repair.reveal(1, 0.35);
+  yield* repair.travel(0.8);
+  pairCards[1].value.text('#1042 · amount: 185');
+  yield* all(repair.arrive(), pairCards[1].value.fill(accent, 0.25));
   yield* caution.opacity(1, 0.4);
   yield* waitUntil('scope');
   yield* all(title.opacity(0, 0.2), pair.opacity(0, 0.4));
@@ -138,7 +149,7 @@ export default makeScene2D(function* (view) {
     db.root.scale(1.45);
     db.root.add([
       text(i === 0 ? 'sales' : 'stock', 29, { y: -4, fontFamily: theme.fontFamily.mono }),
-      text(i === 0 ? '#1042 · 185 ₺' : 'muz', 23, { y: 54, fill: accent }),
+      text(i === 0 ? '#1042 · 185 ₺' : 'muz · 42 kg', 23, { y: 54, fill: accent }),
     ]);
     scopes.add([
       db.root,

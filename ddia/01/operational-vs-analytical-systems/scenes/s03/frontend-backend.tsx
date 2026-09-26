@@ -111,11 +111,11 @@ export default makeScene2D(function* (view) {
     }),
     text('HTTP response', 22, { position: response.pointAt(0.5).addY(73), opacity: 0 }),
   ];
-  const packet = paper(258, 128, '#17232f');
-  packet.root.position([100, 104]);
+  const packet = paper(258, 90, '#17232f');
+  packet.root.position([100, -67]);
   packet.root.opacity(0);
   packet.root.add([
-    text('request', 24, { y: -31, fill: accent }),
+    text('request', 24, { y: -20, fill: accent }),
     text('GET /orders/1042', 21, { y: 21, fontFamily: theme.fontFamily.mono }),
   ]);
   stage.add([request.root, query.root, row.root, response.root, ...labels, packet.root]);
@@ -191,7 +191,7 @@ export default makeScene2D(function* (view) {
   );
   yield* waitUntil('next');
   yield* title.opacity(0, 0.2);
-  title.children(heading('bu data’yı ', 'başka kim', ' kullanıyor?').children());
+  title.children(heading('aynı veriyi ', 'başka kim', ' kullanıyor?').children());
   yield* all(
     title.opacity(1, 0.3),
     market.root.opacity(1, 0.3),
