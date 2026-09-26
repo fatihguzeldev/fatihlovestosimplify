@@ -17,9 +17,10 @@ export function* showSearch(view: View2D) {
   market.label.position([0, -235 - 40 / 0.9]);
   market.label.offset([0, 0]);
   market.label.fill(foreground);
-  const query = text('', 34, { position: [-204, -112], offset: [-1, 0] });
+  const searchField = new Layout({ y: -138 });
+  const query = text('', 32, { position: [-203, 0], offset: [-1, 0] });
   const placeholder = text('ürün ara', 29, {
-    position: [-204, -112],
+    position: [-203, 0],
     offset: [-1, 0],
     fill: muted,
   });
@@ -28,66 +29,68 @@ export function* showSearch(view: View2D) {
     stroke: accent,
     lineWidth: 2.2,
     fill: '#18232f',
-    data: 'M -266 -147 Q 4 -151 266 -147 Q 282 -147 282 -132 L 280 -94 Q 280 -77 265 -77 L -265 -76 Q -281 -76 -280 -92 L -282 -133 Q -282 -147 -266 -147 Z',
+    data: 'M -262 -35 Q 4 -38 262 -35 Q 277 -35 277 -20 L 276 19 Q 276 35 261 35 L -261 36 Q -277 36 -276 20 L -277 -20 Q -277 -35 -262 -35 Z',
   });
   const cursor = new Path({
     ...ink,
     stroke: accent,
     lineWidth: 2,
     opacity: 0,
-    data: 'M -142 -129 L -142 -94',
+    data: 'M -141 -17 L -141 18',
   });
-  market.body.add([
+  searchField.add([
     searchBox,
     new Path({
       ...ink,
       stroke: accent,
       lineWidth: 2.6,
-      data: 'M -245 -130 C -268 -133 -269 -103 -247 -103 C -225 -102 -223 -128 -245 -130 M -235 -104 L -224 -92',
+      data: 'M -245 -18 C -268 -21 -269 9 -247 9 C -225 10 -223 -16 -245 -18 M -235 8 L -224 20',
     }),
     placeholder,
     query,
     cursor,
   ]);
+  market.body.add(searchField);
+  const rowPositions = searchProducts.map((_, i) => i * 116);
   const loading = new Layout({ opacity: 0 });
-  [18, 134].forEach((y) => {
+  rowPositions.forEach((y) => {
     loading.add([
-      new Rect({ position: [0, y], size: [554, 99], radius: 12, fill: '#13191f' }),
+      new Rect({ position: [0, y], size: [554, 96], radius: 12, fill: '#13191f' }),
       new Path({
         ...ink,
         lineWidth: 3,
         stroke: '#35414e',
         lineDash: [6, 8],
-        data: `M -251 ${y - 30} L -190 ${y - 29} L -191 ${y + 29} L -252 ${y + 28} Z`,
+        data: `M -260 ${y - 31} L -197 ${y - 30} L -198 ${y + 31} L -261 ${y + 30} Z`,
       }),
       new Path({
         ...ink,
         stroke: '#35414e',
         lineWidth: 3,
-        data: `M -160 ${y - 12} L 13 ${y - 12} M -160 ${y + 15} L -72 ${y + 16}`,
+        data: `M -177 ${y - 17} L 13 ${y - 17} M -177 ${y + 19} L -89 ${y + 20}`,
       }),
     ]);
   });
   const resultCount = text('2 ürün', 22, {
-    position: [275, -48],
-    offset: [1, 0],
+    position: [-277, -73],
+    offset: [-1, 0],
     fill: muted,
     opacity: 0,
   });
   const products = searchProducts.map((product, i) => {
-    const row = new Layout({ position: [0, 28 + i * 116], opacity: 0 });
+    const row = new Layout({ position: [0, rowPositions[i] + 10], opacity: 0 });
     const fruit = banana();
-    fruit.position([-225, 0]);
-    fruit.scale(0.83);
+    fruit.position([-229, 0]);
+    fruit.scale(0.72);
     fruit.rotation(product.tilt);
     row.add([
-      new Rect({ size: [554, 99], radius: 12, fill: '#151c24', stroke: '#2c3946', lineWidth: 1.2 }),
-      new Rect({ position: [-225, 0], size: [80, 79], radius: 10, fill: '#202e3d' }),
+      new Rect({ size: [554, 96], radius: 12, fill: '#151c24', stroke: '#2c3946', lineWidth: 1.2 }),
+      new Rect({ position: [-229, 0], size: [64, 64], radius: 10, fill: '#202e3d' }),
       fruit,
-      text(product.name, 30, { position: [-164, -21], offset: [-1, 0], fontWeight: 500 }),
-      text('1 kg', 21, { position: [-164, 17], offset: [-1, 0], fill: muted }),
+      text(product.name, 29, { position: [-177, -17], offset: [-1, 0], fontWeight: 500 }),
+      text('1 kg', 21, { position: [-177, 19], offset: [-1, 0], fill: muted }),
       text(product.price, 28, {
-        position: [173, 1],
+        position: [190, 0],
         offset: [1, 0],
         fontFamily: theme.fontFamily.mono,
       }),
@@ -96,7 +99,7 @@ export function* showSearch(view: View2D) {
         stroke: accent,
         lineWidth: 2,
         fill: '#182638',
-        position: [226, 0],
+        position: [239, 0],
         data: 'M -20 -23 Q 0 -25 20 -21 Q 24 0 21 21 Q 0 25 -22 20 Z M -10 0 L 10 0 M 0 -10 L 0 10',
       }),
     ]);
@@ -155,7 +158,9 @@ export function* showSearch(view: View2D) {
   loading.remove();
   yield* sequence(
     0.12,
-    ...products.map((row, i) => all(row.opacity(1, 0.25), row.y(18 + i * 116, 0.3, easeOutCubic))),
+    ...products.map((row, i) =>
+      all(row.opacity(1, 0.25), row.y(rowPositions[i], 0.3, easeOutCubic)),
+    ),
   );
   yield* resultCount.opacity(1, 0.2);
   return root;
