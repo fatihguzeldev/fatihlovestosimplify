@@ -1,0 +1,38 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "htap",
+      "targetTime": 5
+    },
+    {
+      "name": "inside",
+      "targetTime": 22
+    },
+    {
+      "name": "other-sources",
+      "targetTime": 38
+    },
+    {
+      "name": "combine",
+      "targetTime": 52
+    },
+    {
+      "name": "return",
+      "targetTime": 63
+    },
+    {
+      "name": "specialization",
+      "targetTime": 74
+    },
+    {
+      "name": "next",
+      "targetTime": 86
+    },
+    {
+      "name": "end",
+      "targetTime": 98
+    }
+  ],
+  "seed": 104212
+}

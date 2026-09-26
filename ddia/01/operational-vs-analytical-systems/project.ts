@@ -14,7 +14,9 @@ import etl from './scenes/s10/etl?scene';
 
 import eltAndConnectors from './scenes/s11/elt-and-connectors?scene';
 
+import htap from './scenes/s12/htap?scene';
+
 export default makeProject({
   name: 'ddia_chapter1_operational_vs_analytical_systems',
-  scenes: [intro, dataIntensive, buildingBlocks, frontendBackend, differentJobs, transactions, analytics, workloadPatterns, productAnalytics, dataWarehousing, etl, eltAndConnectors],
+  scenes: [intro, dataIntensive, buildingBlocks, frontendBackend, differentJobs, transactions, analytics, workloadPatterns, productAnalytics, dataWarehousing, etl, eltAndConnectors, htap],
 });
