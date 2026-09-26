@@ -1,0 +1,38 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "items",
+      "targetTime": 6
+    },
+    {
+      "name": "features",
+      "targetTime": 23
+    },
+    {
+      "name": "training",
+      "targetTime": 40
+    },
+    {
+      "name": "review",
+      "targetTime": 54
+    },
+    {
+      "name": "image",
+      "targetTime": 69
+    },
+    {
+      "name": "custom-code",
+      "targetTime": 85
+    },
+    {
+      "name": "next",
+      "targetTime": 100
+    },
+    {
+      "name": "end",
+      "targetTime": 112
+    }
+  ],
+  "seed": 104213
+}
