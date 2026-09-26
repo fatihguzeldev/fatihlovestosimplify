@@ -106,11 +106,12 @@ export function createPhone(name: string) {
   composer.add(input);
   const send = new Layout({x: 187, y: () => composer.y()});
   send.add(new Circle({size: 60, fill: accent}));
-  send.add(new Path({data: 'M -13 -15 L 17 0 L -13 15 L -8 3 L 7 0 L -8 -3 Z', fill: '#101720', rotation: -12}));
+  const sendIcon = new Path({data: 'M -13 -15 L 17 0 L -13 15 L -8 3 L 7 0 L -8 -3 Z', fill: '#101720', rotation: -12});
+  send.add(sendIcon);
   screen.add([composer, send]);
   screen.add(new Rect({position: [0, 395], size: [464, 30], fill: ink}));
   screen.add(new Rect({position: [0, 394], size: [158, 5], radius: 3, fill: foreground}));
-  return {root, screen, chat, composer, input, send, keyboardProgress, contact, status, clock};
+  return {root, screen, chat, composer, input, send, sendIcon, keyboardProgress, contact, status, clock};
 }
 
 export function createBubble(value: string, outgoing: boolean, time: string, width = 380) {
