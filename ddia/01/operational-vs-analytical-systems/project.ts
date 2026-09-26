@@ -24,7 +24,11 @@ import dataOperations from './scenes/s15/data-operations?scene';
 
 import analyticalOutputs from './scenes/s16/analytical-outputs?scene';
 
+import systemOfRecord from './scenes/s17/system-of-record?scene';
+
+import derivedData from './scenes/s18/derived-data?scene';
+
 export default makeProject({
   name: 'ddia_chapter1_operational_vs_analytical_systems',
-  scenes: [intro, dataIntensive, buildingBlocks, frontendBackend, differentJobs, transactions, analytics, workloadPatterns, productAnalytics, dataWarehousing, etl, eltAndConnectors, htap, dataScience, dataLake, dataOperations, analyticalOutputs],
+  scenes: [intro, dataIntensive, buildingBlocks, frontendBackend, differentJobs, transactions, analytics, workloadPatterns, productAnalytics, dataWarehousing, etl, eltAndConnectors, htap, dataScience, dataLake, dataOperations, analyticalOutputs, systemOfRecord, derivedData],
 });

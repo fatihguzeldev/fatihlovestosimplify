@@ -1,0 +1,38 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "part",
+      "targetTime": 5
+    },
+    {
+      "name": "first-write",
+      "targetTime": 16
+    },
+    {
+      "name": "authority",
+      "targetTime": 34
+    },
+    {
+      "name": "conflict",
+      "targetTime": 48
+    },
+    {
+      "name": "scope",
+      "targetTime": 64
+    },
+    {
+      "name": "upstream",
+      "targetTime": 80
+    },
+    {
+      "name": "next",
+      "targetTime": 100
+    },
+    {
+      "name": "end",
+      "targetTime": 112
+    }
+  ],
+  "seed": 104217
+}
