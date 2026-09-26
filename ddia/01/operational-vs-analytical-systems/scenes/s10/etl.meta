@@ -1,0 +1,46 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "sources",
+      "targetTime": 4
+    },
+    {
+      "name": "extract",
+      "targetTime": 20
+    },
+    {
+      "name": "transform",
+      "targetTime": 36
+    },
+    {
+      "name": "schema",
+      "targetTime": 49
+    },
+    {
+      "name": "load",
+      "targetTime": 59
+    },
+    {
+      "name": "other-sources",
+      "targetTime": 74
+    },
+    {
+      "name": "query",
+      "targetTime": 100
+    },
+    {
+      "name": "responsibility",
+      "targetTime": 123
+    },
+    {
+      "name": "next",
+      "targetTime": 143
+    },
+    {
+      "name": "end",
+      "targetTime": 155
+    }
+  ],
+  "seed": 104210
+}
