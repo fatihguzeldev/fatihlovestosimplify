@@ -113,16 +113,16 @@ export function createPhone(name: string) {
 export function createBubble(value: string, outgoing: boolean, time: string, width = 380) {
   const root = new Layout({});
   const fill = outgoing ? '#243e5a' : '#2a2e33';
-  const body = new Rect({width, height: 108, radius: outgoing ? [23, 23, 6, 23] : [6, 23, 23, 23], fill});
+  const body = new Rect({width, height: 74, radius: outgoing ? [23, 23, 6, 23] : [6, 23, 23, 23], fill});
   const tail = new Path({
     data: outgoing ? 'M 0 0 L 17 14 Q 5 15 -5 7 Z' : 'M 0 0 L -17 -14 Q -4 -15 5 -7 Z',
     x: outgoing ? width / 2 - 5 : -width / 2 + 5,
     y: () => outgoing ? body.height() / 2 - 15 : -body.height() / 2 + 15,
     fill,
   });
-  const text = label(value, 30, -width / 2 + 22, -12);
+  const text = label(value, 25, -width / 2 + 22, -12);
   text.offset([-1, 0]);
-  const stamp = label(time, 17, width / 2 - (outgoing ? 56 : 22), 32);
+  const stamp = label(time, 17, width / 2 - (outgoing ? 56 : 22), 15);
   stamp.offset([1, 0]);
   stamp.fill('#aeb7c1');
   stamp.y(() => body.height() / 2 - 22);

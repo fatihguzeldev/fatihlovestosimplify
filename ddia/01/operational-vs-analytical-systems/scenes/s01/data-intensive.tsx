@@ -133,7 +133,7 @@ export default makeScene2D(function* (view) {
   phone.root.rotation(-5);
   phone.root.opacity(0);
   const incoming = createBubble('birazdan oradayım.', false, '14:32');
-  incoming.root.position([-25, -125]);
+  incoming.root.position([-25, -135]);
   incoming.root.opacity(0);
   phone.chat.add(incoming.root);
   view.add(phone.root);
@@ -144,7 +144,7 @@ export default makeScene2D(function* (view) {
   traces.remove();
   incoming.root.scale(0.88);
   yield* all(
-    incoming.root.opacity(1, 0.25), incoming.root.y(-140, 0.6, easeOutCubic),
+    incoming.root.opacity(1, 0.25), incoming.root.y(-153, 0.6, easeOutCubic),
     incoming.root.scale(1, 0.6, easeOutCubic),
   );
 
@@ -160,7 +160,7 @@ export default makeScene2D(function* (view) {
   yield* phone.send.scale(0.84, 0.12).to(1, 0.22);
   phone.input.text('');
   yield* all(
-    outgoing.root.opacity(1, 0.25), outgoing.root.y(5, 0.7, easeOutCubic),
+    outgoing.root.opacity(1, 0.25), outgoing.root.y(-71, 0.7, easeOutCubic),
     phone.composer.y(335, 0.7), phone.send.y(335, 0.7), phone.keyboard.opacity(0, 0.45),
     phone.root.rotation(0, 0.8),
   );
@@ -190,21 +190,13 @@ export default makeScene2D(function* (view) {
   yield* replaceText(question, 'mesajlar biriktikçe mi?');
   const historyCount = text('2 mesaj', 38, {position: [left, 90], fill: accent, opacity: 0});
   view.add(historyCount);
-  yield* all(
-    incoming.root.y(-153, 0.65), incoming.body.height(74, 0.65),
-    incoming.text.fontSize(25, 0.65), incoming.stamp.y(15, 0.65),
-    outgoing.root.y(-71, 0.65), outgoing.body.height(74, 0.65),
-    outgoing.text.fontSize(25, 0.65), outgoing.stamp.y(15, 0.65),
-    outgoing.checks.y(14, 0.65), historyCount.opacity(1, 0.5),
-  );
+  yield* historyCount.opacity(1, 0.5);
   const extraMessages = [
     'konumu paylaştım.', 'gördüm, teşekkürler.', 'ana girişteyim.', 'yaklaşınca haber veririm.',
   ].map((value, index) => {
     const bubble = createBubble(value, index % 2 === 0, `14:${34 + index}`);
     bubble.root.position([index % 2 === 0 ? 25 : -25, 11 + index * 82 + 18]);
     bubble.root.opacity(0);
-    bubble.body.height(74);
-    bubble.text.fontSize(25);
     phone.chat.add(bubble.root);
     return bubble;
   });
@@ -271,8 +263,7 @@ export default makeScene2D(function* (view) {
   yield* all(
     question.opacity(1, 0.4), phone.root.position([620, 145], 0.8),
     ...extraMessages.map(bubble => bubble.root.opacity(0, 0.4)), outgoing.root.opacity(0, 0.4),
-    incoming.root.y(-75, 0.7), incoming.body.height(108, 0.7),
-    incoming.text.fontSize(30, 0.7), incoming.stamp.y(32, 0.7),
+    incoming.root.y(-75, 0.7),
   );
   for (const bubble of extraMessages) bubble.root.remove();
   yield* all(writer.root.opacity(1, 0.45), writer.root.y(145, 0.45), phone.root.opacity(0.6, 0.45));
@@ -330,11 +321,8 @@ export default makeScene2D(function* (view) {
   yield* all(phone.root.position([-620, 145], 0.8), service.position([530, 150], 0.8), service.scale(1, 0.8), incoming.root.opacity(0, 0.3));
   phone.clock.text('14:40');
   outgoing.root.position([25, -75]);
-  outgoing.body.height(108);
-  outgoing.text.fontSize(30);
   outgoing.text.text('tamam, haber ver.');
   outgoing.stamp.text('14:40');
-  outgoing.stamp.y(32);
   outgoing.checks.opacity(0);
   yield* outgoing.root.opacity(1, 0.3);
   const delivery = new Layout({opacity: 0});
