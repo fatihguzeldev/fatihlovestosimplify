@@ -29,6 +29,7 @@ export default makeScene2D(function* (view) {
     lineCap: 'round',
     end: 0,
   });
+  underline.opacity(() => (underline.end() > 0 ? 1 : 0));
   card.add([
     text('part 1', 29, {
       position: [-800, -203],

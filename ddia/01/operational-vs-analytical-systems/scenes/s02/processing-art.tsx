@@ -17,6 +17,7 @@ export function orderSlip(id: number, amount: number, time: string) {
     data: 'M -150 18 L -144 24 L -133 10',
     end: 0,
   });
+  stamp.opacity(() => (stamp.end() > 0 ? 1 : 0));
   root.add([
     face,
     text(`#${id}`, 27, {
@@ -131,6 +132,7 @@ export function salesDisplay() {
     data: 'M -134 122 L 134 122',
     end: 0,
   });
+  chart.opacity(() => (chart.end() > 0 ? 1 : 0));
   panel.root.add([
     text('bugünkü satış', 30, { y: -232 }),
     total,

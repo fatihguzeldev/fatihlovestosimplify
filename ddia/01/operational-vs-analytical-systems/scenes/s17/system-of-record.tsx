@@ -34,6 +34,7 @@ export default makeScene2D(function* (view) {
     lineCap: 'round',
     end: 0,
   });
+  line.opacity(() => (line.end() > 0 ? 1 : 0));
   card.add([
     first,
     second,

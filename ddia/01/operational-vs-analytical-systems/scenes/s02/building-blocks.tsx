@@ -80,6 +80,7 @@ export default makeScene2D(function* (view) {
     lineJoin: 'round',
     end: 0,
   });
+  tick.opacity(() => (tick.end() > 0 ? 1 : 0));
   const burst = new Layout({ opacity: 0 });
   burst.add([
     new Path({ ...ink, stroke: accent, data: 'M 184 -42 Q 195 -48 205 -54' }),

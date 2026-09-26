@@ -49,6 +49,7 @@ export function searchIndex() {
         data: `M -54 21 C -14 24 -29 ${y} 26 ${y}`,
       }),
   );
+  links.forEach((link) => link.opacity(() => (link.end() > 0 ? 1 : 0)));
   const documents = searchProducts.map((product, i) => {
     const card = paper(212, 114, '#131b23');
     card.root.position([130, -69 + i * 153]);

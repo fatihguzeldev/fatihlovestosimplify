@@ -52,6 +52,7 @@ export function* showProcessing(view: View2D) {
     data: 'M -409 -110 Q -391 -111 -391 -92 L -391 53 Q -391 80 -383 80 Q -391 80 -391 107 L -391 263 Q -391 280 -409 280',
     end: 0,
   });
+  bundle.opacity(() => (bundle.end() > 0 ? 1 : 0));
   root.add([
     title,
     source,

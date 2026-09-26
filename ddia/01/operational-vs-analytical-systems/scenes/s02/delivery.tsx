@@ -113,6 +113,7 @@ export function deliveryMap() {
     'M -126 70 Q -131 -7 -127 -84 C -126 -109 -87 -103 -70 -104 L 105 -102 Q 129 -102 124 -81 L 125 70';
   map.root.add(new Path({ ...ink, stroke: '#28394b', lineWidth: 15, data: path }));
   const route = new Path({ ...ink, stroke: accent, lineWidth: 5, data: path, end: 0 });
+  route.opacity(() => (route.end() > 0 ? 1 : 0));
   const shop = storefront();
   const house = home();
   shop.position([-125, 105]);
