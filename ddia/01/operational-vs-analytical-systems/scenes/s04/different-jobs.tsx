@@ -6,7 +6,8 @@ import {cartoonDatabase} from '../../../../../common/cartoon-system';
 import {theme} from '../../theme';
 import {accent, background, foreground, heading, muted, text} from '../shared/drawing';
 import {createMarket} from '../shared/market';
-import {role, salesReport} from './illustrations';
+import {salesReport} from './illustrations';
+import {role} from '../shared/people';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
