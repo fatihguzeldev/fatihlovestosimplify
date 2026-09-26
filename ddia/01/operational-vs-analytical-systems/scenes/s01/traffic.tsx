@@ -2,7 +2,7 @@ import {Circle, Layout, Path, Txt, View2D} from '@motion-canvas/2d';
 import {all, delay, linear, waitFor} from '@motion-canvas/core';
 import {theme} from '../../theme';
 import {cartoonArrow} from '../../../../../common/cartoon-arrow';
-import {cartoonDatabase, cartoonService} from './cartoon-system';
+import {cartoonDatabase, cartoonService} from '../../../../../common/cartoon-system';
 
 const {accent, foreground} = theme.colors;
 

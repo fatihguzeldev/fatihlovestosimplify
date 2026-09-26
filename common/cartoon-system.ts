@@ -1,5 +1,5 @@
 import {Circle, Layout, Path, Txt} from '@motion-canvas/2d';
-import {theme} from '../../theme';
+import {theme} from './theme';
 
 const {background, foreground} = theme.colors;
 const ink = {stroke: foreground, lineWidth: 3, lineCap: 'round' as const, lineJoin: 'round' as const};
