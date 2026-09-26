@@ -135,15 +135,13 @@ export function* showCompute(view: View2D) {
     region.progress(region.row === 0 ? half * 9 : 0);
   }
   yield* all(
-    caption.opacity(1, 0.4),
-    detail.opacity(1, 0.4),
-    label.opacity(1, 0.4),
     frame.opacity(0, 0.3),
     ...regions.map(({tile, border, x, y}) => all(
       tile.position([x + Math.sign(x) * 18, y + Math.sign(y) * 18], 0.65, easeInOutCubic),
       border.opacity(0.75, 0.5),
     )),
   );
+  yield* all(caption.opacity(1, 0.4), detail.opacity(1, 0.4), label.opacity(1, 0.4));
   yield* all(...regions.map(({progress}) => progress(half * half, 3, linear)));
   yield* all(
     ...regions.map(({tile, border, x, y}) => all(

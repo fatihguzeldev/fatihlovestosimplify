@@ -145,11 +145,12 @@ export default makeScene2D(function* (view) {
   incoming.root.opacity(0);
   phone.chat.add(incoming.root);
   view.add(phone.root);
+  yield* traces.opacity(0, 0.35);
+  traces.remove();
   yield* all(
-    traces.opacity(0, 0.45), phone.root.opacity(1, 0.65),
+    phone.root.opacity(1, 0.65),
     phone.root.y(10, 0.95, easeOutCubic), phone.root.rotation(-3, 0.95),
   );
-  traces.remove();
   incoming.root.scale(0.88);
   yield* all(
     incoming.root.opacity(1, 0.25), incoming.root.y(-153, 0.6, easeOutCubic),
@@ -216,9 +217,10 @@ export default makeScene2D(function* (view) {
   question.children(questionParts('', 'query rate', ' arttığında mı?'));
   question.y(-285);
   yield* all(
-    question.opacity(1, 0.4), opening.y(-405, 0.8), opening.scale(0.45, 0.8),
+    opening.y(-405, 0.8), opening.scale(0.45, 0.8),
     phone.root.position([-620, 145], 0.8), phone.root.scale(0.64, 0.8),
   );
+  yield* question.opacity(1, 0.4);
   const traffic = yield* showQueryRate(view);
   const service = traffic.service;
 
@@ -262,12 +264,13 @@ export default makeScene2D(function* (view) {
   operations.add([editPath, editLabel, editPacket, readPath, readLabel, readPacket]);
   view.add([writer.root, names, shared, operations]);
   yield* all(
-    question.opacity(1, 0.4), phone.root.position([620, 145], 0.8),
+    phone.root.position([620, 145], 0.8),
     ...extraMessages.map(bubble => bubble.root.opacity(0, 0.4)), outgoing.root.opacity(0, 0.4),
     incoming.root.y(-75, 0.7),
   );
   for (const bubble of extraMessages) bubble.root.remove();
   yield* all(writer.root.opacity(1, 0.45), writer.root.y(145, 0.45), phone.root.opacity(0.6, 0.45));
+  yield* question.opacity(1, 0.3);
   yield* all(names.opacity(1, 0.3), service.opacity(1, 0.35), shared.opacity(1, 0.35), operations.opacity(1, 0.35));
   yield* editMode.opacity(1, 0.2);
   yield* writer.input.text('on dakika gecikeceğim.', 0.8);
@@ -297,7 +300,10 @@ export default makeScene2D(function* (view) {
   phone.chat.add(readerLoading);
   yield* all(
     writer.send.scale(0.84, 0.12).to(1, 0.18),
-    incoming.root.opacity(0, 0.2), readerLoading.opacity(1, 0.3),
+    incoming.root.opacity(0, 0.2),
+  );
+  yield* all(
+    readerLoading.opacity(1, 0.3),
     readPath.end(1, 0.3), readLabel.opacity(1, 0.3),
   );
   editMode.text('kaydediliyor…');
@@ -312,14 +318,20 @@ export default makeScene2D(function* (view) {
   yield* all(pendingLabel.opacity(1, 0.4), pendingText.opacity(1, 0.4));
 
   yield* waitUntil('failures');
-  yield* replaceQuestion(question, 'yanıt gelmedi. mesaj ', 'kaydedildi mi?');
-  yield* all(writer.root.opacity(0, 0.4), names.opacity(0, 0.4), shared.opacity(0, 0.4), operations.opacity(0, 0.4), readerLoading.opacity(0, 0.4));
+  yield* all(
+    question.opacity(0, 0.2), service.opacity(0, 0.4),
+    writer.root.opacity(0, 0.4), names.opacity(0, 0.4), shared.opacity(0, 0.4),
+    operations.opacity(0, 0.4), readerLoading.opacity(0, 0.4),
+  );
+  question.children(questionParts('yanıt gelmedi. mesaj ', 'kaydedildi mi?'));
   readerLoading.remove();
   writer.root.remove();
   names.remove();
   shared.remove();
   operations.remove();
-  yield* all(phone.root.position([-620, 145], 0.8), service.position([530, 150], 0.8), service.scale(1, 0.8), incoming.root.opacity(0, 0.3));
+  service.position([530, 150]);
+  service.scale(1);
+  yield* all(phone.root.position([-620, 145], 0.8), incoming.root.opacity(0, 0.3));
   phone.clock.text('14:40');
   outgoing.root.position([25, -75]);
   outgoing.text.text('tamam, haber ver.');
@@ -342,10 +354,11 @@ export default makeScene2D(function* (view) {
   yield* all(packet.opacity(0, 0.2), interruption.opacity(1, 0.25), returnPath.opacity(0.25, 0.25));
   returnLabel.text('yanıt ulaşmadı');
   returnLabel.x(-40);
+  yield* question.opacity(1, 0.3);
 
   yield* waitUntil('availability');
-  yield* replaceQuestion(question, 'sohbeti ', 'açamıyoruz.');
-  yield* outgoing.root.opacity(0, 0.4);
+  yield* all(question.opacity(0, 0.2), outgoing.root.opacity(0, 0.4));
+  question.children(questionParts('sohbeti ', 'açamıyoruz.'));
   phone.status.text('bağlanıyor…');
   const reconnecting = text('bağlanıyor…', 30, {offset: [0, 0], opacity: 0});
   phone.chat.add(reconnecting);
@@ -358,6 +371,7 @@ export default makeScene2D(function* (view) {
   packet.opacity(1);
   yield* all(packet.x(0, 0.85), service.opacity(0.35, 0.85), reconnecting.opacity(1, 0.5));
   yield* all(packet.opacity(0, 0.2), interruption.opacity(1, 0.25), sendPath.opacity(0.25, 0.25));
+  yield* question.opacity(1, 0.3);
 
   yield* waitUntil('compute-intensive');
   yield* all(
@@ -405,8 +419,8 @@ export default makeScene2D(function* (view) {
   yield* closingUnderline.end(1, 0.75);
 
   yield* waitUntil('building-blocks');
+  yield* all(closingTitle.opacity(0, 0.35), closingUnderline.opacity(0, 0.35));
   yield* all(
-    closingTitle.opacity(0, 0.5), closingUnderline.opacity(0, 0.5),
     closingCaption.y(0, 0.8, easeInOutCubic), closingCaption.fontSize(86, 0.8),
     closingData.fill(accent, 0.8),
   );
