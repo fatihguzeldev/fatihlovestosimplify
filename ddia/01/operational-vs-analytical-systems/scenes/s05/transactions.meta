@@ -1,0 +1,42 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "read",
+      "targetTime": 9
+    },
+    {
+      "name": "point-query",
+      "targetTime": 24
+    },
+    {
+      "name": "update",
+      "targetTime": 35
+    },
+    {
+      "name": "crud",
+      "targetTime": 53
+    },
+    {
+      "name": "latency",
+      "targetTime": 66
+    },
+    {
+      "name": "oltp",
+      "targetTime": 83
+    },
+    {
+      "name": "transaction",
+      "targetTime": 98
+    },
+    {
+      "name": "next",
+      "targetTime": 111
+    },
+    {
+      "name": "end",
+      "targetTime": 122
+    }
+  ],
+  "seed": 104205
+}
