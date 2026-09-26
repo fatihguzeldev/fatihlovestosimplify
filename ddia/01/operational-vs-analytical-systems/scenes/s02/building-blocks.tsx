@@ -201,7 +201,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('next');
   yield* cache.root.opacity(0, 0.4);
   cache.root.remove();
-  title.children(heading('hangi işe, ', 'hangi araç?').children());
+  title.children(heading('hangi işe ', 'hangi araç?').children());
   write.root.opacity(1);
   read.root.opacity(0);
   writeLabel.opacity(0);

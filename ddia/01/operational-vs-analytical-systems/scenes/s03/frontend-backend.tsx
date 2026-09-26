@@ -10,7 +10,7 @@ import { createMarket } from '../shared/market';
 export default makeScene2D(function* (view) {
   view.fill(background);
   const stage = new Layout({});
-  const title = heading('hangi işe, ', 'hangi araç?');
+  const title = heading('hangi işe ', 'hangi araç?');
   const market = createMarket();
   market.root.position([-470, 100]);
   market.cart.remove();
