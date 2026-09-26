@@ -88,5 +88,5 @@ export function* showQueryRate(view: View2D) {
     ...[0, 0.25, 0.5, 0.75].map((offset, i) => delay(offset, fetchMessages(i, offset))),
   );
   yield* waitFor(0.5);
-  return {root, service};
+  return {root, service, serviceCaption: caption};
 }

@@ -1,4 +1,4 @@
-import {Layout, Line, makeScene2D, Rect, Txt, type TxtProps} from '@motion-canvas/2d';
+import {Layout, Line, makeScene2D, Path, Rect, Txt, type TxtProps} from '@motion-canvas/2d';
 import {
   all,
   createSignal,
@@ -224,13 +224,16 @@ export default makeScene2D(function* (view) {
   yield* question.opacity(1, 0.4);
   const traffic = yield* showQueryRate(view);
   const service = traffic.service;
+  const serviceCaption = traffic.serviceCaption;
 
   yield* waitUntil('changes');
   yield* all(traffic.root.opacity(0, 0.35), question.opacity(0, 0.2));
   service.remove();
   service.opacity(0);
-  service.position([0, -35]);
-  service.scale(0.47);
+  service.position([0, 60]);
+  service.scale(1);
+  serviceCaption.y(-165);
+  serviceCaption.fontSize(28);
   view.add(service);
   traffic.root.remove();
   question.children(questionParts('gönderdiğimiz mesajı ', 'değiştirirsek?'));
@@ -264,18 +267,30 @@ export default makeScene2D(function* (view) {
     text('deniz', 30, {position: [-620, -158], offset: [0, 0], fontFamily: theme.fontFamily.serif, fontStyle: 'italic'}),
     text('fatih', 30, {position: [620, -158], offset: [0, 0], fontFamily: theme.fontFamily.serif, fontStyle: 'italic'}),
   ]);
-  const shared = new Layout({position: [0, 235], opacity: 0});
-  const record = new Rect({size: [350, 150], radius: 20, fill: '#2a2e33', stroke: accent, lineWidth: 0});
-  const storedText = text('birazdan\noradayım.', 32, {offset: [0, 0], y: -8, lineHeight: '115%'});
-  const recordId = text('mesaj #42', 25, {offset: [0, 0], y: -105, fontFamily: theme.fontFamily.mono, fill: accent});
-  const recordStamp = text('14:32', 18, {position: [145, 52], offset: [1, 0], fill: theme.colors.muted});
-  shared.add([record, recordId, storedText, recordStamp]);
+  const shared = new Layout({position: [0, 205], opacity: 0});
+  const recordHeight = createSignal(122);
+  const recordSide = new Path({
+    data: () => `M 207 -59 L 218 -49 L 216 ${recordHeight() - 51} L -196 ${recordHeight() - 49} L -207 ${recordHeight() - 59} Z`,
+    fill: background, stroke: foreground, lineWidth: 2.5, lineJoin: 'round',
+  });
+  const record = new Path({
+    data: () => `M -209 -59 Q -2 -63 207 -59 L 209 ${recordHeight() - 63} Q 5 ${recordHeight() - 58} -207 ${recordHeight() - 59} Z`,
+    fill: '#15191d', stroke: foreground, lineWidth: 2.7, lineJoin: 'round',
+  });
+  const storedText = text('birazdan oradayım.', 30, {position: [-184, 20]});
+  const recordId = text('mesaj #42', 22, {position: [-184, -31], fontFamily: theme.fontFamily.mono, fill: accent});
+  const recordStamp = text('14:32', 18, {position: [183, -31], offset: [1, 0], fontFamily: theme.fontFamily.mono, fill: theme.colors.muted});
+  shared.add([
+    recordSide, record,
+    new Line({points: [[-184, -7], [182, -7]], stroke: foreground, opacity: 0.18, lineWidth: 1.5}),
+    recordId, recordStamp, storedText,
+  ]);
   const operations = new Layout({opacity: 0});
-  const editPath = cartoonArrow('s01-edit', [-424, 35], [-207, 205], accent, 0);
-  const editLabel = text('edit', 28, {position: [-340, 35], offset: [0, 0], fill: accent, opacity: 0});
-  const readPath = cartoonArrow('s01-concurrent-read', [424, 35], [207, 205], accent, 0);
-  const readLabel = text('read', 28, {position: [340, 35], offset: [0, 0], opacity: 0});
-  const updatePath = cartoonArrow('s01-message-update', [207, 205], [424, 35], accent, 0);
+  const editPath = cartoonArrow('s01-edit', [-424, 35], [-176, 35], accent, 0);
+  const editLabel = text('edit', 28, {position: editPath.pointAt(0.5).addY(-58), offset: [0, 0], fill: accent, opacity: 0});
+  const readPath = cartoonArrow('s01-concurrent-read', [424, 35], [176, 35], accent, 0);
+  const readLabel = text('read', 28, {position: readPath.pointAt(0.5).addY(-58), offset: [0, 0], opacity: 0});
+  const updatePath = cartoonArrow('s01-message-update', [176, 35], [424, 35], accent, 0);
   operations.add([editPath.root, editLabel, readPath.root, readLabel, updatePath.root]);
   view.add([writer.root, names, shared, operations]);
   yield* all(
@@ -296,14 +311,14 @@ export default makeScene2D(function* (view) {
   yield* all(editPath.reveal(1, 0.25), editLabel.opacity(1, 0.25));
   yield* editPath.travel(0.45);
   yield* all(editPath.arrive(), storedText.opacity(0, 0.12), edited.text.opacity(0, 0.12));
-  storedText.text('on dakika\ngecikeceğim.');
+  storedText.text('on dakika gecikeceğim.');
   recordStamp.text('14:38');
   edited.text.text('on dakika gecikeceğim.');
   edited.stamp.text('düzenlendi · 14:38');
   storedText.fill(accent);
   yield* all(
     storedText.opacity(1, 0.18), edited.text.opacity(1, 0.18),
-    record.lineWidth(3, 0.12).to(0, 0.18), editPreview.opacity(0, 0.2),
+    record.stroke(accent, 0.12).to(foreground, 0.18), editPreview.opacity(0, 0.2),
     edited.body.lineWidth(0, 0.3),
   );
   yield* updatePath.reveal(1, 0.2);
@@ -339,11 +354,15 @@ export default makeScene2D(function* (view) {
   );
   editMode.text('kaydediliyor…');
   yield* all(editPath.travel(0.7), readPath.travel(0.7));
-  yield* all(editPath.arrive(), readPath.arrive(), record.height(230, 0.4), record.lineWidth(3, 0.4), storedText.y(-53, 0.4), recordId.y(-145, 0.4), recordStamp.y(95, 0.4));
-  const pendingLabel = text('edit isteği', 20, {offset: [0, 0], y: 5, fill: accent, opacity: 0});
-  const pendingText = text('beş dakika\ngecikeceğim.', 31, {offset: [0, 0], y: 53, lineHeight: '115%', fill: accent, opacity: 0});
-  shared.add([pendingLabel, pendingText]);
-  yield* all(pendingLabel.opacity(1, 0.4), pendingText.opacity(1, 0.4));
+  yield* all(editPath.arrive(), readPath.arrive(), recordHeight(242, 0.4), record.stroke(accent, 0.4));
+  const pending = new Layout({opacity: 0});
+  pending.add([
+    new Line({points: [[-184, 77], [182, 77]], stroke: accent, lineWidth: 1.5, opacity: 0.45}),
+    text('bekleyen edit', 21, {position: [-184, 107], fontFamily: theme.fontFamily.mono, fill: accent}),
+    text('beş dakika gecikeceğim.', 30, {position: [-184, 148], fill: accent}),
+  ]);
+  shared.add(pending);
+  yield* pending.opacity(1, 0.4);
 
   yield* waitUntil('failures');
   yield* all(
@@ -359,6 +378,7 @@ export default makeScene2D(function* (view) {
   operations.remove();
   service.position([530, 150]);
   service.scale(1);
+  serviceCaption.y(174);
   yield* all(phone.root.position([-620, 145], 0.8), incoming.root.opacity(0, 0.3));
   phone.clock.text('14:40');
   outgoing.root.position([25, -153]);
@@ -369,18 +389,20 @@ export default makeScene2D(function* (view) {
   const delivery = new Layout({opacity: 0});
   const sendPath = cartoonArrow('s01-write', [-424, 90], [356, 90], accent);
   const returnPath = cartoonArrow('s01-response', [356, 215], [-424, 215], accent);
-  const sendLabel = text('write', 26, {position: [10, 37], fill: accent});
-  const returnLabel = text('yanıt', 26, {position: [20, 271]});
-  const interruption = text('×', 56, {position: returnPath.pointAt(0.43), offset: [0, 0], fill: accent, opacity: 0});
+  const sendLabel = text('write', 28, {position: sendPath.pointAt(0.5).addY(-58), offset: [0, 0], fill: accent});
+  const responseStop = returnPath.pointAt(0.43);
+  const returnLabel = text('yanıt', 28, {position: returnPath.pointAt(0.5).addY(65), offset: [0, 0]});
+  const interruption = text('×', 56, {position: responseStop, offset: [0, 0], fill: accent, opacity: 0});
   delivery.add([sendPath.root, returnPath.root, sendLabel, returnLabel, interruption]);
   view.add(delivery);
   yield* all(service.opacity(1, 0.5), delivery.opacity(1, 0.5));
   yield* sendPath.travel(0.85);
   yield* all(sendPath.arrive(), returnPath.travel(0.65, 0.43));
-  yield* all(interruption.opacity(1, 0.25), returnPath.root.opacity(0.25, 0.25));
+  yield* all(interruption.opacity(1, 0.25), returnPath.root.opacity(0.25, 0.25), returnLabel.opacity(0, 0.15));
   returnLabel.text('yanıt ulaşmadı');
-  returnLabel.x(-40);
-  yield* question.opacity(1, 0.3);
+  returnLabel.position(responseStop.addY(65));
+  returnLabel.fill(accent);
+  yield* all(question.opacity(1, 0.3), returnLabel.opacity(1, 0.3));
 
   yield* waitUntil('availability');
   yield* all(question.opacity(0, 0.2), outgoing.root.opacity(0, 0.4));
