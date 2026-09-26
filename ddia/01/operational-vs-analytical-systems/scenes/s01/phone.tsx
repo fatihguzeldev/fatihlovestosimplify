@@ -1,4 +1,5 @@
 import {Circle, Layout, Line, Path, Rect, Txt} from '@motion-canvas/2d';
+import {createSignal} from '@motion-canvas/core';
 import {theme} from '../../theme';
 
 const {foreground, accent} = theme.colors;
@@ -82,7 +83,8 @@ export function createPhone(name: string) {
   const chat = new Layout({y: -30});
   screen.add(chat);
 
-  const keyboard = new Layout({y: 280, opacity: 0});
+  const keyboardProgress = createSignal(0);
+  const keyboard = new Layout({y: () => 530 - 250 * keyboardProgress()});
   keyboard.add(new Rect({size: [464, 240], fill: '#25282c'}));
   ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'].forEach((row, rowIndex) => {
     [...row].forEach((key, i) => {
@@ -98,16 +100,17 @@ export function createPhone(name: string) {
   keyboard.add(label('↵', 27, 176, 69));
   screen.add(keyboard);
 
-  const composer = new Rect({position: [-38, 335], size: [365, 68], radius: 34, fill: '#282c30'});
+  const composer = new Rect({x: -38, y: () => 335 - 215 * keyboardProgress(), size: [365, 68], radius: 34, fill: '#282c30'});
   const input = label('', 28, -165);
   input.offset([-1, 0]);
   composer.add(input);
-  const send = new Layout({position: [187, 335]});
+  const send = new Layout({x: 187, y: () => composer.y()});
   send.add(new Circle({size: 60, fill: accent}));
   send.add(new Path({data: 'M -13 -15 L 17 0 L -13 15 L -8 3 L 7 0 L -8 -3 Z', fill: '#101720', rotation: -12}));
   screen.add([composer, send]);
+  screen.add(new Rect({position: [0, 395], size: [464, 30], fill: ink}));
   screen.add(new Rect({position: [0, 394], size: [158, 5], radius: 3, fill: foreground}));
-  return {root, screen, chat, composer, input, send, keyboard, contact, status, clock};
+  return {root, screen, chat, composer, input, send, keyboardProgress, contact, status, clock};
 }
 
 export function createBubble(value: string, outgoing: boolean, time: string, width = 380) {

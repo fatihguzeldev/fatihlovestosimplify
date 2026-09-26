@@ -155,13 +155,13 @@ export default makeScene2D(function* (view) {
   outgoing.root.opacity(0);
   outgoing.checks.opacity(0);
   phone.chat.add(outgoing.root);
-  yield* all(phone.composer.y(120, 0.55), phone.send.y(120, 0.55), phone.keyboard.opacity(1, 0.55));
+  yield* phone.keyboardProgress(1, 0.55, easeInOutCubic);
   yield* phone.input.text('tamam, bekliyorum.', 1.15);
   yield* phone.send.scale(0.84, 0.12).to(1, 0.22);
   phone.input.text('');
   yield* all(
     outgoing.root.opacity(1, 0.25), outgoing.root.y(-71, 0.7, easeOutCubic),
-    phone.composer.y(335, 0.7), phone.send.y(335, 0.7), phone.keyboard.opacity(0, 0.45),
+    phone.keyboardProgress(0, 0.7, easeInOutCubic),
     phone.root.rotation(0, 0.8),
   );
   yield* outgoing.checks.opacity(1, 0.35);
