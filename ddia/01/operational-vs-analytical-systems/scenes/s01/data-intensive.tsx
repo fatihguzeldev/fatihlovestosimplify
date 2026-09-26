@@ -5,7 +5,6 @@ import {
   easeInOutCubic,
   easeOutCubic,
   fadeTransition,
-  tween,
   waitUntil,
 } from '@motion-canvas/core';
 import {loadFonts} from '../../../../../common/fonts';
@@ -13,7 +12,7 @@ import {theme} from '../../theme';
 import {showCompute} from './compute';
 import {createBubble, createPhone} from './phone';
 import {showQueryRate} from './traffic';
-import {sketchArrow} from './arrow';
+import {cartoonArrow} from './arrow';
 
 const {background, foreground, accent} = theme.colors;
 const left = -960 + 1920 * theme.spacing.xl / 100;
@@ -257,13 +256,11 @@ export default makeScene2D(function* (view) {
   const recordStamp = text('14:32', 18, {position: [145, 52], offset: [1, 0], fill: theme.colors.muted});
   shared.add([record, recordId, storedText, recordStamp]);
   const operations = new Layout({opacity: 0});
-  const editPath = sketchArrow([-424, 95], [-207, 205], accent, 0);
-  const editLabel = text('edit', 28, {position: [-340, 100], offset: [0, 0], fill: accent, opacity: 0});
-  const editPacket = new Rect({position: editPath.pointAt(0), size: [24, 12], radius: 4, fill: accent, opacity: 0});
-  const readPath = sketchArrow([424, 95], [207, 205], foreground, 0);
-  const readLabel = text('read', 28, {position: [340, 100], offset: [0, 0], opacity: 0});
-  const readPacket = new Rect({position: readPath.pointAt(0), size: [24, 12], radius: 4, fill: foreground, opacity: 0});
-  operations.add([editPath.root, editLabel, editPacket, readPath.root, readLabel, readPacket]);
+  const editPath = cartoonArrow([-424, 95], [-207, 205], accent, 0);
+  const editLabel = text('edit', 28, {position: [-340, 79], offset: [0, 0], fill: accent, opacity: 0});
+  const readPath = cartoonArrow([424, 95], [207, 205], accent, 0);
+  const readLabel = text('read', 28, {position: [340, 79], offset: [0, 0], opacity: 0});
+  operations.add([editPath.root, editLabel, readPath.root, readLabel]);
   view.add([writer.root, names, shared, operations]);
   yield* all(
     phone.root.position([620, 145], 0.8),
@@ -278,15 +275,13 @@ export default makeScene2D(function* (view) {
   yield* writer.input.text('on dakika gecikeceğim.', 0.8);
   yield* writer.send.scale(0.84, 0.12).to(1, 0.18);
   writer.input.text('');
-  yield* all(editPath.path.end(1, 0.3), editLabel.opacity(1, 0.3));
-  editPacket.opacity(1);
-  yield* tween(0.55, value => editPacket.position(editPath.pointAt(value)));
-  editPacket.opacity(0);
+  yield* all(editPath.reveal(1, 0.3), editLabel.opacity(1, 0.3));
+  yield* editPath.travel(0.55);
   storedText.text('on dakika\ngecikeceğim.');
   recordStamp.text('14:38');
   edited.text.text('on dakika gecikeceğim.');
   edited.stamp.text('düzenlendi · 14:38');
-  yield* all(record.lineWidth(3, 0.15).to(0, 0.3), editMode.opacity(0, 0.3));
+  yield* all(editPath.arrive(), record.lineWidth(3, 0.15).to(0, 0.3), editMode.opacity(0, 0.3));
   incoming.text.text('on dakika gecikeceğim.');
   incoming.stamp.text('düzenlendi · 14:38');
   phone.clock.text('14:38');
@@ -306,17 +301,11 @@ export default makeScene2D(function* (view) {
   );
   yield* all(
     readerLoading.opacity(1, 0.3),
-    readPath.path.end(1, 0.3), readLabel.opacity(1, 0.3),
+    readPath.reveal(1, 0.3), readLabel.opacity(1, 0.3),
   );
   editMode.text('kaydediliyor…');
-  editPacket.position(editPath.pointAt(0));
-  editPacket.opacity(1);
-  readPacket.opacity(1);
-  yield* all(
-    tween(0.7, value => editPacket.position(editPath.pointAt(value))),
-    tween(0.7, value => readPacket.position(readPath.pointAt(value))),
-  );
-  yield* all(editPacket.opacity(0, 0.15), readPacket.opacity(0, 0.15), record.height(230, 0.4), record.lineWidth(3, 0.4), storedText.y(-53, 0.4), recordId.y(-145, 0.4), recordStamp.y(95, 0.4));
+  yield* all(editPath.travel(0.7), readPath.travel(0.7));
+  yield* all(editPath.arrive(), readPath.arrive(), record.height(230, 0.4), record.lineWidth(3, 0.4), storedText.y(-53, 0.4), recordId.y(-145, 0.4), recordStamp.y(95, 0.4));
   const pendingLabel = text('edit isteği', 20, {offset: [0, 0], y: 5, fill: accent, opacity: 0});
   const pendingText = text('beş dakika\ngecikeceğim.', 31, {offset: [0, 0], y: 53, lineHeight: '115%', fill: accent, opacity: 0});
   shared.add([pendingLabel, pendingText]);
@@ -344,19 +333,17 @@ export default makeScene2D(function* (view) {
   outgoing.checks.opacity(0);
   yield* outgoing.root.opacity(1, 0.3);
   const delivery = new Layout({opacity: 0});
-  const sendPath = sketchArrow([-424, 90], [356, 90], accent);
-  const returnPath = sketchArrow([356, 190], [-424, 190], foreground);
-  const sendLabel = text('write', 26, {position: [10, 45], fill: accent});
-  const returnLabel = text('yanıt', 26, {position: [20, 235]});
-  const packet = new Rect({position: sendPath.pointAt(0), size: [24, 12], radius: 4, fill: accent});
+  const sendPath = cartoonArrow([-424, 90], [356, 90], accent);
+  const returnPath = cartoonArrow([356, 215], [-424, 215], accent);
+  const sendLabel = text('write', 26, {position: [10, 37], fill: accent});
+  const returnLabel = text('yanıt', 26, {position: [20, 271]});
   const interruption = text('×', 56, {position: returnPath.pointAt(0.43), offset: [0, 0], fill: accent, opacity: 0});
-  delivery.add([sendPath.root, returnPath.root, sendLabel, returnLabel, packet, interruption]);
+  delivery.add([sendPath.root, returnPath.root, sendLabel, returnLabel, interruption]);
   view.add(delivery);
   yield* all(service.opacity(1, 0.5), delivery.opacity(1, 0.5));
-  yield* tween(0.85, value => packet.position(sendPath.pointAt(value)));
-  packet.position(returnPath.pointAt(0));
-  yield* tween(0.65, value => packet.position(returnPath.pointAt(value * 0.43)));
-  yield* all(packet.opacity(0, 0.2), interruption.opacity(1, 0.25), returnPath.root.opacity(0.25, 0.25));
+  yield* sendPath.travel(0.85);
+  yield* all(sendPath.arrive(), returnPath.travel(0.65, 0.43));
+  yield* all(interruption.opacity(1, 0.25), returnPath.root.opacity(0.25, 0.25));
   returnLabel.text('yanıt ulaşmadı');
   returnLabel.x(-40);
   yield* question.opacity(1, 0.3);
@@ -372,10 +359,8 @@ export default makeScene2D(function* (view) {
   interruption.opacity(0);
   returnLabel.opacity(0);
   returnPath.root.opacity(0);
-  packet.position(sendPath.pointAt(0));
-  packet.opacity(1);
-  yield* all(tween(0.85, value => packet.position(sendPath.pointAt(value * 0.57))), service.opacity(0.35, 0.85), reconnecting.opacity(1, 0.5));
-  yield* all(packet.opacity(0, 0.2), interruption.opacity(1, 0.25), sendPath.root.opacity(0.25, 0.25));
+  yield* all(sendPath.travel(0.85, 0.57), service.opacity(0.35, 0.85), reconnecting.opacity(1, 0.5));
+  yield* all(interruption.opacity(1, 0.25), sendPath.root.opacity(0.25, 0.25));
   yield* question.opacity(1, 0.3);
 
   yield* waitUntil('compute-intensive');

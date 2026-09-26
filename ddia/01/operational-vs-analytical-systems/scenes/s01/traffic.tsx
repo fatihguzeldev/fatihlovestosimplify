@@ -1,9 +1,10 @@
-import {Circle, Layout, Line, Path, Rect, Txt, View2D} from '@motion-canvas/2d';
-import {all, delay, linear, tween, waitFor} from '@motion-canvas/core';
+import {Circle, Layout, Path, Txt, View2D} from '@motion-canvas/2d';
+import {all, delay, linear, waitFor} from '@motion-canvas/core';
 import {theme} from '../../theme';
-import {sketchArrow} from './arrow';
+import {cartoonArrow} from './arrow';
+import {cartoonDatabase, cartoonService} from './cartoon-system';
 
-const {accent, foreground, background} = theme.colors;
+const {accent, foreground} = theme.colors;
 
 export function* showQueryRate(view: View2D) {
   const root = new Layout({opacity: 0});
@@ -17,42 +18,19 @@ export function* showQueryRate(view: View2D) {
   const arrowInset = 32;
   const requestCenter = (phoneRight + serviceLeft) / 2;
   const queryCenter = (serviceRight + databaseLeft) / 2;
-  const service = new Layout({position: [serviceLeft + 142 * serviceScale, 150], scale: serviceScale});
-  service.add(new Path({
-    data: 'M -139 -108 L 128 -110 Q 144 -110 143 -95 L 141 96 Q 141 110 127 111 L -129 109 Q -142 109 -141 95 Z',
-    fill: background,
-    stroke: foreground,
-    lineWidth: 3,
-    lineJoin: 'round',
-  }));
-  const lights = [-66, 0, 66].map(y => {
-    service.add(new Rect({position: [0, y], size: [250, 51], radius: 4, stroke: foreground, lineWidth: 1.5}));
-    const light = new Circle({position: [-99, y], size: 9, fill: accent, opacity: 0.35});
-    service.add(light);
-    service.add(new Line({points: [[-74, y], [76, y]], stroke: foreground, opacity: 0.3, lineWidth: 2}));
-    return light;
-  });
-  service.add(new Txt({text: 'mesaj servisi', y: 153 / serviceScale, fontFamily: theme.fontFamily.sans, fontSize: 28 / serviceScale, fill: foreground}));
+  const {root: service, lights, caption} = cartoonService('mesaj servisi', accent);
+  service.position([serviceLeft + 144 * serviceScale, 150]);
+  service.scale(serviceScale);
+  caption.y(153 / serviceScale);
+  caption.fontSize(28 / serviceScale);
   root.add(service);
 
-  const database = new Layout({position: [620, 150]});
-  database.add(new Path({
-    data: 'M -115 -80 L -115 80 C -115 122 115 122 115 80 L 115 -80 Z',
-    fill: background,
-    stroke: foreground,
-    lineWidth: 3,
-  }));
-  const databaseTop = new Circle({position: [0, -80], size: [230, 60], fill: background, stroke: foreground, lineWidth: 3});
-  database.add([
-    databaseTop,
-    new Txt({text: 'database', y: 153, fontFamily: theme.fontFamily.sans, fontSize: 28, fill: foreground}),
-  ]);
+  const {root: database, top: databaseTop} = cartoonDatabase('database', accent);
+  database.position([620, 150]);
   root.add(database);
 
-  const requestArrow = sketchArrow([phoneRight + arrowInset, 110], [serviceLeft - arrowInset, 110], foreground);
-  const queryArrow = sketchArrow([serviceRight + arrowInset, 110], [databaseLeft - arrowInset, 110], accent);
-  requestArrow.root.opacity(0.7);
-  queryArrow.root.opacity(0.8);
+  const requestArrow = cartoonArrow([phoneRight + arrowInset, 110], [serviceLeft - arrowInset, 110], accent);
+  const queryArrow = cartoonArrow([serviceRight + arrowInset, 110], [databaseLeft - arrowInset, 110], accent);
   root.add([
     requestArrow.root, queryArrow.root,
     new Txt({text: 'request', position: [requestCenter, 63], fontFamily: theme.fontFamily.sans, fontSize: 27, fill: foreground}),
@@ -88,19 +66,14 @@ export function* showQueryRate(view: View2D) {
   const arrivalsBegin = requestTravel + queryTravel;
 
   function* fetchMessages(index: number, offset: number) {
-    const request = new Rect({position: requestArrow.pointAt(0), size: [24, 12], radius: 3, fill: foreground});
-    root.add(request);
-    yield* tween(requestTravel, value => request.position(requestArrow.pointAt(value)));
-    request.remove();
-    const query = new Circle({position: queryArrow.pointAt(0), size: 16, fill: accent});
-    root.add(query);
+    yield* requestArrow.travel(requestTravel);
     yield* all(
-      lights[index % lights.length].opacity(1, 0.05).to(0.35, 0.15),
-      tween(queryTravel, value => query.position(queryArrow.pointAt(value))),
+      requestArrow.arrive(),
+      lights[index % lights.length].opacity(1, 0.05).to(0.65, 0.15),
+      queryArrow.travel(queryTravel),
     );
-    query.remove();
     arrivals.add(new Circle({position: progress.getPointAtPercentage(offset).position.scale(1.28), size: 8, fill: accent}));
-    yield* databaseTop.stroke(accent, 0.04).to(foreground, 0.16);
+    yield* all(queryArrow.arrive(), databaseTop.stroke(accent, 0.04).to(foreground, 0.16));
   }
 
   yield* all(delay(arrivalsBegin, progress.end(1, 1, linear)), fetchMessages(0, 0));
