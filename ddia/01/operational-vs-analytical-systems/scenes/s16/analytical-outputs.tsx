@@ -27,12 +27,12 @@ export default makeScene2D(function* (view) {
   warehouse.root.add(text('customers', 26, {y: 15, fill: accent, fontFamily: theme.fontFamily.mono}));
   const segment = paper(380, 220, '#17232f');
   segment.root.position([0, 90]);
+  const segmentValue = text('frequent_buyer', 29, {y: 55, fill: accent, fontFamily: theme.fontFamily.mono, opacity: 0});
   segment.root.add([
     text('customer #17', 29, {y: -62, fontFamily: theme.fontFamily.mono}),
     text('segment', 24, {y: -5, fill: muted, fontFamily: theme.fontFamily.mono}),
-    text('frequent_buyer', 29, {y: 55, fill: accent, fontFamily: theme.fontFamily.mono}),
+    segmentValue,
   ]);
-  segment.root.opacity(0.22);
   const crm = paper(360, 270, '#101315');
   crm.root.position([645, 90]);
   const crmValue = text('—', 26, {y: 66, fill: accent, fontFamily: theme.fontFamily.mono});
@@ -47,7 +47,7 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(1, 0.3), sync.opacity(1, 0.5));
   yield* derive.reveal(1, 0.3);
   yield* derive.travel(0.7);
-  yield* all(derive.arrive(), segment.root.opacity(1, 0.3));
+  yield* all(derive.arrive(), segmentValue.opacity(1, 0.3));
   yield* transfer.reveal(1, 0.3);
   yield* transfer.travel(0.7);
   crmValue.text('frequent_buyer');
@@ -62,8 +62,8 @@ export default makeScene2D(function* (view) {
   train.root.add([text('train', 47, {y: -39, fill: accent, fontFamily: theme.fontFamily.mono}), text('training data', 26, {y: 44})]);
   const artifact = paper(340, 230, '#17232f');
   artifact.root.position([0, 90]);
-  artifact.root.opacity(0.2);
-  artifact.root.add([text('model v1', 43, {y: -28, fill: accent, fontFamily: theme.fontFamily.mono}), text('artifact', 26, {y: 47, fill: muted})]);
+  const modelName = text('model v1', 43, {y: -28, fill: accent, fontFamily: theme.fontFamily.mono, opacity: 0});
+  artifact.root.add([modelName, text('artifact', 26, {y: 47, fill: muted})]);
   const service = cartoonService('recommendation service', accent);
   service.root.position([645, 90]);
   service.root.scale(1.1);
@@ -80,7 +80,7 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(1, 0.3), deployment.opacity(1, 0.5));
   yield* output.reveal(1, 0.3);
   yield* output.travel(0.8);
-  yield* all(output.arrive(), artifact.root.opacity(1, 0.3));
+  yield* all(output.arrive(), modelName.opacity(1, 0.3));
   yield* waitUntil('deploy');
   yield* deploy.reveal(1, 0.3);
   yield* deploy.travel(0.8);

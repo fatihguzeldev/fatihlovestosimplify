@@ -53,8 +53,8 @@ export default makeScene2D(function* (view) {
   source.root.add([text('#1042', 30, {y: 0, fontFamily: theme.fontFamily.mono}), text('store A', 25, {y: 62, fill: accent, fontFamily: theme.fontFamily.mono})]);
   const storage = lakeStorage();
   storage.root.position([420, 75]);
-  storage.files[0].root.opacity(0.18);
-  storage.files[3].root.opacity(0.18);
+  storage.files[0].root.opacity(0);
+  storage.files[3].root.opacity(0);
   const copy = cartoonArrow('s14-sales-copy-to-lake', [-345, 75], [120, 75], accent, 0);
   const note = text('siparişin ürün satırlarını da taşıyoruz.', 31, {position: [0, 389], fill: muted, opacity: 0});
   ingest.add([source.root, storage.root, copy.root, note]);

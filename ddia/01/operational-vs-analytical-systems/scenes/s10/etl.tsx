@@ -132,7 +132,10 @@ export default makeScene2D(function* (view) {
   const chart = monthlyChart();
   chart.root.position([465, 92]);
   chart.root.scale(0.86);
-  chart.root.opacity(0.22);
+  chart.bars.forEach(({bar, value}) => {
+    bar.opacity(0);
+    value.opacity(0);
+  });
   const analyst = role('analyst', 'ocak satışları', 1);
   analyst.position([498, -185]);
   analyst.opacity(1);
@@ -149,7 +152,7 @@ export default makeScene2D(function* (view) {
   yield* query.arrive();
   yield* reply.reveal(1, 0.4);
   yield* reply.travel(0.9);
-  yield* all(reply.arrive(), chart.root.opacity(1, 0.3));
+  yield* all(reply.arrive(), ...chart.bars.flatMap(({bar, value}) => [bar.opacity(1, 0.3), value.opacity(1, 0.3)]));
   yield* waitUntil('responsibility');
   yield* all(title.opacity(0, 0.2), analysis.opacity(0, 0.4));
   analysis.remove();

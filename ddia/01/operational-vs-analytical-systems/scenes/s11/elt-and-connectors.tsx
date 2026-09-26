@@ -36,7 +36,7 @@ export default makeScene2D(function* (view) {
   ]);
   const copy = paper(240, 134, '#101315');
   copy.root.position([-225, 100]);
-  copy.root.opacity(0.2);
+  copy.root.opacity(0);
   copy.root.add([
     text('#1042', 28, {y: -24, fontFamily: theme.fontFamily.mono}),
     text('store A', 26, {y: 27, fill: accent, fontFamily: theme.fontFamily.mono}),
