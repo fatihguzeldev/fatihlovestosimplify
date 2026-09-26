@@ -48,13 +48,6 @@ export function* showCompute(view: View2D) {
     textWrap: false,
   });
   const image = new Layout({position: [430, 50]});
-  const label = new Txt({
-    text: 'piksel piksel',
-    position: [430, 410],
-    fontFamily: theme.fontFamily.sans,
-    fontSize: 32,
-    fill: foreground,
-  });
   const side = 28;
   const half = side / 2;
   const pixelSize = 20;
@@ -119,18 +112,17 @@ export function* showCompute(view: View2D) {
     return {tile, border, progress, x, y, row};
   });
 
-  comparison.add([title, caption, detail, image, label]);
+  comparison.add([title, caption, detail, image]);
   view.add(comparison);
   yield* comparison.opacity(1, 0.6);
   yield* serial(side * 9, 2.2, linear);
 
   yield* waitUntil('parallel-computation');
-  yield* all(caption.opacity(0, 0.2), detail.opacity(0, 0.2), label.opacity(0, 0.2));
+  yield* all(caption.opacity(0, 0.2), detail.opacity(0, 0.2));
   caption.text('farklı bölgeleri\naynı anda hesaplayabiliriz.');
   caption.fontSize(48);
   detail.text('bu görüntünün her bölgesi bağımsız.');
   detail.fontSize(30);
-  label.text('aynı görüntü, dört bölge');
   for (const region of regions) {
     region.progress(region.row === 0 ? half * 9 : 0);
   }
@@ -141,7 +133,7 @@ export function* showCompute(view: View2D) {
       border.opacity(0.75, 0.5),
     )),
   );
-  yield* all(caption.opacity(1, 0.4), detail.opacity(1, 0.4), label.opacity(1, 0.4));
+  yield* all(caption.opacity(1, 0.4), detail.opacity(1, 0.4));
   yield* all(...regions.map(({progress}) => progress(half * half, 3, linear)));
   yield* all(
     ...regions.map(({tile, border, x, y}) => all(
@@ -149,9 +141,6 @@ export function* showCompute(view: View2D) {
       border.opacity(0, 0.65),
     )),
     frame.opacity(0.25, 0.85),
-    label.opacity(0, 0.3),
   );
-  label.text('görüntü hazır.');
-  yield* label.opacity(1, 0.35);
   return comparison;
 }
