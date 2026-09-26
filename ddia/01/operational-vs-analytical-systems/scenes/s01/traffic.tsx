@@ -29,12 +29,12 @@ export function* showQueryRate(view: View2D) {
   database.position([620, 150]);
   root.add(database);
 
-  const requestArrow = cartoonArrow('s01-request', [phoneRight + arrowInset, 110], [serviceLeft - arrowInset, 110], accent);
-  const queryArrow = cartoonArrow('s01-query', [serviceRight + arrowInset, 110], [databaseLeft - arrowInset, 110], accent);
+  const requestArrow = cartoonArrow('s01-request', [phoneRight + arrowInset, 130], [serviceLeft - arrowInset, 130], accent);
+  const queryArrow = cartoonArrow('s01-query', [serviceRight + arrowInset, 130], [databaseLeft - arrowInset, 130], accent);
   root.add([
     requestArrow.root, queryArrow.root,
     new Txt({text: 'request', position: [requestCenter, 63], fontFamily: theme.fontFamily.sans, fontSize: 27, fill: foreground}),
-    new Txt({text: 'getMessages()', position: [requestCenter, 200], fontFamily: theme.fontFamily.mono, fontSize: 26, fill: foreground}),
+    new Txt({text: 'getMessages()', position: [requestCenter, 220], fontFamily: theme.fontFamily.mono, fontSize: 26, fill: foreground}),
     new Txt({text: 'query', position: [queryCenter, 63], fontFamily: theme.fontFamily.sans, fontSize: 27, fill: accent}),
   ]);
 
