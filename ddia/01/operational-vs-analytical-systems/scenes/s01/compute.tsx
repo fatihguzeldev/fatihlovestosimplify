@@ -119,8 +119,8 @@ export function* showCompute(view: View2D) {
 
   yield* waitUntil('parallel-computation');
   yield* all(caption.opacity(0, 0.2), detail.opacity(0, 0.2));
-  caption.text('farklı bölgeleri\naynı anda hesaplayabiliriz.');
-  caption.fontSize(48);
+  caption.text('farklı bölgeleri aynı anda hesaplayabiliriz.');
+  caption.fontSize(44);
   detail.text('bu görüntünün her bölgesi bağımsız.');
   detail.fontSize(30);
   for (const region of regions) {
