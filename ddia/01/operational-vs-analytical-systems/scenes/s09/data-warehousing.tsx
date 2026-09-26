@@ -19,7 +19,7 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(0, 0.25), system.root.opacity(0, 0.4));
   const card = new Layout({opacity: 0});
   const first = text('data’nın ', 104, {position: [-806, -35], offset: [-1, 0]});
-  const second = text('yolculuğu.', 104, {position: () => [-806 + first.width(), -35], offset: [-1, 0], fill: accent, fontStyle: 'italic', fontWeight: 500});
+  const second = text('yolculuğu.', 104, {position: () => [-806 + first.width() + 26, -35], offset: [-1, 0], fill: accent, fontStyle: 'italic', fontWeight: 500});
   const line = new Path({data: () => `M 2 0 Q ${second.width() * 0.45} 10 ${second.width() - 4} 1`, position: () => second.position().addY(78), stroke: accent, lineWidth: 5, lineCap: 'round', end: 0});
   card.add([first, second, line,
     text('part 2', 29, {position: [-800, -203], offset: [-1, 0], fill: muted, fontFamily: theme.fontFamily.mono}),
