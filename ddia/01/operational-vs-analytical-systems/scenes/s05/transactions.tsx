@@ -30,7 +30,7 @@ export default makeScene2D(function* (view) {
   yield* all(bridge.root.opacity(0, 0.25), database.opacity(0, 0.3), market.label.opacity(0, 0.25));
   database.remove();
   bridge.root.remove();
-  yield* all(market.root.position([-575, 100], 0.7), market.root.scale(0.66, 0.7));
+  yield* all(market.root.position([-575, 100], 0.7), market.root.scale(0.66, 0.7), market.status.fontSize(40, 0.7));
   const table = orderTable();
   table.root.position([420, 90]);
   table.root.opacity(0);
@@ -39,8 +39,8 @@ export default makeScene2D(function* (view) {
   sql.root.opacity(0);
   const code = text('SELECT status FROM orders WHERE id = 1042;', 27, {position: [-764, 0], offset: [-1, 0], fontFamily: theme.fontFamily.mono});
   sql.root.add(code);
-  const request = cartoonArrow('s05-select-order', [-318, 52], [-2, 52], accent, 0);
-  const response = cartoonArrow('s05-selected-status', [-2, 185], [-318, 185], accent, 0);
+  const request = cartoonArrow('s05-select-order', [-318, 84], [-2, 84], accent, 0);
+  const response = cartoonArrow('s05-selected-status', [-2, 218], [-318, 218], accent, 0);
   const queryLabel = text('read', 29, {position: request.pointAt(0.5).addY(-80), fill: accent, opacity: 0});
   const responseLabel = text('created', 26, {position: response.pointAt(0.5).addY(76), fill: accent, fontFamily: theme.fontFamily.mono, opacity: 0});
   view.add([table.root, sql.root, request.root, response.root, queryLabel, responseLabel]);

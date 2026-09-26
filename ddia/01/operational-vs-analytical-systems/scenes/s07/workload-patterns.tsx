@@ -2,7 +2,7 @@ import {Layout, makeScene2D, Rect} from '@motion-canvas/2d';
 import {all, waitFor, waitUntil} from '@motion-canvas/core';
 import {loadFonts} from '../../../../../common/fonts';
 import {theme} from '../../theme';
-import {accent, background, foreground, heading, muted, paper, text} from '../shared/drawing';
+import {accent, background, heading, muted, paper, text} from '../shared/drawing';
 import {workloadExamples} from '../shared/workloads';
 import {role} from '../shared/people';
 
@@ -72,9 +72,12 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('workload');
   yield* show('kaç query, ', 'ne kadar iş?', ['çok sayıda kısa query', 'az sayıda karmaşık query'], ['birkaç kayda dokunur', 'birçok kaydı işler'], 34);
   const requests = Array.from({length: 6}, (_, i) => {
-    const ticket = new Rect({position: [-675 + i * 86, 320], size: [64, 40], radius: 5, stroke: foreground, fill: '#17232f', lineWidth: 2, opacity: 0});
-    drawings.add(ticket);
-    return ticket;
+    const ticket = paper(98, 54, '#17232f');
+    ticket.root.position([-745 + i * 114, 320]);
+    ticket.root.opacity(0);
+    ticket.root.add(text(`#${1041 + i}`, 22, {fontFamily: theme.fontFamily.mono}));
+    drawings.add(ticket.root);
+    return ticket.root;
   });
   const reportQuery = paper(330, 90, '#17232f');
   reportQuery.root.position([460, 320]);
@@ -122,7 +125,7 @@ export default makeScene2D(function* (view) {
   yield* caveat.opacity(1, 0.4);
   yield* waitUntil('next');
   yield* all(features.opacity(0, 0.3), title.opacity(0, 0.2), typical.opacity(0, 0.2));
-  title.children(heading('analizi ', 'kullanıcı da', ' görebilir mi?').children());
+  title.children(heading('bu sonuca ', 'kullanıcı da', ' ihtiyaç duyarsa?').children());
   yield* all(examples.order.root.opacity(0, 0.3), names.opacity(0, 0.25));
   yield* all(examples.chart.root.position([0, 80], 0.7), examples.chart.root.scale(1.15, 0.7));
   yield* title.opacity(1, 0.3);

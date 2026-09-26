@@ -2,12 +2,13 @@ import {Layout, Line, Path, Rect} from '@motion-canvas/2d';
 import {cartoonArrow} from '../../../../../common/cartoon-arrow';
 import {theme} from '../../theme';
 import {accent, banana, ink, muted, paper, text} from '../shared/drawing';
+import {januaryTotals} from '../shared/workloads';
 
 export function salesReport() {
   const report = paper(410, 300, '#101315');
   const chart = new Layout({});
   const period = text('ocak 2026', 25, {y: -115, fill: muted});
-  const bars = [400, 300].map((amount, i) => {
+  const bars = januaryTotals.map((amount, i) => {
     const x = -84 + i * 168;
     const bar = new Rect({position: [x, 88], offset: [0, 1], width: 73, height: 0, fill: accent});
     const value = text(`${amount} ₺`, 25, {position: [x, 88 - amount * 0.37 - 24], fontFamily: theme.fontFamily.mono, opacity: 0});

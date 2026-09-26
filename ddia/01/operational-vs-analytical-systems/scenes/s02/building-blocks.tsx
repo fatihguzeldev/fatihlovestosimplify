@@ -81,7 +81,7 @@ export default makeScene2D(function* (view) {
   cache.calculation.position([-470, 85]);
   cache.calculation.scale(1.25);
   cache.calculation.opacity(1);
-  cache.route.end(0);
+  cache.route.end(1);
   const fresh = text('24 dk', 46, {position: [-470, 305], fill: accent, opacity: 0, fontFamily: theme.fontFamily.mono});
   const refresh = heading('bu sonuç ne zaman ', 'yenilenecek?');
   refresh.position([-806, 410]);
@@ -90,7 +90,8 @@ export default makeScene2D(function* (view) {
   cache.root.add([fresh, refresh]);
   view.add(cache.root);
   yield* cache.root.opacity(1, 0.5);
-  yield* cache.route.end(1, 1.2);
+  yield* cache.traffic.opacity(1, 0.65);
+  yield* waitFor(0.35);
   yield* fresh.opacity(1, 0.5);
   yield* waitUntil('cache-stale');
   yield* all(refresh.opacity(1, 0.4), cache.cache.face.stroke(accent, 0.4));

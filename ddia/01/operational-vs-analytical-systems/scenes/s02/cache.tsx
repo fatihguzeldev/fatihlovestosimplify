@@ -24,8 +24,19 @@ export function* showCache(view: View2D) {
     map.root.add(new Rect({position: [x, y], size: [72, 53], radius: 5, stroke: foreground, lineWidth: 1.5, opacity: 0.2}));
   }
   const route = new Path({data: 'M -113 74 L -113 -83 Q -113 -95 -99 -95 L 106 -93 L 110 74', stroke: accent, lineWidth: 5, lineJoin: 'round', end: 0});
+  const traffic = new Layout({opacity: 0});
+  [-53, 1, 55].forEach((x, i) => {
+    const car = new Layout({position: [x, -90], rotation: i === 1 ? -3 : 2});
+    car.add([
+      new Path({...ink, lineWidth: 1.8, fill: '#13191f', data: 'M -19 5 L -19 -4 L -11 -5 L -5 -14 L 7 -14 L 13 -5 L 21 -2 L 21 5 Z'}),
+      new Path({stroke: accent, lineWidth: 2, data: 'M -8 -6 L -4 -11 L 5 -11 L 9 -6 M -14 0 L -3 0 M 3 0 L 15 0'}),
+      ...[-11, 13].map(wheel => new Circle({position: [wheel, 6], size: 8, fill: '#13191f', stroke: foreground, lineWidth: 1.8})),
+    ]);
+    traffic.add(car);
+  });
   map.root.add([
     route,
+    traffic,
     ...[-113, 110].map(x => new Circle({position: [x, 74], size: 12, fill: accent})),
     text('A', 22, {position: [-113, 102], fontFamily: theme.fontFamily.mono}),
     text('B', 22, {position: [110, 102], fontFamily: theme.fontFamily.mono}),
@@ -74,5 +85,5 @@ export function* showCache(view: View2D) {
   yield* all(lookup.arrive(), cache.face.stroke(accent, 0.1).to(foreground, 0.3), hit.reveal(1, 0.3));
   yield* hit.travel(0.5);
   yield* all(hit.arrive(), estimate.opacity(1, 0.25));
-  return {root, title, market, calculation, route, cache, cachedValue, lookup, hit, lookupLabel};
+  return {root, title, market, calculation, route, traffic, cache, cachedValue, lookup, hit, lookupLabel};
 }
