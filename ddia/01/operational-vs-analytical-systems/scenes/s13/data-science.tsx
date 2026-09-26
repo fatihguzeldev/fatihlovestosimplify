@@ -21,8 +21,8 @@ export default makeScene2D(function* (view) {
   items.root.opacity(0);
   const cells = new Layout({opacity: 0});
   cells.add(text('order_items', 29, {y: -86, fill: accent, fontFamily: theme.fontFamily.mono}));
-  [['order_id', 'product', 'qty'], ['1042', 'muz', '2'], ['1042', 'süt', '1']].forEach((row, i) => {
-    row.forEach((value, j) => cells.add(text(value, 25, {position: [[-242, -55, 193][j], -28 + i * 54], offset: [-1, 0], fill: i === 0 ? muted : foreground, fontFamily: theme.fontFamily.mono})));
+  [['order_id', 'product', 'quantity'], ['1042', 'muz', '2 kg'], ['1042', 'süt', '1 litre']].forEach((row, i) => {
+    row.forEach((value, j) => cells.add(text(value, 25, {position: [[-242, -55, 122][j], -28 + i * 54], offset: [-1, 0], fill: i === 0 ? muted : foreground, fontFamily: theme.fontFamily.mono})));
   });
   items.root.add(cells);
   initial.receipt.root.remove();
@@ -45,8 +45,8 @@ export default makeScene2D(function* (view) {
   const vector = new Layout({opacity: 0});
   vector.add([
     text('features · #1042', 27, {y: -84, fontFamily: theme.fontFamily.mono}),
-    text('muz_adedi', 24, {position: [-130, -13], fill: muted, fontFamily: theme.fontFamily.mono}),
-    text('süt_adedi', 24, {position: [130, -13], fill: muted, fontFamily: theme.fontFamily.mono}),
+    text('muz_kg', 24, {position: [-130, -13], fill: muted, fontFamily: theme.fontFamily.mono}),
+    text('süt_litre', 24, {position: [130, -13], fill: muted, fontFamily: theme.fontFamily.mono}),
     text('2', 64, {position: [-130, 57], fill: accent, fontFamily: theme.fontFamily.mono}),
     text('1', 64, {position: [130, 57], fill: accent, fontFamily: theme.fontFamily.mono}),
     new Path({data: 'M -221 13 L -237 13 L -237 101 L -221 101 M 220 13 L 236 13 L 236 101 L 220 101', stroke: foreground, lineWidth: 2.5}),
