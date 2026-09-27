@@ -141,14 +141,18 @@ export default makeScene2D(function* (view) {
     60,
   );
   yield* waitUntil('next');
-  yield* all(features.opacity(0, 0.3), title.opacity(0, 0.2), visual.opacity(0, 0.3));
+  yield* all(
+    features.opacity(0, 0.3),
+    title.opacity(0, 0.3),
+    visual.opacity(0, 0.3),
+    names.opacity(0, 0.3),
+  );
   visual.remove();
   title.children(heading('bu sonuca ', 'kullanıcı da', ' ihtiyaç duyarsa?').children());
   examples.order.root.opacity(0);
   examples.chart.root.opacity(0);
   examples.root.opacity(1);
   yield* all(
-    names.opacity(0, 0.25),
     examples.chart.root.opacity(1, 0.5),
     examples.chart.root.position([0, 80], 0.7),
     examples.chart.root.scale(1.15, 0.7),
