@@ -30,9 +30,12 @@ export default makeScene2D(function* (view) {
   view.add(stage);
   yield loadFonts();
   yield* waitFor(0.6);
-  yield* all(title.opacity(0, 0.25), bridgeArrow.root.opacity(0, 0.25));
+  yield* all(
+    title.opacity(0, 0.25),
+    bridgeArrow.root.opacity(0, 0.25),
+    market.label.opacity(0, 0.25),
+  );
   bridgeArrow.root.remove();
-  yield* market.label.opacity(0, 0.15);
   yield* all(
     market.root.position([-580, 110], 0.75),
     market.root.scale(0.72, 0.75),
