@@ -16,6 +16,31 @@ import {
 } from '../shared/drawing';
 import { createOrderEntry } from '../shared/market';
 
+function groupBrace(x: number, width: number) {
+  const half = width / 2;
+  const root = new Layout({ position: [x, 386], opacity: 0 });
+  const data = `M ${-half} -17 C ${-half - 7} 4 ${-half + 5} 14 ${-half + 28} 11
+    L -82 7 C -46 4 -20 5 -4 17 L 2 22 L 10 14
+    C 28 3 63 7 96 8 L ${half - 24} 12 C ${half + 1} 15 ${half + 12} 0 ${half + 6} -18
+    L ${half - 4} -17 C ${half + 1} -3 ${half - 16} -3 ${half - 29} -3
+    L 90 -7 C 48 -10 27 -7 2 3 C -20 -10 -53 -9 -83 -7
+    L ${-half + 27} -2 C ${-half + 13} -1 ${-half + 10} -8 ${-half + 11} -17 Z`;
+  const outline = new Path({ ...ink, lineWidth: 2.4, fill: background, data });
+  const hatch = new Path({ data, clip: true });
+  for (let i = 0, left = -half + 10; left < half; i++, left += 23) {
+    hatch.add(
+      new Path({
+        ...ink,
+        stroke: accent,
+        lineWidth: 1.7,
+        data: `M ${left} ${11 + (i % 3)} Q ${left + 5} 2 ${left + 9 + (i % 2) * 3} -7`,
+      }),
+    );
+  }
+  root.add([outline, hatch]);
+  return { root, outline };
+}
+
 export default makeScene2D(function* (view) {
   view.fill(background);
   const stage = new Layout({});
@@ -116,15 +141,10 @@ export default makeScene2D(function* (view) {
     }),
     text('HTTP response', 22, { position: response.pointAt(0.5).addY(77), opacity: 0 }),
   ];
-  const zone = new Path({
-    ...ink,
-    data: 'M -105 369 Q -111 398 -86 398 L 309 402 Q 337 401 354 412 Q 371 401 398 403 L 814 398 Q 835 401 831 372',
-    stroke: muted,
-    lineWidth: 2.5,
-    opacity: 0,
-  });
-  const backendLabel = text('backend', 30, { position: [363, 453], opacity: 0 });
-  const frontendLabel = text('frontend', 30, { position: [-580, -126], opacity: 0 });
+  const frontendBrace = groupBrace(-580, 476);
+  const backendBrace = groupBrace(310, 810);
+  const backendLabel = text('backend', 30, { position: [310, 450], opacity: 0 });
+  const frontendLabel = text('frontend', 30, { position: [-580, 450], opacity: 0 });
   const frontendNote = text('tarayıcıda çalışan kod', 25, {
     position: [-580, 308],
     fill: muted,
@@ -140,7 +160,8 @@ export default makeScene2D(function* (view) {
     row.root,
     response.root,
     ...labels,
-    zone,
+    frontendBrace.root,
+    backendBrace.root,
     backendLabel,
     frontendLabel,
     frontendNote,
@@ -167,9 +188,22 @@ export default makeScene2D(function* (view) {
   yield* all(response.arrive(), market.shell.stroke(accent, 0.12).to(foreground, 0.3));
 
   yield* waitUntil('roles');
-  yield* all(frontendLabel.opacity(1, 0.35), frontendNote.opacity(1, 0.35));
-  yield* waitFor(0.45);
-  yield* all(zone.opacity(0.5, 0.4), backendLabel.opacity(1, 0.35));
+  const flow = [
+    packet.root,
+    activeLine,
+    ...[request, query, row, response].map((arrow) => arrow.root),
+    ...labels,
+  ];
+  yield* all(...flow.map((node) => node.opacity(0, 0.35)));
+  flow.forEach((node) => node.remove());
+  yield* all(database.x(560, 0.55), record.root.x(560, 0.55));
+  yield* all(
+    frontendBrace.root.opacity(1, 0.35),
+    frontendLabel.opacity(1, 0.35),
+    frontendNote.opacity(1, 0.35),
+  );
+  yield* waitFor(0.2);
+  yield* all(backendBrace.root.opacity(1, 0.35), backendLabel.opacity(1, 0.35));
 
   yield* waitUntil('stateless');
   yield* title.opacity(0, 0.2);
@@ -181,14 +215,7 @@ export default makeScene2D(function* (view) {
     opacity: 0,
   });
   stage.add(stateless);
-  yield* all(
-    title.opacity(1, 0.3),
-    packet.root.opacity(0, 0.35),
-    activeLine.opacity(0, 0.35),
-    ...[request, query, row, response].map((arrow) => arrow.root.opacity(0, 0.35)),
-    ...labels.map((label) => label.opacity(0, 0.25)),
-  );
-  packet.root.remove();
+  yield* title.opacity(1, 0.3);
   yield* all(stateless.opacity(1, 0.35), top.stroke(accent, 0.15).to(foreground, 0.35));
   const local = paper(535, 215, '#17232f');
   local.root.y(10);
@@ -208,6 +235,8 @@ export default makeScene2D(function* (view) {
     database.opacity(0.3, 0.3),
     record.root.opacity(0.3, 0.3),
     stateless.opacity(0, 0.2),
+    backendBrace.root.opacity(0.3, 0.3),
+    backendLabel.opacity(0.3, 0.3),
   );
   yield* local.root.opacity(1, 0.4);
   yield* waitUntil('backend-focus');
@@ -220,8 +249,12 @@ export default makeScene2D(function* (view) {
     service.opacity(1, 0.3),
     database.opacity(1, 0.3),
     record.root.opacity(1, 0.3),
-    zone.stroke(accent, 0.3),
-    zone.opacity(1, 0.3),
+    backendBrace.outline.stroke(accent, 0.3),
+    backendBrace.root.opacity(1, 0.3),
+    backendLabel.opacity(1, 0.3),
+    frontendBrace.root.opacity(0.45, 0.3),
+    frontendLabel.opacity(0.45, 0.3),
+    frontendNote.opacity(0.45, 0.3),
     backendLabel.fill(accent, 0.3),
   );
   yield* waitUntil('next');
@@ -230,8 +263,10 @@ export default makeScene2D(function* (view) {
   yield* all(
     title.opacity(1, 0.3),
     market.root.opacity(1, 0.3),
-    zone.stroke(muted, 0.3),
-    zone.opacity(0.5, 0.3),
+    backendBrace.outline.stroke(foreground, 0.3),
+    frontendBrace.root.opacity(1, 0.3),
+    frontendLabel.opacity(1, 0.3),
+    frontendNote.opacity(1, 0.3),
     backendLabel.fill(foreground, 0.3),
   );
   yield* waitUntil('end');
