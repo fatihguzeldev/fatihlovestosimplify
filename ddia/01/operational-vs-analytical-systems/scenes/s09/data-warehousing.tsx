@@ -156,7 +156,7 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(0, 0.25), sourceNote.opacity(0, 0.25));
   title.children(heading('bu bilgileri ', 'birlikte sorgulamak', ' istiyoruz.').children());
   const schema = paper(1210, 144, '#17232f');
-  schema.root.position([0, 270]);
+  schema.root.position([0, 310]);
   schema.root.opacity(0);
   schema.root.add([
     text('analize uygun bir görünüm', 26, { y: -37, fill: muted }),
@@ -167,20 +167,16 @@ export default makeScene2D(function* (view) {
     }),
   ]);
   const links = new Layout({ opacity: 0 });
-  [-570, 0, 570].forEach((x, i) => {
-    links.add(
-      new Path({
-        ...ink,
-        stroke: accent,
-        lineWidth: 2.4,
-        data: `M ${x} 104 Q ${x + (i - 1) * 8} 132 ${x * 0.55} 151 L ${x * 0.55} 180 M ${x * 0.55 - 6} 173 L ${x * 0.55} 181 L ${x * 0.55 + 6} 172`,
-        end: 0,
-      }),
-    );
+  const sourceLinks = [-570, 0, 570].map((x, i) => {
+    const arrow = cartoonArrow(`s09-source-${i}-schema`, [0, 0], [(1 - i) * 130, 160], accent, 0);
+    arrow.root.position([x, 110]);
+    arrow.root.scale(0.65);
+    links.add(arrow.root);
+    return arrow;
   });
   view.add([links, schema.root]);
   yield* all(title.opacity(1, 0.3), schema.root.opacity(1, 0.4), links.opacity(1, 0.3));
-  yield* all(...links.children().map((node) => (node as Path).end(1, 0.65)));
+  yield* all(...sourceLinks.map((arrow) => arrow.reveal(1, 0.65)));
   yield* waitUntil('access');
   yield* all(
     title.opacity(0, 0.3),
