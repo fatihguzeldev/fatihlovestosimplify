@@ -57,17 +57,18 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('inside');
   yield* all(title.opacity(0, 0.2), system.expanded.opacity(0, 0.2));
   title.children(heading('tek arayüzün altında ', 'iki ayrı yapı', ' olabilir.').children());
-  system.internals.opacity(1);
   system.oltp.selection.y(0);
   system.oltp.selection.opacity(1);
   yield* all(
     title.opacity(1, 0.3),
     system.name.position([-610, 88], 0.85, easeInOutCubic),
     system.name.fontSize(42, 0.85, easeInOutCubic),
-    ...system.doors.map((door) => door.width(0, 0.85, easeInOutCubic)),
-    system.facade.opacity(1, 0.85),
   );
-  yield* waitFor(0.8);
+  system.internals.opacity(1);
+  yield* all(
+    ...system.doors.map((door) => door.width(0, 0.8, easeInOutCubic)),
+    system.facade.opacity(1, 0.8),
+  );
   yield* all(system.paymentResult.opacity(0, 0.2), system.responses[0].root.opacity(0, 0.2));
   system.payment.text('yeni deneme · 14:01:20');
   system.paymentResult.text('reddedildi · kaydediliyor…');
