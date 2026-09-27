@@ -123,6 +123,13 @@ export function createMarket() {
     offset: [1, 0],
     fontFamily: theme.fontFamily.mono,
   });
+  const receiptDetails = new Layout({});
+  receiptDetails.add([
+    text('muz · süt', 27, { position: [-269, 57], offset: [-1, 0] }),
+    text('2 kg · 1 litre', 20, { position: [-269, 93], offset: [-1, 0], fill: muted }),
+    text('toplam', 20, { position: [269, 53], offset: [1, 0], fill: muted }),
+    receiptTotal,
+  ]);
   receipt.add([
     text('sipariş', 21, { position: [-269, -146], offset: [-1, 0], fill: muted }),
     text('#1042', 43, {
@@ -141,18 +148,16 @@ export function createMarket() {
     new Rect({ position: [0, -34], size: [550, 62], radius: 9, fill: '#182638' }),
     new Path({ stroke: accent, lineWidth: 3, lineCap: 'round', data: 'M -272 -49 L -272 -19' }),
     status,
-    text('muz · süt', 27, { position: [-269, 57], offset: [-1, 0] }),
-    text('2 kg · 1 litre', 20, { position: [-269, 93], offset: [-1, 0], fill: muted }),
-    text('toplam', 20, { position: [269, 53], offset: [1, 0], fill: muted }),
-    receiptTotal,
+    receiptDetails,
   ]);
   body.add(receipt);
-  return { root, body, cart, receipt, receiptTotal, button, shell, label, status };
+  return { root, body, cart, receipt, receiptDetails, receiptTotal, button, shell, label, status };
 }
 
 export function createOrderEntry() {
   const market = createMarket();
   market.cart.remove();
+  market.receiptDetails.opacity(0);
   market.label.opacity(0);
   market.root.position([0, 80]);
   const entry = new Layout({});
@@ -181,8 +186,6 @@ export function createOrderEntry() {
       stroke: accent,
       data: 'M -21 -18 L 3 -26 L 23 -15 L 22 19 L -1 28 L -22 16 Z M -21 -18 L -1 -7 L 23 -15 M -1 -7 L -1 28 M -10 -22 L 11 -11 L 11 0',
     }),
-    text('muz · süt', 28, { position: [-269, 9], offset: [-1, 0] }),
-    text('185 ₺', 28, { position: [269, 9], offset: [1, 0], fontFamily: theme.fontFamily.mono }),
     new Path({ ...ink, opacity: 0.18, lineWidth: 1.5, data: 'M -270 56 Q 0 58 270 55' }),
     open,
   ]);

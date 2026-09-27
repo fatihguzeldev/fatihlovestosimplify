@@ -163,6 +163,7 @@ export default makeScene2D(function* (view) {
   yield* response.travel(0.65);
   market.status.fontFamily(theme.fontFamily.mono);
   market.status.text('created');
+  market.receiptDetails.opacity(1);
   yield* all(response.arrive(), market.shell.stroke(accent, 0.12).to(foreground, 0.3));
 
   yield* waitUntil('roles');
