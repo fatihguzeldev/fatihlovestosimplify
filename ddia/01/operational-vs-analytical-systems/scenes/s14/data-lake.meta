@@ -6,23 +6,23 @@
       "targetTime": 5
     },
     {
-      "name": "choose",
+      "name": "read",
       "targetTime": 18
     },
     {
-      "name": "insert-lake",
+      "name": "report",
       "targetTime": 28
     },
     {
-      "name": "consumers",
+      "name": "features",
       "targetTime": 44
     },
     {
-      "name": "training",
+      "name": "reuse",
       "targetTime": 57
     },
     {
-      "name": "raw",
+      "name": "consumers",
       "targetTime": 69
     },
     {

@@ -6,7 +6,7 @@ import { cartoonDatabase } from '../../../../../common/cartoon-system';
 import { theme } from '../../theme';
 import { accent, background, heading, muted, text } from '../shared/drawing';
 import { warehouseSystem } from '../shared/warehouse-system';
-import { recommendationSource } from '../shared/recommendation-source';
+import { salesReportSource } from '../shared/report-source';
 import { htapLandscape, htapSystem } from './htap-system';
 
 export default makeScene2D(function* (view) {
@@ -174,10 +174,10 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('next');
   yield* all(title.opacity(0, 0.2), main.root.opacity(0, 0.4));
   main.root.remove();
-  title.children(heading('peki, ', 'ürün önerisi', ' hazırlasak?').children());
-  const recommendations = recommendationSource();
-  recommendations.root.opacity(0);
-  view.add(recommendations.root);
-  yield* all(title.opacity(1, 0.3), recommendations.root.opacity(1, 0.5));
+  title.children(heading('bugünkü sorumuz: ', 'ne kadar sattık?').children());
+  const report = salesReportSource();
+  report.root.opacity(0);
+  view.add(report.root);
+  yield* all(title.opacity(1, 0.3), report.root.opacity(1, 0.5));
   yield* waitUntil('end');
 });

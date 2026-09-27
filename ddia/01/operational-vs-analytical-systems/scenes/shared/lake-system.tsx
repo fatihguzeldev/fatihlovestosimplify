@@ -10,26 +10,31 @@ export function lakeStorage() {
     text('data lake', 36, { position: [-206, -180], offset: [-1, 0], fill: accent }),
     text('kaynak kopyaları', 23, { position: [-206, -139], offset: [-1, 0], fill: muted }),
   ]);
-  const files = ['sales.parquet', 'reviews.json', 'product.jpg', 'order_items.parquet'].map(
-    (name, i) => {
-      const file = paper(202, 96);
-      file.root.position([-116 + (i % 2) * 232, -42 + Math.floor(i / 2) * 144]);
-      file.face.data('M -101 -46 Q 0 -49 76 -47 L 100 -23 L 99 48 Q 0 50 -100 47 Z');
-      const [base, extension] = name.split('.');
-      file.root.add([
-        new Path({
-          data: 'M 76 -47 L 75 -23 L 100 -23',
-          stroke: foreground,
-          lineWidth: 2,
-          lineJoin: 'round',
-        }),
-        text(base, 20, { y: -12, fontFamily: theme.fontFamily.mono }),
-        text(`.${extension}`, 18, { y: 22, fill: accent, fontFamily: theme.fontFamily.mono }),
-      ]);
-      surface.root.add(file.root);
-      return file;
-    },
-  );
+  const files = [
+    'sales.parquet',
+    'clickstream.jsonl',
+    'order_items.parquet',
+    'reviews.json',
+    'product.jpg',
+    'readings.csv',
+  ].map((name, i) => {
+    const file = paper(202, 82);
+    file.root.position([-116 + (i % 2) * 232, -67 + Math.floor(i / 2) * 112]);
+    file.face.data('M -101 -39 Q 0 -42 76 -40 L 100 -16 L 99 41 Q 0 43 -100 40 Z');
+    const [base, extension] = name.split('.');
+    file.root.add([
+      new Path({
+        data: 'M 76 -40 L 75 -16 L 100 -16',
+        stroke: foreground,
+        lineWidth: 2,
+        lineJoin: 'round',
+      }),
+      text(base, 20, { y: -11, fontFamily: theme.fontFamily.mono }),
+      text(`.${extension}`, 18, { y: 19, fill: accent, fontFamily: theme.fontFamily.mono }),
+    ]);
+    surface.root.add(file.root);
+    return file;
+  });
   return { ...surface, files };
 }
 

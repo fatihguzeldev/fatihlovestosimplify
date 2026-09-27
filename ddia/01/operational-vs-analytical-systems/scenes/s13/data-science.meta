@@ -2,27 +2,27 @@
   "version": 0,
   "timeEvents": [
     {
-      "name": "items",
+      "name": "question",
       "targetTime": 6
     },
     {
-      "name": "features",
+      "name": "events",
       "targetTime": 23
     },
     {
-      "name": "training",
+      "name": "schema",
       "targetTime": 40
     },
     {
-      "name": "review",
+      "name": "report",
       "targetTime": 54
     },
     {
-      "name": "image",
+      "name": "features",
       "targetTime": 69
     },
     {
-      "name": "custom-code",
+      "name": "preserve",
       "targetTime": 85
     },
     {

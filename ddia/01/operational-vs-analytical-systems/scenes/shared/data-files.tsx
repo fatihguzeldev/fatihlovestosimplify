@@ -2,7 +2,7 @@ import { Layout, Path } from '@motion-canvas/2d';
 import { theme } from '../../theme';
 import { accent, banana, foreground, muted, paper, text } from './drawing';
 
-export function dataFile(name: string, kind: 'records' | 'review' | 'image' | 'sensor') {
+export function dataFile(name: string, kind: 'records' | 'review' | 'image' | 'sensor' | 'events') {
   const surface = paper(440, 300, '#101315');
   surface.root.add([
     text(name, 27, {
@@ -40,6 +40,13 @@ export function dataFile(name: string, kind: 'records' | 'review' | 'image' | 's
     fruit.position([0, 30]);
     fruit.scale(2.5);
     surface.root.add(fruit);
+  } else if (kind === 'events') {
+    surface.root.add([
+      text('oturum #17', 24, { y: -28, fill: muted }),
+      text('view · muz', 25, { y: 17, fontFamily: theme.fontFamily.mono }),
+      text('view · süt', 25, { y: 55, fontFamily: theme.fontFamily.mono }),
+      text('add_to_cart · muz', 25, { y: 93, fontFamily: theme.fontFamily.mono }),
+    ]);
   } else {
     [
       ['time', 'temp'],
@@ -65,11 +72,13 @@ export function analysisInputs() {
   const root = new Layout({});
   const files = [
     dataFile('sales.parquet', 'records'),
+    dataFile('clickstream.jsonl', 'events'),
     dataFile('reviews.json', 'review'),
     dataFile('product.jpg', 'image'),
   ];
   files.forEach((file, i) => {
-    file.root.position([-570 + 570 * i, 90]);
+    file.root.position([-660 + 440 * i, 90]);
+    file.root.scale(0.82);
     root.add(file.root);
   });
   return { root, files };
