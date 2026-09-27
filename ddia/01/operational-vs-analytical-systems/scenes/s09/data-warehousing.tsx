@@ -1,5 +1,5 @@
 import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
-import { all, cancel, loop, waitUntil } from '@motion-canvas/core';
+import { all, cancel, easeOutCubic, loop, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
@@ -69,9 +69,9 @@ export default makeScene2D(function* (view) {
   yield* all(orderReply.arrive(), system.orders.fill(foreground, 0.25));
   yield* waitUntil('scan');
   title.children(heading('rapor ', 'çok sayıda kaydı', ' tarıyor.').children());
-  const refreshing = text('yenileniyor…', 32, { y: 235, fill: accent, opacity: 0 });
-  system.chart.root.add(refreshing);
-  yield* all(system.sales.fill(accent, 0.2), refreshing.opacity(1, 0.2));
+  const waiting = text('yanıt bekleniyor…', 32, { y: 235, fill: accent, opacity: 0 });
+  system.chart.root.add(waiting);
+  yield* all(system.sales.fill(accent, 0.2), waiting.opacity(1, 0.2));
   yield* system.query.travel(0.7);
   yield* system.query.arrive();
   const work = databaseWork();
@@ -127,7 +127,15 @@ export default makeScene2D(function* (view) {
   view.add(reportReply.root);
   yield* reportReply.reveal(1, 0.3);
   yield* reportReply.travel(0.6);
-  yield* all(reportReply.arrive(), refreshing.opacity(0, 0.3), system.sales.fill(foreground, 0.3));
+  yield* all(
+    reportReply.arrive(),
+    waiting.opacity(0, 0.3),
+    system.sales.fill(foreground, 0.3),
+    ...system.chart.bars.flatMap(({ bar, value, height }) => [
+      bar.height(height, 0.8, easeOutCubic),
+      value.opacity(1, 0.2),
+    ]),
+  );
   yield* waitUntil('sources');
   yield* all(title.opacity(0, 0.3), system.root.opacity(0, 0.3), reportReply.root.opacity(0, 0.3));
   system.root.remove();

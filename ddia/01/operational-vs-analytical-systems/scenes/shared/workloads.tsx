@@ -9,24 +9,25 @@ export const januaryTotals = ['A', 'B'].map((store) =>
     .reduce((sum, row) => sum + row.amount, 0),
 );
 
-export function monthlyChart() {
+export function monthlyChart(totals = januaryTotals) {
   const surface = paper(650, 340, '#101315');
   surface.root.add(text('ocak 2026', 26, { y: -130, fill: muted }));
-  const bars = januaryTotals.map((amount, i) => {
+  const bars = totals.map((amount, i) => {
     const x = -140 + i * 280;
+    const height = (amount / Math.max(...totals)) * 172;
     const bar = new Rect({
       position: [x, 110],
       offset: [0, 1],
       width: 112,
-      height: amount * 0.43,
+      height,
       fill: accent,
     });
     const value = text(`${amount}₺`, 31, {
-      position: [x, 110 - amount * 0.43 - 28],
+      position: [x, 110 - height - 28],
       fontFamily: theme.fontFamily.mono,
     });
     surface.root.add([bar, value, text(`mağaza ${i ? 'b' : 'a'}`, 27, { position: [x, 141] })]);
-    return { bar, value, amount };
+    return { bar, value, amount, height };
   });
   surface.root.add(
     new Line({

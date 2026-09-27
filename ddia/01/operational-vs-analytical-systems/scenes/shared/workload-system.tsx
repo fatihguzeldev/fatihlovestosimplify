@@ -21,7 +21,12 @@ export function workloadSystem() {
   const orders = text('orders', 28, { y: -7, fontFamily: theme.fontFamily.mono });
   const sales = text('sales', 28, { y: 57, fontFamily: theme.fontFamily.mono });
   database.root.add([orders, sales]);
-  const chart = monthlyChart();
+  const chart = monthlyChart([640, 480]);
+  chart.bars.forEach(({ bar, value }) => {
+    bar.height(0);
+    value.opacity(0);
+    value.y(() => 110 - bar.height() - 28);
+  });
   chart.root.position([620, 75]);
   chart.root.scale(0.63);
   const order = cartoonArrow('workloads-order-request', [-385, 75], [-170, 75], accent);
