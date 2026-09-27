@@ -313,7 +313,7 @@ export default makeScene2D(function* (view) {
   yield* local.root.opacity(1, 0.4);
   yield* waitUntil('backend-focus');
   yield* all(title.opacity(0, 0.2), local.root.opacity(0, 0.25));
-  title.children(heading('kitabın odağında ', 'backend', ' var.').children());
+  title.children(heading('fakat bizim odağımızda ', 'backend', ' var.').children());
   yield* all(
     title.opacity(1, 0.3),
     market.receipt.opacity(1, 0.3),
