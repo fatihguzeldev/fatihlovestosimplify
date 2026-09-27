@@ -1,5 +1,5 @@
-import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
-import { all, waitUntil } from '@motion-canvas/core';
+import { Layout, makeScene2D, Path, Rect } from '@motion-canvas/2d';
+import { all, createSignal, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase } from '../../../../../common/cartoon-system';
@@ -43,29 +43,91 @@ export default makeScene2D(function* (view) {
 
   const stage = new Layout({ opacity: 0 });
   const title = heading('siparişim ', 'ne durumda?');
+  const orderFlow = new Layout({ position: [404, -30], scale: 1.2 });
   const market = createMarket();
   market.root.position([-620, 70]);
-  market.root.scale(0.6);
+  market.root.scale(0.66);
   market.cart.remove();
-  market.receipt.opacity(1);
   market.label.opacity(0);
   market.status.text('…');
+  const detail = createSignal(0);
+  const overview = new Layout({});
+  const overviewDetails = new Layout({ opacity: 0 });
+  const overviewStatus = text('…', 42, {
+    fontSize: () => 42 - detail() * 10,
+    position: () => [-249 - detail() * 4, -8 - detail() * 24],
+    offset: [-1, 0],
+    fill: accent,
+    fontFamily: theme.fontFamily.mono,
+  });
+  overviewStatus.text(() => market.status.text());
+  overviewDetails.add([
+    new Path({
+      data: () =>
+        `M -269 ${61 - detail() * 39} Q 0 ${64 - detail() * 40} 269 ${61 - detail() * 39}`,
+      stroke: foreground,
+      lineWidth: 1.5,
+      opacity: () => 0.2 - detail() * 0.04,
+    }),
+    text('muz · süt', 36, {
+      fontSize: () => 36 - detail() * 2,
+      position: () => [-269, 118 - detail() * 64],
+      offset: [-1, 0],
+      fontWeight: 500,
+    }),
+    text('185 ₺', 38, {
+      fontSize: () => 38 - detail() * 2,
+      position: () => [269, 118 - detail() * 20],
+      offset: [1, 0],
+      fontFamily: theme.fontFamily.mono,
+    }),
+  ]);
+  overview.add([
+    text('sipariş', 32, {
+      fontSize: () => 32 - detail() * 6,
+      position: () => [-269, -132 - detail() * 14],
+      offset: [-1, 0],
+      fill: muted,
+    }),
+    text('#1042', 48, {
+      fontSize: () => 48 - detail() * 4,
+      position: () => [-269, -83 - detail() * 20],
+      offset: [-1, 0],
+      fontFamily: theme.fontFamily.mono,
+      fontWeight: 500,
+    }),
+    new Rect({
+      position: () => [-269, -8 - detail() * 24],
+      offset: [-1, 0],
+      width: () => overviewStatus.width() + 40 - detail() * 8,
+      height: () => 66 - detail() * 14,
+      radius: 7,
+      fill: '#182638',
+    }),
+    overviewStatus,
+    overviewDetails,
+  ]);
+  market.body.add(overview);
   const { root: database, top, caption } = cartoonDatabase('sales database', accent);
   database.position([0, 70]);
-  database.scale(1.12);
-  caption.fontSize(28 / 1.12);
-  const record = text('#1042', 28, { y: -7, fontFamily: theme.fontFamily.mono });
-  const state = text('created', 25, { y: 57, fill: accent, fontFamily: theme.fontFamily.mono });
+  database.scale(1.4);
+  for (const path of database.children()) {
+    if (path instanceof Path) path.lineWidth(path.lineWidth() * 0.7);
+  }
+  caption.fontSize(28 / 1.4);
+  caption.y((275 - 70) / 1.4);
+  const record = text('#1042', 23, { y: -7, fontFamily: theme.fontFamily.mono });
+  const state = text('created', 20, { y: 57, fill: accent, fontFamily: theme.fontFamily.mono });
   database.add([record, state]);
   const orderQuestion = text('siparişim ne durumda?', 31, { position: [-620, -124], opacity: 0 });
   const reportQuestion = text('ocak satışları nasıl?', 31, { position: [620, -124], opacity: 0 });
   const operational = text('operational work', 29, {
-    position: [-620, 272],
+    position: [-620, 275],
     fill: accent,
     opacity: 0,
   });
   const analytical = text('analytical work', 29, {
-    position: [620, 272],
+    position: [620, 275],
     fill: accent,
     opacity: 0,
   });
@@ -78,33 +140,43 @@ export default makeScene2D(function* (view) {
   const report = salesReport();
   report.root.position([620, 70]);
   report.root.opacity(0);
-  const request = cartoonArrow('s04-order-question', [-385, 20], [-170, 20], accent, 0);
-  const response = cartoonArrow('s04-order-answer', [-170, 140], [-385, 140], accent, 0);
-  const query = cartoonArrow('s04-january-query', [375, 20], [170, 20], accent, 0);
-  const result = cartoonArrow('s04-january-result', [170, 140], [375, 140], accent, 0);
-  const readLabel = text('#1042', 23, {
-    position: request.pointAt(0.5).addY(-75),
+  const request = cartoonArrow('s04-order-question', [-373, 20], [-193, 20], accent, 0);
+  const response = cartoonArrow('s04-order-answer', [-193, 125], [-373, 125], accent, 0);
+  const query = cartoonArrow('s04-january-query', [375, 20], [193, 20], accent, 0);
+  const result = cartoonArrow('s04-january-result', [193, 125], [375, 125], accent, 0);
+  const readLabel = text('#1042', 24, {
+    position: request.pointAt(0.5).addY(-54),
     fontFamily: theme.fontFamily.mono,
     opacity: 0,
   });
-  const queryLabel = text('ocak', 24, { position: query.pointAt(0.5).addY(-75), opacity: 0 });
-  stage.add([
-    title,
+  const responseLabel = text('created', 24, {
+    position: response.pointAt(0.5).addY(65),
+    fill: accent,
+    fontFamily: theme.fontFamily.mono,
+    opacity: 0,
+  });
+  const queryLabel = text('ocak', 24, { position: query.pointAt(0.5).addY(-54), opacity: 0 });
+  orderFlow.add([
     market.root,
     database,
     orderQuestion,
-    reportQuestion,
     operational,
-    analytical,
     engineer,
+    request.root,
+    response.root,
+    readLabel,
+    responseLabel,
+  ]);
+  stage.add([
+    title,
+    orderFlow,
+    reportQuestion,
+    analytical,
     analyst,
     scientist,
     report.root,
-    request.root,
-    response.root,
     query.root,
     result.root,
-    readLabel,
     queryLabel,
   ]);
   view.add(stage);
@@ -113,11 +185,12 @@ export default makeScene2D(function* (view) {
   yield* all(request.reveal(1, 0.4), readLabel.opacity(1, 0.3));
   yield* request.travel(0.6);
   yield* all(request.arrive(), top.stroke(accent, 0.12).to(foreground, 0.3));
-  yield* response.reveal(1, 0.4);
+  yield* all(response.reveal(1, 0.4), responseLabel.opacity(1, 0.3));
   yield* response.travel(0.6);
   market.status.text('created');
   yield* all(
     response.arrive(),
+    overviewDetails.opacity(1, 0.3),
     operational.opacity(1, 0.35),
     market.shell.stroke(accent, 0.12).to(foreground, 0.3),
   );
@@ -126,17 +199,21 @@ export default makeScene2D(function* (view) {
   title.children(heading('bu isteği ', 'bir servis', ' karşılar.').children());
   readLabel.text('getOrder(1042)');
   readLabel.fontSize(21);
+  readLabel.position(request.pointAt(0.5).addY(-64));
   yield* all(title.opacity(1, 0.35), orderQuestion.opacity(1, 0.35), engineer.opacity(1, 0.4));
 
   yield* waitUntil('analytical');
   yield* all(
     title.opacity(0, 0.2),
+    orderFlow.position([0, 0], 0.75),
+    orderFlow.scale(1, 0.75),
     engineer.opacity(0.35, 0.25),
     market.root.opacity(0.4, 0.25),
     orderQuestion.opacity(0.4, 0.25),
     request.root.opacity(0.25, 0.25),
     response.root.opacity(0.25, 0.25),
     readLabel.opacity(0.25, 0.25),
+    responseLabel.opacity(0.25, 0.25),
     operational.opacity(0.4, 0.25),
   );
   title.children(heading('ocak satışları ', 'nasıl?').children());
@@ -182,6 +259,7 @@ export default makeScene2D(function* (view) {
     request.root.opacity(1, 0.35),
     response.root.opacity(1, 0.35),
     readLabel.opacity(1, 0.35),
+    responseLabel.opacity(1, 0.35),
   );
 
   yield* waitUntil('recommendation');
@@ -200,6 +278,7 @@ export default makeScene2D(function* (view) {
     request.root.opacity(0.2, 0.25),
     response.root.opacity(0.2, 0.25),
     readLabel.opacity(0.2, 0.25),
+    responseLabel.opacity(0.2, 0.25),
     orderQuestion.opacity(0.35, 0.25),
     operational.opacity(0.35, 0.25),
   );
@@ -224,6 +303,7 @@ export default makeScene2D(function* (view) {
     request.root.opacity(0, 0.25),
     response.root.opacity(0, 0.25),
     readLabel.opacity(0, 0.25),
+    responseLabel.opacity(0, 0.25),
     record.opacity(0, 0.25),
     state.opacity(0, 0.25),
   );
@@ -232,9 +312,13 @@ export default makeScene2D(function* (view) {
     market.root.opacity(1, 0.3),
     market.root.position([-470, 100], 0.75),
     market.root.scale(1, 0.75),
+    detail(1, 0.75),
     database.position([550, 110], 0.75),
     database.scale(1.4, 0.75),
+    caption.y(153, 0.75),
   );
+  overview.remove();
+  market.receipt.opacity(1);
   market.label.text('application');
   caption.text('sales database');
   caption.fontSize(28 / 1.4);
