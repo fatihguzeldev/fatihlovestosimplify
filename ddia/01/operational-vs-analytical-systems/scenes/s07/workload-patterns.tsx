@@ -148,7 +148,7 @@ export default makeScene2D(function* (view) {
     names.opacity(0, 0.3),
   );
   visual.remove();
-  title.children(heading('bu sonuca ', 'kullanıcı da', ' ihtiyaç duyarsa?').children());
+  title.children(heading('bu analizi ', 'uygulamanın içinde', ' sunsak?').children());
   examples.order.root.opacity(0);
   examples.chart.root.opacity(0);
   examples.root.opacity(1);
