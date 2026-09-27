@@ -1,5 +1,5 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
-import { all, waitFor, waitUntil } from '@motion-canvas/core';
+import { all, easeOutCubic, waitFor, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { theme } from '../../theme';
 import { accent, background, foreground, heading, muted, text } from '../shared/drawing';
@@ -108,6 +108,11 @@ export default makeScene2D(function* (view) {
   chart.root.position([0, 35]);
   chart.root.scale(1.3);
   chart.root.opacity(0);
+  for (const { bar, value } of chart.bars) {
+    bar.height(0);
+    value.y(() => bar.y() - bar.height() - 28);
+    value.opacity(0);
+  }
   const resultLabel = text('query result', 30, {
     position: [0, 330],
     fill: muted,
@@ -116,6 +121,12 @@ export default makeScene2D(function* (view) {
   });
   view.add([chart.root, resultLabel]);
   yield* all(title.opacity(1, 0.3), chart.root.opacity(1, 0.45), resultLabel.opacity(1, 0.35));
+  yield* waitFor(0.25);
+  yield* all(
+    ...chart.bars.map(({ bar, value, amount }) =>
+      all(bar.height(amount * 0.43, 0.8, easeOutCubic), value.opacity(1, 0.3)),
+    ),
+  );
   yield* waitUntil('olap');
   yield* title.opacity(0, 0.2);
   title.children(heading('bu erişim biçimi: ', 'OLAP').children());
