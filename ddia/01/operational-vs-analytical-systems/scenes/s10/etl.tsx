@@ -159,7 +159,7 @@ export default makeScene2D(function* (view) {
     text('sales', 30, { y: 10, fill: accent, fontFamily: theme.fontFamily.mono }),
     text('kayıtlar', 23, { y: 59 }),
   ]);
-  const chart = monthlyChart();
+  const chart = monthlyChart([640, 480]);
   chart.root.position([465, 92]);
   chart.root.scale(0.86);
   chart.bars.forEach(({ bar, value }) => {
