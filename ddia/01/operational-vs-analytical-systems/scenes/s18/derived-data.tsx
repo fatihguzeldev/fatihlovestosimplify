@@ -84,7 +84,6 @@ export default makeScene2D(function* (view) {
       fontFamily: theme.fontFamily.mono,
       opacity: () => save.reveal(),
     }),
-    text('aynı okumayı her seferinde kaynağa götürmeyiz.', 32, { position: [0, 346], fill: muted }),
   ]);
   view.add(cacheExample);
   yield* all(title.opacity(1, 0.3), cacheExample.opacity(1, 0.5));
@@ -120,7 +119,6 @@ export default makeScene2D(function* (view) {
     index.root,
     build.root,
     text('index', 29, { position: [0, -32], opacity: () => build.reveal() }),
-    text('terimden ilgili ürünlere ulaşırız.', 32, { position: [0, 346], fill: muted }),
   ]);
   view.add(search);
   yield* all(title.opacity(1, 0.3), search.opacity(1, 0.5));
@@ -171,7 +169,6 @@ export default makeScene2D(function* (view) {
       fontStyle: 'italic',
       fontWeight: 500,
     }),
-    text('buradaki tekrar, okumayı kolaylaştırıyor.', 38, { position: [0, 183] }),
   ]);
   view.add(meaning);
   yield* all(title.opacity(1, 0.3), meaning.opacity(1, 0.5));
@@ -182,9 +179,7 @@ export default makeScene2D(function* (view) {
   aggregate.rows.root.opacity(1);
   aggregate.calculate.root.opacity(1);
   aggregate.operation.text('SUM(amount)');
-  aggregate.note.text('satışlar ve sorgu tanımı duruyor.');
-  aggregate.note.fontFamily(theme.fontFamily.sans);
-  aggregate.note.fill(muted);
+  aggregate.note.opacity(0);
   aggregate.totals.forEach((value) => value.text('—'));
   yield* all(title.opacity(1, 0.3), aggregate.root.opacity(1, 0.5));
   yield* aggregate.calculate.travel(1);
@@ -194,6 +189,7 @@ export default makeScene2D(function* (view) {
   aggregate.note.text('REFRESH MATERIALIZED VIEW monthly_totals;');
   aggregate.note.fontFamily(theme.fontFamily.mono);
   aggregate.note.fill(accent);
+  aggregate.note.opacity(1);
   yield* waitUntil('limits');
   yield* all(title.opacity(0, 0.2), aggregate.root.opacity(0, 0.4));
   title.children(heading('ama gereken kaynakların ', 'korunması şart.').children());
@@ -240,7 +236,6 @@ export default makeScene2D(function* (view) {
     text('monthly_totals → derived', 28, { y: 91, fontFamily: theme.fontFamily.mono }),
   ]);
   roles.add([left.root, right.root]);
-  roles.add(text('bu örnekte', 27, { position: [0, 344], fill: muted }));
   view.add(roles);
   yield* all(title.opacity(1, 0.3), roles.opacity(1, 0.5));
   yield* waitUntil('return');

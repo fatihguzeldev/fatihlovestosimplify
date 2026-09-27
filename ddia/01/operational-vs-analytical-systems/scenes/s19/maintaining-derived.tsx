@@ -56,13 +56,7 @@ export default makeScene2D(function* (view) {
   chain.records[0].amount.text('165');
   chain.records[0].face.stroke(accent);
   title.children(heading('düzeltmeyi ', 'akış boyunca', ' taşıyalım.').children());
-  const note = text('bu örnekte aktarım asenkron.', 30, {
-    position: [0, 449],
-    fill: muted,
-    opacity: 0,
-  });
-  view.add(note);
-  yield* all(title.opacity(1, 0.3), chain.root.opacity(1, 0.5), note.opacity(1, 0.3));
+  yield* all(title.opacity(1, 0.3), chain.root.opacity(1, 0.5));
   yield* waitUntil('lake');
   yield* chain.copy.travel(1.1);
   chain.records[1].amount.text('165');
@@ -73,13 +67,12 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('load');
   yield* title.opacity(0, 0.2);
   title.children(heading('warehouse’da ', 'aynı kaydı', ' güncelliyoruz.').children());
-  note.text('yeni bir satış eklemiyoruz: id yine #1042.');
   yield* title.opacity(1, 0.3);
   yield* chain.transform.travel(1.1);
   chain.records[2].amount.text('165');
   yield* all(chain.transform.arrive(), chain.records[2].face.stroke(accent, 0.3));
   yield* waitUntil('new-query');
-  yield* all(title.opacity(0, 0.2), chain.root.opacity(0, 0.4), note.opacity(0, 0.3));
+  yield* all(title.opacity(0, 0.2), chain.root.opacity(0, 0.4));
   comparison.cards[1].amount.text('165');
   comparison.transfer.text('son aktarım: t1');
   comparison.transfer.fill(muted);
@@ -111,7 +104,6 @@ export default makeScene2D(function* (view) {
   aggregate.root.opacity(0);
   aggregate.values[1].text('165');
   aggregate.values[1].fill(accent);
-  aggregate.note.text('başka bir seçenek · PostgreSQL materialized view');
   view.add(aggregate.root);
   yield* all(title.opacity(1, 0.3), aggregate.root.opacity(1, 0.5));
   yield* waitUntil('refresh');
