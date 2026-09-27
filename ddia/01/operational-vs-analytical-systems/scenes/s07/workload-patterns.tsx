@@ -21,11 +21,6 @@ export default makeScene2D(function* (view) {
     examples.chart.root.scale(0.58, 0.75),
   );
   const names = new Layout({ opacity: 0 });
-  const typical = text('tipik özellikler', 23, {
-    position: [790, -370],
-    offset: [1, 0],
-    fill: muted,
-  });
   ['OLTP', 'OLAP'].forEach((name, i) => {
     const x = -460 + i * 920;
     names.add([
@@ -43,7 +38,7 @@ export default makeScene2D(function* (view) {
   const rightNote = text('', 28, { position: [460, 184] });
   const drawings = new Layout({});
   features.add([left, right, leftNote, rightNote, drawings]);
-  view.add([names, typical, features]);
+  view.add([names, features]);
   yield* names.opacity(1, 0.4);
   function* show(
     before: string,
@@ -201,7 +196,7 @@ export default makeScene2D(function* (view) {
   drawings.add(caveat);
   yield* caveat.opacity(1, 0.4);
   yield* waitUntil('next');
-  yield* all(features.opacity(0, 0.3), title.opacity(0, 0.2), typical.opacity(0, 0.2));
+  yield* all(features.opacity(0, 0.3), title.opacity(0, 0.2));
   title.children(heading('bu sonuca ', 'kullanıcı da', ' ihtiyaç duyarsa?').children());
   yield* all(examples.order.root.opacity(0, 0.3), names.opacity(0, 0.25));
   yield* all(examples.chart.root.position([0, 80], 0.7), examples.chart.root.scale(1.15, 0.7));
