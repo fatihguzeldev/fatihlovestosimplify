@@ -70,12 +70,8 @@
       "targetTime": 238
     },
     {
-      "name": "next",
-      "targetTime": 254
-    },
-    {
       "name": "end",
-      "targetTime": 270
+      "targetTime": 254
     }
   ],
   "seed": 104219

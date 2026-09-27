@@ -1,4 +1,4 @@
-import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
+import { Layout, makeScene2D } from '@motion-canvas/2d';
 import { all, waitFor, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { theme } from '../../theme';
@@ -167,27 +167,5 @@ export default makeScene2D(function* (view) {
   });
   view.add(recap);
   yield* all(title.opacity(1, 0.3), recap.opacity(1, 0.5));
-  yield* waitUntil('next');
-  yield* all(title.opacity(0, 0.2), recap.opacity(0, 0.4));
-  const end = new Layout({ opacity: 0 });
-  end.add([
-    text('bu sistemleri kim geliştiriyor?', 62, { position: [-806, -188], offset: [-1, 0] }),
-    text('kim işletiyor?', 78, {
-      position: [-806, -72],
-      offset: [-1, 0],
-      fill: accent,
-      fontStyle: 'italic',
-    }),
-    new Path({
-      data: 'M -800 30 Q -451 38 -120 31',
-      stroke: accent,
-      lineWidth: 4,
-      lineCap: 'round',
-    }),
-    text('sonraki video', 26, { position: [-800, 180], offset: [-1, 0], fill: muted }),
-    text('cloud vs. self-hosting', 46, { position: [-800, 250], offset: [-1, 0] }),
-  ]);
-  view.add(end);
-  yield* end.opacity(1, 0.6);
   yield* waitUntil('end');
 });
