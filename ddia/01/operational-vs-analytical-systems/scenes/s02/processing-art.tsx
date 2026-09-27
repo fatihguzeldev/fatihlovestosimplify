@@ -31,7 +31,7 @@ export function orderSlip(id: number, amount: number, time: string) {
       fontFamily: theme.fontFamily.mono,
       fill: muted,
     }),
-    text(`${amount} ₺`, 31, {
+    text(`${amount}₺`, 31, {
       position: [148, -4],
       offset: [1, 0],
       fontFamily: theme.fontFamily.mono,
@@ -121,7 +121,7 @@ export function addingMachine() {
 export function salesDisplay() {
   const panel = paper(350, 366, '#11171c');
   panel.root.position([606, 80]);
-  const total = text('0 ₺', 66, { y: -88, fontFamily: theme.fontFamily.mono, fill: accent });
+  const total = text('0₺', 66, { y: -88, fontFamily: theme.fontFamily.mono, fill: accent });
   const count = text('0 sipariş', 24, { y: -32, fill: muted });
   const updated = text('güncelleme bekliyor', 20, { y: 4, fill: muted });
   const chart = new Path({

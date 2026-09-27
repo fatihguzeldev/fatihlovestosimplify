@@ -3,8 +3,8 @@ import { theme } from '../../theme';
 import { accent, banana, foreground, ink, muted, paper, text } from '../shared/drawing';
 
 export const searchProducts = [
-  { id: 'p17', name: 'muz', price: '60 ₺', tilt: -6 },
-  { id: 'p42', name: 'yerli muz', price: '55 ₺', tilt: 5 },
+  { id: 'p17', name: 'muz', price: '60₺', tilt: -6 },
+  { id: 'p42', name: 'yerli muz', price: '55₺', tilt: 5 },
 ];
 
 export function searchIndex() {

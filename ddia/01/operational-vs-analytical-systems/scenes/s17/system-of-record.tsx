@@ -136,7 +136,7 @@ export default makeScene2D(function* (view) {
     db.root.scale(1.45);
     db.root.add([
       text(i === 0 ? 'sales' : 'stock', 29, { y: -4, fontFamily: theme.fontFamily.mono }),
-      text(i === 0 ? '#1042 · 185 ₺' : 'muz · 42 kg', 23, { y: 54, fill: accent }),
+      text(i === 0 ? '#1042 · 185₺' : 'muz · 42 kg', 23, { y: 54, fill: accent }),
     ]);
     scopes.add([
       db.root,

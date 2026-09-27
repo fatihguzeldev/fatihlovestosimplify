@@ -86,7 +86,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('sum');
   yield* all(lines[4].fill(muted, 0.25), lines[0].fill(accent, 0.25));
   const totals = januaryTotals.map((amount, i) =>
-    text(`${amount} ₺`, 58, {
+    text(`${amount}₺`, 58, {
       position: [230 + i * 360, 257],
       fill: accent,
       fontFamily: theme.fontFamily.mono,

@@ -88,10 +88,10 @@ export function createMarket() {
     milk,
     text('muz', 29, { position: [-164, -97], offset: [-1, 0] }),
     text('2 kg', 21, { position: [-164, -62], offset: [-1, 0], fill: muted }),
-    text('120 ₺', 27, { position: [273, -83], offset: [1, 0], fontFamily: theme.fontFamily.mono }),
+    text('120₺', 27, { position: [273, -83], offset: [1, 0], fontFamily: theme.fontFamily.mono }),
     text('süt', 29, { position: [-164, 3], offset: [-1, 0] }),
     text('1 litre', 21, { position: [-164, 38], offset: [-1, 0], fill: muted }),
-    text('65 ₺', 27, { position: [273, 17], offset: [1, 0], fontFamily: theme.fontFamily.mono }),
+    text('65₺', 27, { position: [273, 17], offset: [1, 0], fontFamily: theme.fontFamily.mono }),
     new Line({
       points: [
         [-273, 81],
@@ -102,7 +102,7 @@ export function createMarket() {
       lineWidth: 1.5,
     }),
     text('toplam', 21, { position: [-273, 116], offset: [-1, 0], fill: muted }),
-    text('185 ₺', 32, {
+    text('185₺', 32, {
       position: [-273, 152],
       offset: [-1, 0],
       fontFamily: theme.fontFamily.mono,
@@ -118,7 +118,7 @@ export function createMarket() {
     fontFamily: theme.fontFamily.mono,
     fill: accent,
   });
-  const receiptTotal = text('185 ₺', 36, {
+  const receiptTotal = text('185₺', 36, {
     position: [269, 98],
     offset: [1, 0],
     fontFamily: theme.fontFamily.mono,

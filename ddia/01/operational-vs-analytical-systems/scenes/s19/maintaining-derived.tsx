@@ -90,7 +90,7 @@ export default makeScene2D(function* (view) {
   yield* comparison.sql.fill(accent, 0.2);
   yield* waitFor(0.7);
   const bar = comparison.chart.bars[0];
-  bar.value.text('380 ₺');
+  bar.value.text('380₺');
   bar.value.y(110 - 380 * 0.43 - 28);
   bar.bar.height(380 * 0.43);
   const math = text('60 + 165 + 155 = 380', 35, {
@@ -139,7 +139,7 @@ export default makeScene2D(function* (view) {
   const chart = monthlyChart();
   chart.root.position([455, 75]);
   chart.root.scale(0.95);
-  chart.bars[0].value.text('380 ₺');
+  chart.bars[0].value.text('380₺');
   chart.bars[0].value.y(110 - 380 * 0.43 - 28);
   chart.bars[0].bar.height(380 * 0.43);
   const finish = new Layout({ opacity: 0 });

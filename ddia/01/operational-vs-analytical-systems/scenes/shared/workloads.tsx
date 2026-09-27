@@ -21,7 +21,7 @@ export function monthlyChart() {
       height: amount * 0.43,
       fill: accent,
     });
-    const value = text(`${amount} ₺`, 31, {
+    const value = text(`${amount}₺`, 31, {
       position: [x, 110 - amount * 0.43 - 28],
       fontFamily: theme.fontFamily.mono,
     });
@@ -53,7 +53,7 @@ export function workloadExamples() {
       fill: accent,
       fontFamily: theme.fontFamily.mono,
     }),
-    text('185 ₺', 30, {
+    text('185₺', 30, {
       position: [-268, 112],
       offset: [-1, 0],
       fontFamily: theme.fontFamily.mono,

@@ -12,7 +12,7 @@ export function etlPipeline() {
   source.root.add([
     text('#1042', 28, { y: -10, fontFamily: theme.fontFamily.mono }),
     text('store A', 24, { y: 40, fill: accent, fontFamily: theme.fontFamily.mono }),
-    text('185 ₺', 22, { y: 78, fontFamily: theme.fontFamily.mono }),
+    text('185₺', 22, { y: 78, fontFamily: theme.fontFamily.mono }),
   ]);
   const warehouse = cartoonDatabase('data warehouse', accent);
   warehouse.root.position([645, 100]);
@@ -22,7 +22,7 @@ export function etlPipeline() {
   stored.add([
     text('#1042', 28, { y: -10, fontFamily: theme.fontFamily.mono }),
     text('Marmara', 24, { y: 40, fill: accent, fontFamily: theme.fontFamily.mono }),
-    text('185 ₺', 22, { y: 78, fontFamily: theme.fontFamily.mono }),
+    text('185₺', 22, { y: 78, fontFamily: theme.fontFamily.mono }),
   ]);
   warehouse.root.add(stored);
   const transform = paper(470, 280, '#101315');

@@ -11,8 +11,8 @@ export function* updateCache(root: Layout, title: Txt) {
   const market = createMarket();
   market.cart.remove();
   market.receipt.opacity(1);
-  market.receiptTotal.text('165 ₺');
-  market.receipt.add(text('tutar düzeltmesi · −20 ₺', 24, { y: 157, fill: accent }));
+  market.receiptTotal.text('165₺');
+  market.receipt.add(text('tutar düzeltmesi · −20₺', 24, { y: 157, fill: accent }));
   market.root.position([-545, 90]);
   market.root.scale(0.95);
   market.label.opacity(0);

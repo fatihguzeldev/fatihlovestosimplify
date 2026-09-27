@@ -119,7 +119,7 @@ export function* showProcessing(view: View2D) {
     yield* slip.stamp.end(1, 0.2);
     if (i === 0) yield* output.reveal(1, 0.35);
     yield* output.travel(0.5);
-    report.total.text(`${sum} ₺`);
+    report.total.text(`${sum}₺`);
     report.count.text(`${i + 1} sipariş`);
     report.updated.text(order.updated);
     const x = -90 + i * 44.8;
@@ -148,7 +148,7 @@ export function* showProcessing(view: View2D) {
   machine.operation.text('sum(amount)');
   machine.expression.text('…');
   machine.result.text('0');
-  report.total.text('0 ₺');
+  report.total.text('0₺');
   report.count.text('0 sipariş');
   report.updated.text('güncelleme bekliyor');
   report.chart.end(0);
@@ -182,7 +182,7 @@ export function* showProcessing(view: View2D) {
   yield* sequence(0.08, ...slips.map((slip) => slip.stamp.end(1, 0.2)));
   yield* output.root.opacity(1, 0.3);
   yield* output.travel(0.65);
-  report.total.text(`${sum} ₺`);
+  report.total.text(`${sum}₺`);
   report.count.text(`${orders.length} sipariş`);
   report.updated.text('10:05’te güncellendi');
   report.chart.data('M -134 122 L 134 122 L 134 55');

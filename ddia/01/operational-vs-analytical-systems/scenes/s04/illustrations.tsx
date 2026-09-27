@@ -11,7 +11,7 @@ export function salesReport() {
   const bars = januaryTotals.map((amount, i) => {
     const x = -84 + i * 168;
     const bar = new Rect({ position: [x, 88], offset: [0, 1], width: 73, height: 0, fill: accent });
-    const value = text(`${amount} ₺`, 25, {
+    const value = text(`${amount}₺`, 25, {
       position: [x, 88 - amount * 0.37 - 24],
       fontFamily: theme.fontFamily.mono,
       opacity: 0,

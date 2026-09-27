@@ -75,7 +75,7 @@ export default makeScene2D(function* (view) {
       offset: [-1, 0],
       fontWeight: 500,
     }),
-    text('185 ₺', 38, {
+    text('185₺', 38, {
       fontSize: () => 38 - detail() * 2,
       position: () => [269, 118 - detail() * 20],
       offset: [1, 0],

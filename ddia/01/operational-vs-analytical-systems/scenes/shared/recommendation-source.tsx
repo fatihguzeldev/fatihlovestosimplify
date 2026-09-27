@@ -11,7 +11,7 @@ export function recommendationSource() {
   warehouse.caption.fontSize(24);
   warehouse.root.add([
     text('sales', 31, { y: -2, fill: accent, fontFamily: theme.fontFamily.mono }),
-    text('#1042 · 185 ₺', 20, { y: 60, fontFamily: theme.fontFamily.mono }),
+    text('#1042 · 185₺', 20, { y: 60, fontFamily: theme.fontFamily.mono }),
   ]);
   const receipt = paper(540, 360, '#101315');
   receipt.root.position([450, 75]);
@@ -23,7 +23,7 @@ export function recommendationSource() {
     text('muz · 2 kg', 33, { position: [-215, -28], offset: [-1, 0] }),
     text('süt · 1 litre', 33, { position: [-215, 32], offset: [-1, 0] }),
     new Path({ data: 'M -216 76 L 217 76', stroke: foreground, lineWidth: 1.4, opacity: 0.4 }),
-    text('185 ₺', 34, {
+    text('185₺', 34, {
       position: [211, 125],
       offset: [1, 0],
       fill: accent,
