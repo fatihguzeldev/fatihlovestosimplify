@@ -190,7 +190,7 @@ export default makeScene2D(function* (view) {
     queryLabel.opacity(0, 0.2),
     responseLabel.opacity(0, 0.2),
   );
-  title.children(heading('peki, ', 'bütün satışlara', ' bakarsak?').children());
+  title.children(heading('şimdi ', 'bütün satışlara', ' bakalım.').children());
   yield* all(
     table.root.position([0, 85], 0.7),
     table.rows[1].highlight.opacity(0, 0.3),

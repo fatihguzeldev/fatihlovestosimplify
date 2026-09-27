@@ -11,7 +11,7 @@ import { accessExample } from './access';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('peki, gelen kayıt ', 'eksikse?');
+  const title = heading('bu kez ', 'eksik bir kayıt', ' geliyor.');
   const consumers = lakeConsumers();
   view.add([title, consumers.root]);
   yield loadFonts();

@@ -9,7 +9,7 @@ import { promotion, together } from './questions';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('peki, ', 'bütün satışlara', ' bakarsak?');
+  const title = heading('şimdi ', 'bütün satışlara', ' bakalım.');
   const previous = orderTable();
   previous.root.position([0, 85]);
   previous.rows[1].cells[1].text('preparing');

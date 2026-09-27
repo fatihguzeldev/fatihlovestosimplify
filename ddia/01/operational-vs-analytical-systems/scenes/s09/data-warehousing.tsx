@@ -258,7 +258,7 @@ export default makeScene2D(function* (view) {
   yield* all(operationalRoute.reveal(1, 0.5), analyticalRoute.reveal(1, 0.5));
   yield* waitUntil('next');
   yield* all(title.opacity(0, 0.3), purpose.opacity(0, 0.3));
-  title.children(heading('peki bu data ', 'buraya nasıl gelecek?').children());
+  title.children(heading('veriyi ', 'warehouse’a nasıl taşıyacağız?').children());
   yield* title.opacity(1, 0.3);
   yield* waitUntil('end');
 });

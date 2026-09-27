@@ -201,7 +201,7 @@ export default makeScene2D(function* (view) {
     textWrap: false,
     lineHeight: '125%',
     opacity: 0,
-    children: questionParts('peki, ne zaman ', 'data-intensive', ' diyoruz?'),
+    children: questionParts('ne zaman ', 'data-intensive', ' diyoruz?'),
   });
   view.add(question);
   yield* question.opacity(1, 0.5);

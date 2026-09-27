@@ -10,7 +10,7 @@ import { storedTotals } from '../shared/stored-totals';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('peki, bundan ', 'ürettiklerimiz?');
+  const title = heading('bu kayıttan ', 'neler türetiyoruz?');
   const chain = recordChain('record-lineage');
   view.add([title, chain.root]);
   yield loadFonts();

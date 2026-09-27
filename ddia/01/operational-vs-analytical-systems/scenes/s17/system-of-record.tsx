@@ -174,7 +174,7 @@ export default makeScene2D(function* (view) {
   yield* all(chain.transform.arrive(), distinction.opacity(1, 0.4));
   yield* waitUntil('next');
   yield* all(title.opacity(0, 0.2), distinction.opacity(0, 0.3));
-  title.children(heading('peki, bundan ', 'ürettiklerimiz?').children());
+  title.children(heading('bu kayıttan ', 'neler türetiyoruz?').children());
   yield* title.opacity(1, 0.3);
   yield* waitUntil('end');
 });

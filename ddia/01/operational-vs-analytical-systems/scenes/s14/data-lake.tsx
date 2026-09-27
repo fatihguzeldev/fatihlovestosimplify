@@ -198,7 +198,7 @@ export default makeScene2D(function* (view) {
     meaning.opacity(0, 0.2),
     consumers.lake.files[1].face.stroke(foreground, 0.3),
   );
-  title.children(heading('peki, gelen kayıt ', 'eksikse?').children());
+  title.children(heading('bu kez ', 'eksik bir kayıt', ' geliyor.').children());
   yield* title.opacity(1, 0.3);
   yield* waitUntil('end');
 });
