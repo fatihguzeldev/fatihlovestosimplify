@@ -178,6 +178,7 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(0, 0.2), expansion.opacity(0, 0.2), pattern.opacity(0, 0.2));
   title.children(heading('transaction yalnızca ', 'ödeme', ' demek değil.').children());
   pattern.text('birlikte ele alınan read / write işlemleri');
+  pattern.position(title.position().addY(76));
   yield* all(title.opacity(1, 0.3), pattern.opacity(1, 0.35));
   yield* waitUntil('next');
   yield* all(
