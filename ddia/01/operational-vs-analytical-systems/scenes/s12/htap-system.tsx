@@ -15,38 +15,41 @@ function records(label: string, x: number) {
     lineWidth: 2,
     opacity: 0,
   });
-  root.add([text(label, 30, { y: -113, fill: accent, fontStyle: 'italic' }), selection]);
-  const statuses = ['shipped', 'preparing', 'created'].map((status, index) => {
+  root.add([text(label, 30, { y: -125, fill: accent, fontStyle: 'italic' }), selection]);
+  const rows = ['14:01:00', '14:01:10', '14:01:20'].map((time, index) => {
     const y = -48 + index * 48;
-    const value = text(status, 25, {
-      position: [-44, y],
-      offset: [-1, 0],
-      fontFamily: theme.fontFamily.mono,
-    });
-    root.add([
-      text(String(1041 + index), 25, {
-        position: [-166, y],
+    const row = new Layout({ y, opacity: index === 2 ? 0 : 1 });
+    row.add(
+      text('reddedildi', 25, {
+        position: [-26, 0],
         offset: [-1, 0],
         fontFamily: theme.fontFamily.mono,
       }),
-      value,
-    ]);
-    return value;
+    );
+    row.add(
+      text(time, 24, {
+        position: [-166, 0],
+        offset: [-1, 0],
+        fontFamily: theme.fontFamily.mono,
+      }),
+    );
+    root.add(row);
+    return row;
   });
-  return { root, selection, statuses };
+  return { root, selection, rows };
 }
 
 export function htapSystem() {
   const root = new Layout({ opacity: 0 });
   const application = paper(1480, 190, '#101315');
   application.root.position([0, -188]);
-  const order = text('sipariş #1042', 31, { position: [-425, -4] });
-  const orderResult = text('yanıt bekleniyor…', 29, {
+  const payment = text('ödeme · 14:01:10', 31, { position: [-425, -4] });
+  const paymentResult = text('yanıt bekleniyor…', 29, {
     position: [-425, 49],
     fill: muted,
     fontFamily: theme.fontFamily.mono,
   });
-  const countResult = text('hesaplanıyor…', 29, {
+  const riskResult = text('kontrol ediliyor…', 29, {
     position: [425, 49],
     fill: muted,
     fontFamily: theme.fontFamily.mono,
@@ -60,17 +63,17 @@ export function htapSystem() {
       lineJoin: 'round',
     }),
     text('market', 25, { position: [-660, -64], offset: [-1, 0], fontWeight: 500 }),
-    text('aynı uygulama', 23, { position: [704, -64], offset: [1, 0], fill: muted }),
+    text('müşteri #17', 23, { position: [704, -64], offset: [1, 0], fill: muted }),
     new Path({
       data: 'M -739 -39 Q 0 -37 738 -39 M 0 -19 Q -2 25 0 72',
       stroke: foreground,
       lineWidth: 1.4,
       opacity: 0.25,
     }),
-    order,
-    orderResult,
-    text('kaç sipariş hazırlanıyor?', 31, { position: [425, -4] }),
-    countResult,
+    payment,
+    paymentResult,
+    text('bu hesapta şüpheli işlem var mı?', 30, { position: [425, -4] }),
+    riskResult,
   ]);
   const body = paper(1480, 380);
   body.root.position([0, 230]);
@@ -80,24 +83,29 @@ export function htapSystem() {
   transfer.root.position([-193, 280]);
   transfer.root.scale(0.72);
   const internals = new Layout({ opacity: 0 });
-  const scanLabel = text('kayıtları tara ve say', 24, { position: [425, 384], fill: muted });
-  const tally = text('COUNT → 0', 27, {
+  const scanLabel = text('geçmiş denemeleri tara', 24, { position: [425, 384], fill: muted });
+  const tally = text('0 başarısız deneme', 25, {
     position: [425, 384],
     fill: accent,
     fontFamily: theme.fontFamily.mono,
     opacity: 0,
   });
+  const rule = text('30 sn’de 3 başarısız ödeme', 24, { position: [0, 200] });
   internals.add([
     oltp.root,
     analytics.root,
     transfer.root,
     tally,
-    text('değişiklik aktarılır', 24, {
-      position: [0, 217],
+    text('ödeme denemeleri', 22, { position: [-425, 191], fill: muted }),
+    text('aynı müşteri · son 30 sn', 22, { position: [425, 191], fill: muted }),
+    text('örnek inceleme kuralı', 22, { position: [0, 162], fill: muted }),
+    rule,
+    text('yeni deneme aktarılır', 23, {
+      position: [0, 344],
       fill: muted,
       opacity: () => transfer.reveal(),
     }),
-    text('kaydı güncelle', 24, { position: [-425, 384], fill: muted }),
+    text('yeni denemeyi kaydet', 24, { position: [-425, 384], fill: muted }),
     scanLabel,
   ]);
   const doors = [-1, 1].map(
@@ -140,7 +148,7 @@ export function htapSystem() {
     arrow.root.scale(0.57);
     return arrow;
   });
-  const operations = ['read', 'count'].map((label, index) =>
+  const operations = ['read', 'analiz'].map((label, index) =>
     text(label, 25, {
       position: [-425 + index * 850 + 72, -27],
       offset: [-1, 0],
@@ -163,14 +171,15 @@ export function htapSystem() {
   return {
     root,
     application,
-    order,
-    orderResult,
-    countResult,
+    payment,
+    paymentResult,
+    riskResult,
     internals,
     oltp,
     analytics,
     transfer,
     tally,
+    rule,
     scanLabel,
     doors,
     name,
@@ -262,7 +271,7 @@ export function htapLandscape() {
     text('satış uygulaması', 28, { position: [-570, 31] }),
     inventory.root,
     stores.root,
-    ...['siparişler ve satışlar', 'stoklar', 'mağazalar ve bölgeler'].map((label, index) =>
+    ...['ödemeler ve satışlar', 'stoklar', 'mağazalar ve bölgeler'].map((label, index) =>
       text(label, 27, { position: [-570 + index * 570, 83], fill: accent }),
     ),
     warehouse.root,

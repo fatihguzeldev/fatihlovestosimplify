@@ -31,7 +31,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('htap');
   yield* all(title.opacity(0, 0.2), choice.opacity(0, 0.4));
   choice.remove();
-  title.children(heading('iki farklı iş. ', 'aynı uygulama.').children());
+  title.children(heading('ödemeler sürerken ', 'şüpheli işlemleri', ' arıyoruz.').children());
   const system = htapSystem();
   view.add(system.root);
   yield* all(title.opacity(1, 0.3), system.root.opacity(1, 0.6));
@@ -46,11 +46,11 @@ export default makeScene2D(function* (view) {
   );
   yield* all(...system.responses.map((arrow) => arrow.reveal(1, 0.35)));
   yield* all(...system.responses.map((arrow) => arrow.travel(0.65)));
-  system.orderResult.text('preparing');
-  system.countResult.text('1 sipariş');
+  system.paymentResult.text('reddedildi');
+  system.riskResult.text('son 30 sn · 2 başarısız deneme');
   yield* all(
-    system.orderResult.fill(accent, 0.2),
-    system.countResult.fill(accent, 0.2),
+    system.paymentResult.fill(accent, 0.2),
+    system.riskResult.fill(accent, 0.2),
     ...system.responses.map((arrow) => arrow.arrive()),
   );
 
@@ -68,70 +68,70 @@ export default makeScene2D(function* (view) {
     system.facade.opacity(1, 0.85),
   );
   yield* waitFor(0.8);
-  yield* all(system.orderResult.opacity(0, 0.2), system.responses[0].root.opacity(0, 0.2));
-  system.order.text('sipariş #1043');
-  system.orderResult.text('hazırlamaya başla');
+  yield* all(system.paymentResult.opacity(0, 0.2), system.responses[0].root.opacity(0, 0.2));
+  system.payment.text('yeni deneme · 14:01:20');
+  system.paymentResult.text('reddedildi · kaydediliyor…');
+  system.paymentResult.fontSize(26);
   system.operations[0].text('write');
   system.requests[0].reveal(0);
   system.requests[0].root.opacity(1);
-  yield* all(system.orderResult.opacity(1, 0.2), system.operations[0].opacity(1, 0.2));
+  yield* all(system.paymentResult.opacity(1, 0.2), system.operations[0].opacity(1, 0.2));
   yield* system.requests[0].reveal(1, 0.3);
   yield* system.requests[0].travel(0.65);
   yield* all(system.requests[0].arrive(), system.oltp.selection.y(48, 0.3));
-  system.oltp.statuses[2].text('preparing');
-  yield* system.oltp.statuses[2].fill(accent, 0.25);
+  yield* system.oltp.rows[2].opacity(1, 0.25);
   yield* all(system.requests[0].root.opacity(0, 0.2), system.operations[0].opacity(0, 0.2));
   system.responses[0].reveal(0);
   system.responses[0].root.opacity(1);
   yield* system.responses[0].reveal(1, 0.3);
   yield* system.responses[0].travel(0.55);
-  system.orderResult.text('preparing');
+  system.paymentResult.text('reddedildi · kaydedildi');
   yield* system.responses[0].arrive();
 
   yield* system.transfer.reveal(1, 0.4);
   yield* system.transfer.travel(0.85);
   system.analytics.selection.y(48);
-  system.analytics.statuses[2].text('preparing');
   yield* all(
     system.transfer.arrive(),
     system.analytics.selection.opacity(1, 0.2),
-    system.analytics.statuses[2].fill(accent, 0.2),
+    system.analytics.rows[2].opacity(1, 0.2),
   );
   yield* waitFor(0.4);
   yield* all(
     system.responses[1].root.opacity(0, 0.2),
-    system.countResult.opacity(0, 0.2),
+    system.riskResult.opacity(0, 0.2),
     system.analytics.selection.opacity(0, 0.2),
   );
-  system.countResult.text('hesaplanıyor…');
-  system.countResult.fill(muted);
+  system.riskResult.text('kontrol ediliyor…');
+  system.riskResult.fill(muted);
   system.requests[1].reveal(0);
   system.requests[1].root.opacity(1);
-  yield* all(system.countResult.opacity(1, 0.2), system.operations[1].opacity(1, 0.2));
+  yield* all(system.riskResult.opacity(1, 0.2), system.operations[1].opacity(1, 0.2));
   yield* system.requests[1].reveal(1, 0.3);
   yield* system.requests[1].travel(0.65);
   yield* system.requests[1].arrive();
   system.analytics.selection.y(-48);
   yield* system.scanLabel.opacity(0, 0.15);
   yield* all(system.analytics.selection.opacity(1, 0.2), system.tally.opacity(1, 0.2));
-  yield* waitFor(0.45);
-  for (let index = 1; index < 3; index++) {
+  yield* waitFor(0.25);
+  for (let index = 0; index < 3; index++) {
     yield* system.analytics.selection.y(-48 + index * 48, 0.35);
-    system.tally.text(`COUNT → ${index}`);
+    system.tally.text(`${index + 1} başarısız deneme`);
     yield* waitFor(0.4);
   }
   yield* all(
     system.requests[1].root.opacity(0, 0.25),
     system.operations[1].opacity(0, 0.25),
-    system.analytics.selection.height(88, 0.25),
-    system.analytics.selection.y(24, 0.25),
+    system.analytics.selection.height(136, 0.25),
+    system.analytics.selection.y(0, 0.25),
+    system.rule.fill(accent, 0.25),
   );
   system.responses[1].reveal(0);
   system.responses[1].root.opacity(1);
   yield* system.responses[1].reveal(1, 0.3);
   yield* system.responses[1].travel(0.6);
-  system.countResult.text('2 sipariş');
-  yield* all(system.countResult.fill(accent, 0.2), system.responses[1].arrive());
+  system.riskResult.text('inceleme gerekli');
+  yield* all(system.riskResult.fill(accent, 0.2), system.responses[1].arrive());
 
   yield* waitUntil('other-sources');
   const landscape = htapLandscape();
@@ -158,7 +158,7 @@ export default makeScene2D(function* (view) {
 
   yield* waitUntil('return');
   yield* title.opacity(0, 0.2);
-  title.children(heading('HTAP, ', 'warehouse’un yerini', ' almıyor.').children());
+  title.children(heading('warehouse ', 'farklı kaynakları', ' bir araya getiriyor.').children());
   yield* all(title.opacity(1, 0.3), landscape.warehouse.top.stroke(accent, 0.4));
 
   yield* waitUntil('specialization');
