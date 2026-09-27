@@ -1,5 +1,5 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
-import { all, waitFor, waitUntil } from '@motion-canvas/core';
+import { all, easeOutCubic, waitFor, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
@@ -163,8 +163,9 @@ export default makeScene2D(function* (view) {
   chart.root.position([465, 92]);
   chart.root.scale(0.86);
   chart.bars.forEach(({ bar, value }) => {
-    bar.opacity(0);
+    bar.height(0);
     value.opacity(0);
+    value.y(() => 110 - bar.height() - 28);
   });
   const analyst = role('analyst', 'ocak satışları', 1);
   analyst.position([498, -185]);
@@ -193,7 +194,10 @@ export default makeScene2D(function* (view) {
   yield* reply.travel(0.9);
   yield* all(
     reply.arrive(),
-    ...chart.bars.flatMap(({ bar, value }) => [bar.opacity(1, 0.3), value.opacity(1, 0.3)]),
+    ...chart.bars.flatMap(({ bar, value, height }) => [
+      bar.height(height, 0.8, easeOutCubic),
+      value.opacity(1, 0.2),
+    ]),
   );
   yield* waitUntil('responsibility');
   yield* all(title.opacity(0, 0.2), analysis.opacity(0, 0.4));
