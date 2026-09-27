@@ -192,7 +192,7 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(1, 0.3), code.root.opacity(1, 0.5), qualifier.opacity(1, 0.3));
   yield* waitUntil('next');
   yield* all(title.opacity(0, 0.2), code.root.opacity(0, 0.4), qualifier.opacity(0, 0.3));
-  title.children(heading('bu girdileri ', 'nasıl saklayacağız?').children());
+  title.children(heading('bu input’ları ', 'nasıl saklayacağız?').children());
   const inputs = analysisInputs();
   inputs.root.opacity(0);
   view.add(inputs.root);

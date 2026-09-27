@@ -159,7 +159,7 @@ export default makeScene2D(function* (view) {
   [
     ['hangi iş?', 'sipariş durumu · aylık satış'],
     ['hangi temsil?', 'kayıt · cache · analytical görünüm'],
-    ['hangi kaynak?', 'asıl kayıt ve ona bağlı girdiler'],
+    ['hangi kaynak?', 'asıl kayıt ve ona bağlı input’lar'],
     ['nasıl güncellenecek?', 'aktarım · refresh · invalidate'],
   ].forEach(([question, detail], i) => {
     const y = -141 + 147 * i;

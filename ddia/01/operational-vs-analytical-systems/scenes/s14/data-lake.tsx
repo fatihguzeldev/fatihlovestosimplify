@@ -11,7 +11,7 @@ import { lakeConsumers, lakeStorage } from '../shared/lake-system';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('bu girdileri ', 'nasıl saklayacağız?');
+  const title = heading('bu input’ları ', 'nasıl saklayacağız?');
   const inputs = analysisInputs();
   view.add([title, inputs.root]);
   yield loadFonts();

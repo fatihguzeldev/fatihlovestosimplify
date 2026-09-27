@@ -160,7 +160,7 @@ export default makeScene2D(function* (view) {
   const chain = recordChain('record-lineage');
   chain.root.opacity(0);
   view.add(chain.root);
-  title.children(heading('lake bir sonraki adımın ', 'girdisi.').children());
+  title.children(heading('lake bir sonraki adımın ', 'input’u.').children());
   const distinction = text('upstream olmak, asıl kayıt olmak demek değil.', 31, {
     position: [0, 449],
     fill: muted,
