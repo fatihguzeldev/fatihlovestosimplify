@@ -101,7 +101,7 @@ export default makeScene2D(function* (view) {
     featureLabel.opacity(0, 0.3),
   );
   yield* features.root.position([-490, 75], 0.65);
-  title.children(heading('bunlar ', 'eğitime girdi', ' olacak.').children());
+  title.children(heading('bunlar ', 'eğitime input', ' olacak.').children());
   const training = paper(350, 200, '#101315');
   training.root.position([490, 75]);
   training.root.opacity(0);
@@ -110,13 +110,8 @@ export default makeScene2D(function* (view) {
     text('öneri modeli', 26, { y: 49 }),
   ]);
   const trainFlow = cartoonArrow('s13-features-to-training', [-157, 75], [270, 75], accent, 0);
-  const illustrative = text('bu vektör, eğitim girdilerinden tek bir örnek.', 30, {
-    position: [0, 358],
-    fill: muted,
-    opacity: 0,
-  });
-  view.add([training.root, trainFlow.root, illustrative]);
-  yield* all(title.opacity(1, 0.3), training.root.opacity(1, 0.4), illustrative.opacity(1, 0.3));
+  view.add([training.root, trainFlow.root]);
+  yield* all(title.opacity(1, 0.3), training.root.opacity(1, 0.4));
   yield* trainFlow.reveal(1, 0.35);
   yield* trainFlow.travel(0.8);
   yield* all(trainFlow.arrive(), training.face.stroke(accent, 0.15).to(foreground, 0.4));
@@ -126,7 +121,6 @@ export default makeScene2D(function* (view) {
     features.root.opacity(0, 0.3),
     training.root.opacity(0, 0.3),
     trainFlow.root.opacity(0, 0.3),
-    illustrative.opacity(0, 0.3),
   );
   title.children(heading('yorumdan da ', 'bilgi çıkarabiliriz.').children());
   const processing = new Layout({ opacity: 0 });
