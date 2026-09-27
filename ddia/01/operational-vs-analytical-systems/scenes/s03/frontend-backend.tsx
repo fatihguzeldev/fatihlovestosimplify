@@ -15,6 +15,8 @@ export default makeScene2D(function* (view) {
   market.root.position([-470, 100]);
   market.cart.remove();
   market.receipt.opacity(1);
+  const statusFontSize = market.status.fontSize();
+  market.status.fontSize(() => statusFontSize / market.root.scale.x());
   const {
     root: database,
     top,
@@ -22,7 +24,7 @@ export default makeScene2D(function* (view) {
   } = cartoonDatabase('sales database', accent);
   database.position([550, 110]);
   database.scale(1.4);
-  databaseCaption.fontSize(28 / 1.4);
+  databaseCaption.fontSize(() => 28 / database.scale.x());
   const bridgeArrow = cartoonArrow('s02-save-order', [-108, 80], [354, 80], accent);
   stage.add([title, market.root, database, bridgeArrow.root]);
   view.add(stage);
@@ -40,8 +42,6 @@ export default makeScene2D(function* (view) {
   market.label.text('frontend');
   market.label.fontSize(38);
   market.label.fill(foreground);
-  market.status.fontSize(34);
-  databaseCaption.fontSize(28 / 1.08);
   const zone = new Path({
     data: 'M -168 -50 L -167 -85 Q -170 -123 -130 -123 L 785 -120 Q 825 -121 822 -79 L 820 351 Q 821 386 782 385 L -131 387 Q -169 388 -168 353 L -168 310',
     stroke: muted,
