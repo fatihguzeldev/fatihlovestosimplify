@@ -1,12 +1,13 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
-import { all, waitFor, waitUntil } from '@motion-canvas/core';
+import { all, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase } from '../../../../../common/cartoon-system';
 import { theme } from '../../theme';
-import { accent, background, foreground, heading, muted, paper, text } from '../shared/drawing';
+import { accent, background, foreground, heading, muted, text } from '../shared/drawing';
 import { etlPipeline } from '../shared/etl-pipeline';
 import { crmPipeline } from './crm-pipeline';
+import { eltExample } from './elt-example';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -30,75 +31,42 @@ export default makeScene2D(function* (view) {
   yield* all(...letters.map((letter) => letter.opacity(1, 0.3)));
   yield* waitUntil('elt');
   yield* all(title.opacity(0, 0.2), pipeline.root.opacity(0, 0.4));
-  title.children(heading('başka bir düzen: ', 'önce yükle.').children());
+  title.children(heading('önce iki kaynağın kayıtlarını ', 'yüklüyoruz.').children());
   yield* all(title.opacity(1, 0.3), letters[1].y(-263, 0.25), letters[2].y(-190, 0.25));
   yield* all(letters[1].x(60, 0.55), letters[2].x(0, 0.55));
   yield* all(letters[1].y(-226, 0.25), letters[2].y(-226, 0.25));
-  const alternative = new Layout({ opacity: 0 });
-  const source = cartoonDatabase('sales database', accent);
-  source.root.position([-705, 100]);
-  source.root.add([
-    text('#1042', 27, { y: 0, fontFamily: theme.fontFamily.mono }),
-    text('store A', 23, { y: 58, fill: accent, fontFamily: theme.fontFamily.mono }),
-  ]);
-  const copy = paper(240, 134, '#101315');
-  copy.root.position([-225, 100]);
-  copy.root.opacity(0);
-  copy.root.add([
-    text('#1042', 28, { y: -24, fontFamily: theme.fontFamily.mono }),
-    text('store A', 26, { y: 27, fill: accent, fontFamily: theme.fontFamily.mono }),
-  ]);
-  const warehouse = cartoonDatabase('data warehouse', accent);
-  warehouse.root.position([490, 100]);
-  warehouse.root.scale(2);
-  warehouse.caption.fontSize(19);
-  const inside = paper(330, 136, '#101315');
-  inside.root.position([490, 153]);
-  inside.root.opacity(0);
-  const value = text('#1042 · A', 31, { y: -25, fontFamily: theme.fontFamily.mono });
-  const region = text('region: Marmara', 27, {
-    y: 30,
-    fill: accent,
-    fontFamily: theme.fontFamily.mono,
-    opacity: 0,
-  });
-  inside.root.add([value, region]);
-  const transformLabel = text('transform', 29, { position: [490, 43], fill: accent, opacity: 0 });
-  const extract = cartoonArrow('s11-elt-extract', [-550, 100], [-383, 100], accent, 0);
-  const load = cartoonArrow('s11-elt-load', [-63, 100], [211, 100], accent, 0);
-  alternative.add([
-    source.root,
-    copy.root,
-    warehouse.root,
-    inside.root,
-    transformLabel,
-    extract.root,
-    load.root,
-    text('extract', 26, { position: [-467, 20], opacity: () => extract.reveal() }),
-    text('load', 26, { position: [74, 20], opacity: () => load.reveal() }),
-  ]);
-  view.add(alternative);
-  yield* alternative.opacity(1, 0.5);
-  yield* extract.reveal(1, 0.3);
-  yield* extract.travel(0.7);
-  yield* all(extract.arrive(), copy.root.opacity(1, 0.3));
-  yield* load.reveal(1, 0.35);
-  yield* load.travel(0.8);
-  yield* all(load.arrive(), inside.root.opacity(1, 0.3));
+  const alternative = eltExample();
+  view.add(alternative.root);
+  yield* alternative.root.opacity(1, 0.5);
+  for (const [i, record] of [alternative.sales, alternative.stores].entries()) {
+    const load = alternative.loads[i];
+    yield* load.reveal(1, 0.35);
+    yield* load.travel(0.75);
+    yield* all(load.arrive(), record.root.opacity(1, 0.3));
+  }
+  yield* alternative.pending.opacity(1, 0.3);
   yield* waitUntil('transform');
-  yield* title.opacity(0, 0.2);
-  title.children(heading('sonra ', 'warehouse içinde', ' dönüştür.').children());
-  yield* title.opacity(1, 0.3);
-  yield* transformLabel.opacity(1, 0.3);
-  yield* waitFor(0.6);
-  yield* all(region.opacity(1, 0.4), inside.face.stroke(accent, 0.15).to(foreground, 0.4));
+  yield* all(title.opacity(0, 0.2), alternative.pending.opacity(0, 0.2));
+  title.children(heading('mağaza bilgisini ', 'warehouse içinde', ' ekliyoruz.').children());
+  yield* all(
+    title.opacity(1, 0.3),
+    alternative.sales.cells[1].fill(accent, 0.3),
+    alternative.stores.cells[0].fill(accent, 0.3),
+    alternative.match.opacity(1, 0.3),
+  );
+  yield* all(...alternative.transforms.map((arrow) => arrow.reveal(1, 0.5)));
+  yield* all(...alternative.transforms.map((arrow) => arrow.travel(0.85)));
+  yield* all(
+    ...alternative.transforms.map((arrow) => arrow.arrive()),
+    alternative.result.root.opacity(1, 0.4),
+  );
   yield* waitUntil('return');
   yield* all(
     title.opacity(0, 0.2),
-    alternative.opacity(0, 0.4),
+    alternative.root.opacity(0, 0.4),
     ...letters.map((letter) => letter.opacity(0, 0.3)),
   );
-  alternative.remove();
+  alternative.root.remove();
   title.children(heading('bizim örnekte ', 'ETL ile devam.').children());
   yield* all(title.opacity(1, 0.3), pipeline.root.opacity(1, 0.5));
   yield* waitUntil('crm');
