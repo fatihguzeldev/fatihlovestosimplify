@@ -129,7 +129,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('scope');
   yield* all(title.opacity(0, 0.2), pair.opacity(0, 0.4));
   pair.remove();
-  title.children(heading('hangi kayıt için ', 'asıl kaynak?').children());
+  title.children(heading('hangi veri için ', 'hangi sistemi', ' esas alıyoruz?').children());
   const scopes = new Layout({ opacity: 0 });
   ['sales database', 'inventory database'].forEach((name, i) => {
     const db = cartoonDatabase(name, accent);
@@ -147,12 +147,6 @@ export default makeScene2D(function* (view) {
       }),
     ]);
   });
-  scopes.add(
-    text('bu bir rol; tek bir sunucu ya da database ürünü değil.', 31, {
-      position: [0, 423],
-      fill: muted,
-    }),
-  );
   view.add(scopes);
   yield* all(title.opacity(1, 0.3), scopes.opacity(1, 0.5));
   yield* waitUntil('upstream');
