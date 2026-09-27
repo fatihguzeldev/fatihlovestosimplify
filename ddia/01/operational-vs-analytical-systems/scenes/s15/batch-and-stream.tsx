@@ -171,13 +171,7 @@ export function* batchAndStream(stage: Layout, title: Txt) {
   yield* waitUntil('timeliness');
   yield* title.opacity(0, 0.2);
   title.children(heading('incelemeye ', 'daha erken', ' başlayabiliyoruz.').children());
-  const caution = text('bu sinyal inceleme içindir; dolandırıcılık kanıtı değil.', 29, {
-    position: [0, 425],
-    fill: muted,
-    opacity: 0,
-  });
-  stage.add(caution);
-  yield* all(title.opacity(1, 0.3), caution.opacity(1, 0.3));
+  yield* title.opacity(1, 0.3);
   yield* waitUntil('latency');
   yield* title.opacity(0, 0.2);
   title.children(heading('bu da ', 'sıfır gecikme', ' demek değil.').children());
