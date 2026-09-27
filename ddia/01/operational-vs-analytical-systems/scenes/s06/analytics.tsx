@@ -12,9 +12,7 @@ export default makeScene2D(function* (view) {
   const title = heading('peki, ', 'bütün satışlara', ' bakarsak?');
   const previous = orderTable();
   previous.root.position([0, 85]);
-  previous.rows[1].highlight.opacity(1);
   previous.rows[1].cells[1].text('preparing');
-  previous.rows[1].cells[1].fill(accent);
   view.add([title, previous.root]);
   yield loadFonts();
   yield* waitFor(0.65);

@@ -4,7 +4,7 @@ import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase } from '../../../../../common/cartoon-system';
 import { theme } from '../../theme';
-import { accent, background, heading, muted, paper, text } from '../shared/drawing';
+import { accent, background, foreground, heading, muted, paper, text } from '../shared/drawing';
 import { createMarket } from '../shared/market';
 import { orderTable } from '../shared/records';
 import { bookContents } from '../shared/book-contents';
@@ -190,7 +190,12 @@ export default makeScene2D(function* (view) {
     responseLabel.opacity(0, 0.2),
   );
   title.children(heading('peki, ', 'bütün satışlara', ' bakarsak?').children());
-  yield* table.root.position([0, 85], 0.7);
-  yield* all(title.opacity(1, 0.3), ...table.rows.map((row) => row.root.opacity(1, 0.3)));
+  yield* all(
+    table.root.position([0, 85], 0.7),
+    table.rows[1].highlight.opacity(0, 0.3),
+    table.rows[1].cells[1].fill(foreground, 0.3),
+    ...table.rows.map((row) => row.root.opacity(1, 0.3)),
+  );
+  yield* title.opacity(1, 0.3);
   yield* waitUntil('end');
 });
