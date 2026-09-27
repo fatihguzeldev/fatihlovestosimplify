@@ -18,52 +18,48 @@
       "targetTime": 10
     },
     {
-      "name": "recompute",
+      "name": "read",
       "targetTime": 17
     },
     {
-      "name": "stored",
+      "name": "scan",
       "targetTime": 29
     },
     {
-      "name": "reuse",
-      "targetTime": 43
-    },
-    {
-      "name": "responsibility",
-      "targetTime": 55
-    },
-    {
-      "name": "return",
-      "targetTime": 67
+      "name": "resources",
+      "targetTime": 37
     },
     {
       "name": "contention",
-      "targetTime": 75
+      "targetTime": 43
     },
     {
-      "name": "release",
-      "targetTime": 90
+      "name": "order-response",
+      "targetTime": 55
+    },
+    {
+      "name": "report-response",
+      "targetTime": 67
     },
     {
       "name": "sources",
-      "targetTime": 103
+      "targetTime": 80
     },
     {
       "name": "layouts",
-      "targetTime": 118
+      "targetTime": 101
     },
     {
       "name": "access",
-      "targetTime": 137
+      "targetTime": 122
     },
     {
       "name": "warehouse",
-      "targetTime": 155
+      "targetTime": 142
     },
     {
-      "name": "decisions",
-      "targetTime": 164
+      "name": "placement",
+      "targetTime": 158
     },
     {
       "name": "next",

@@ -24,7 +24,7 @@ export default makeScene2D(function* (view) {
   );
   yield* waitUntil('stored');
   yield* all(title.opacity(0, 0.2), chain.root.opacity(0, 0.4));
-  title.children(heading('sakladığımız toplamı ', 'hatırlıyor musun?').children());
+  title.children(heading('hesapladığımız toplamı ', 'saklasak?').children());
   const aggregate = storedTotals();
   aggregate.root.opacity(0);
   aggregate.stored.root.opacity(0.15);

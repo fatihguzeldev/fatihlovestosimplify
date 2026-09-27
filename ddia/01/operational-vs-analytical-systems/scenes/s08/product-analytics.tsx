@@ -135,7 +135,7 @@ export default makeScene2D(function* (view) {
   yield* all(title.opacity(0, 0.35), panel.root.opacity(0, 0.35), needs.opacity(0, 0.35));
   panel.root.remove();
   needs.remove();
-  title.children(heading('bu işleri ', 'nerede çalıştıracağız?').children());
+  title.children(heading('bu işleri ', 'aynı database’e', ' yaptırırsak?').children());
   const system = workloadSystem();
   system.root.opacity(0);
   view.add(system.root);

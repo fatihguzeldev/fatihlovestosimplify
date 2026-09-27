@@ -11,7 +11,7 @@ import { monthlyChart } from '../shared/workloads';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('peki, bu data ', 'buraya nasıl gelecek?');
+  const title = heading('peki bu data ', 'buraya nasıl gelecek?');
   const landscape = warehouseSystem();
   view.add([title, landscape.root]);
   yield loadFonts();

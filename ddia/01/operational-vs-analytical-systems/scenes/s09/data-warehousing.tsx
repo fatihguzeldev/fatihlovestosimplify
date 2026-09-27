@@ -1,18 +1,18 @@
-import { Layout, makeScene2D, Path, Rect } from '@motion-canvas/2d';
-import { all, waitFor, waitUntil } from '@motion-canvas/core';
+import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
+import { all, cancel, loop, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
-import { accent, background, foreground, heading, muted, paper, text } from '../shared/drawing';
+import { accent, background, heading, ink, muted, paper, text } from '../shared/drawing';
 import { role } from '../shared/people';
 import { workloadSystem } from '../shared/workload-system';
 import { warehouseSystem } from '../shared/warehouse-system';
-import { storedResult } from './stored-result';
+import { databaseWork } from './database-work';
 import { bookContents } from '../shared/book-contents';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('bu işleri ', 'nerede çalıştıracağız?');
+  const title = heading('bu işleri ', 'aynı database’e', ' yaptırırsak?');
   const system = workloadSystem();
   view.add([title, system.root]);
   yield loadFonts();
@@ -44,175 +44,188 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('workloads');
   yield* card.opacity(0, 0.4);
   card.remove();
-  title.children(heading('aynı database, ', 'iki farklı iş.').children());
+  title.children(heading('iki iş de ', 'aynı database’de.').children());
   yield* all(title.opacity(1, 0.3), system.root.opacity(1, 0.5));
-  const reply = cartoonArrow('s09-recomputed-result', [170, 208], [375, 208], accent, 0);
-  view.add(reply.root);
-  yield* waitUntil('recompute');
-  yield* system.chart.root.opacity(0.25, 0.3);
-  yield* system.query.travel(0.65);
-  yield* all(system.query.arrive(), system.database.top.stroke(accent, 0.1).to(foreground, 0.35));
-  yield* reply.reveal(1, 0.35);
-  yield* reply.travel(0.65);
-  yield* all(reply.arrive(), system.chart.root.opacity(1, 0.3));
-  yield* waitUntil('stored');
-  yield* all(title.opacity(0, 0.2), system.root.opacity(0, 0.4), reply.root.opacity(0, 0.3));
-  const alternative = new Layout({ opacity: 0 });
-  view.add(alternative);
-  yield* storedResult(alternative);
-  yield* waitUntil('return');
-  yield* alternative.opacity(0, 0.4);
-  alternative.remove();
-  title.children(heading('ana örneğe ', 'dönelim.').children());
-  const transient = text('sonuç sorgu sırasında hesaplanıyor', 32, {
-    position: [0, 406],
-    fill: muted,
-    opacity: 0,
-  });
-  view.add(transient);
-  yield* all(title.opacity(1, 0.3), system.root.opacity(1, 0.5), transient.opacity(1, 0.4));
-  yield* waitUntil('contention');
-  yield* all(title.opacity(0, 0.2), transient.opacity(0, 0.2));
-  title.children(heading('', 'aynı kaynakları', ' paylaşıyorlar.').children());
-  const busy = text('analytical query çalışıyor', 31, {
-    position: [0, 352],
-    fill: accent,
-    opacity: 0,
-  });
-  view.add(busy);
-  yield* title.opacity(1, 0.3);
-  yield* system.query.travel(0.8);
-  yield* all(
-    system.query.arrive(),
-    system.database.top.stroke(accent, 0.2),
-    busy.opacity(1, 0.3),
-    system.chart.root.opacity(0.3, 0.3),
-  );
-  system.market.status.text('yanıt bekleniyor…');
-  yield* system.order.travel(0.6);
-  yield* system.order.arrive();
-  yield* waitFor(0.8);
-  yield* title.opacity(0, 0.2);
-  title.children(heading('sipariş isteği de ', 'bekleyebilir.').children());
-  yield* title.opacity(1, 0.3);
-  yield* waitUntil('release');
-  reply.reveal(0);
-  reply.root.opacity(1);
-  yield* reply.reveal(1, 0.3);
-  yield* reply.travel(0.6);
-  yield* all(
-    reply.arrive(),
-    busy.opacity(0, 0.25),
-    system.chart.root.opacity(1, 0.25),
-    system.database.top.stroke(foreground, 0.25),
-  );
-  const orderReply = cartoonArrow('s09-waited-order-result', [-170, 208], [-385, 208], accent, 0);
+  const orderReply = cartoonArrow('s09-order-result', [-170, 208], [-385, 208], accent, 0);
   view.add(orderReply.root);
-  yield* orderReply.reveal(1, 0.3);
-  yield* orderReply.travel(0.6);
+  yield* waitUntil('read');
+  title.children(heading('siparişin durumunu ', 'okuyoruz.').children());
+  system.market.status.text('yanıt bekleniyor…');
+  yield* system.order.travel(0.55);
+  yield* system.order.arrive();
+  yield* orderReply.reveal(1, 0.25);
+  yield* orderReply.travel(0.55);
   system.market.status.text('preparing');
   yield* orderReply.arrive();
-  yield* waitUntil('sources');
+  yield* waitUntil('scan');
+  title.children(heading('rapor ', 'çok sayıda kaydı', ' tarıyor.').children());
+  system.chart.bars.forEach(({ bar, value }) => {
+    bar.opacity(0);
+    value.opacity(0);
+  });
+  yield* system.query.travel(0.7);
+  yield* system.query.arrive();
+  yield* all(system.root.opacity(0, 0.4), orderReply.root.opacity(0, 0.4));
+  const work = databaseWork();
+  view.add(work.root);
+  yield* work.root.opacity(1, 0.4);
+  const scanning = yield loop(() => work.sweep());
+  yield* waitUntil('resources');
+  title.children(heading('iki iş de ', 'aynı kaynakları', ' kullanıyor.').children());
+  yield* work.resources.opacity(1, 0.4);
+  yield* waitUntil('contention');
+  title.children(heading('bu sırada sipariş yanıtı ', 'gecikebilir.').children());
+  work.status.text('yanıt bekleniyor…');
+  yield* work.pulse.opacity(1, 0.3);
+  const reading = yield loop(() => work.pulse.opacity(0.3, 0.55).to(1, 0.55));
+  yield* waitUntil('order-response');
+  cancel(reading);
+  yield* work.pulse.opacity(0, 0.25);
+  work.status.text('preparing');
+  title.children(heading('sipariş yanıtı geldiğinde ', 'rapor hâlâ çalışıyor.').children());
+  yield* waitUntil('report-response');
+  cancel(scanning);
+  title.children(heading('raporun sonucu da ', 'hazır.').children());
+  work.activity.text('rapor tamamlandı');
+  yield* work.scan.opacity(0, 0.25);
+  yield* work.root.opacity(0, 0.4);
+  work.root.remove();
+  yield* system.root.opacity(1, 0.4);
+  const reportReply = cartoonArrow('s09-report-result', [170, 208], [375, 208], accent, 0);
+  view.add(reportReply.root);
+  yield* reportReply.reveal(1, 0.3);
+  yield* reportReply.travel(0.6);
   yield* all(
-    title.opacity(0, 0.2),
-    system.root.opacity(0, 0.4),
-    reply.root.opacity(0, 0.3),
-    orderReply.root.opacity(0, 0.3),
+    reportReply.arrive(),
+    ...system.chart.bars.flatMap(({ bar, value }) => [bar.opacity(1, 0.3), value.opacity(1, 0.3)]),
   );
-  title.children(heading('satış, stok ve mağaza bilgileri ', 'farklı yerlerde.').children());
+  yield* waitUntil('sources');
+  yield* all(title.opacity(0, 0.3), system.root.opacity(0, 0.3), reportReply.root.opacity(0, 0.3));
+  system.root.remove();
+  title.children(heading('satış ve stokları ', 'bölgelere göre', ' inceleyelim.').children());
   const landscape = warehouseSystem();
   landscape.root.opacity(0);
   landscape.warehouse.root.opacity(0);
   view.add(landscape.root);
-  const question = text('bölgelere göre satış ve stok nasıl?', 42, {
-    position: [0, 252],
-    opacity: 0,
+  const needed = new Layout({ opacity: 0 });
+  ['satışlar', 'stoklar', 'mağazanın bölgesi'].forEach((label, i) => {
+    needed.add(text(label, 29, { position: [-570 + i * 570, 67], fill: accent }));
   });
-  view.add(question);
-  yield* all(title.opacity(1, 0.3), landscape.root.opacity(1, 0.5));
-  yield* question.opacity(1, 0.4);
+  const sourceNote = text('ihtiyacımız olan bilgiler farklı sistemlerde.', 36, { y: 254 });
+  needed.add(sourceNote);
+  view.add(needed);
+  yield* all(title.opacity(1, 0.4), landscape.root.opacity(1, 0.4), needed.opacity(1, 0.4));
   yield* waitUntil('layouts');
-  yield* all(title.opacity(0, 0.2), question.opacity(0, 0.25));
-  title.children(heading('analizde ', 'başka bir görünüm', ' gerekiyor.').children());
-  const schemas = new Layout({ opacity: 0 });
-  const operational = paper(520, 120, '#101315');
-  operational.root.position([-400, 245]);
-  operational.root.add([
-    text('kayıt', 24, { y: -24, fill: muted }),
-    text('id · store_id · amount', 27, { y: 23, fontFamily: theme.fontFamily.mono }),
+  yield* all(title.opacity(0, 0.25), sourceNote.opacity(0, 0.25));
+  title.children(heading('bu bilgileri ', 'birlikte sorgulamak', ' istiyoruz.').children());
+  const schema = paper(1210, 144, '#17232f');
+  schema.root.position([0, 270]);
+  schema.root.opacity(0);
+  schema.root.add([
+    text('analize uygun bir görünüm', 26, { y: -37, fill: muted }),
+    text('mağaza  ·  bölge  ·  satış  ·  stok', 36, {
+      y: 24,
+      fontFamily: theme.fontFamily.mono,
+      fill: accent,
+    }),
   ]);
-  const analytical = paper(520, 120, '#17232f');
-  analytical.root.position([400, 245]);
-  analytical.root.add([
-    text('analiz', 24, { y: -24, fill: muted }),
-    text('region · SUM(amount)', 27, { y: 23, fontFamily: theme.fontFamily.mono, fill: accent }),
-  ]);
-  const reshape = cartoonArrow('s09-analytical-layout', [-107, 245], [107, 245], accent, 0);
-  schemas.add([operational.root, analytical.root, reshape.root]);
-  view.add(schemas);
-  yield* all(title.opacity(1, 0.3), schemas.opacity(1, 0.4));
-  yield* reshape.reveal(1, 0.4);
-  yield* reshape.travel(0.6);
-  yield* waitUntil('access');
-  yield* all(title.opacity(0, 0.2), schemas.opacity(0, 0.3));
-  title.children(heading('her kaynağa ', 'doğrudan erişim', ' yok.').children());
-  const access = new Layout({ opacity: 0 });
-  const boundary = new Rect({
-    position: [0, -143],
-    size: [1660, 340],
-    radius: 25,
-    stroke: muted,
-    lineWidth: 1.6,
-    lineDash: [10, 12],
-    opacity: 0.65,
+  const links = new Layout({ opacity: 0 });
+  [-570, 0, 570].forEach((x, i) => {
+    links.add(
+      new Path({
+        ...ink,
+        stroke: accent,
+        lineWidth: 2.4,
+        data: `M ${x} 104 Q ${x + (i - 1) * 8} 132 ${x * 0.55} 151 L ${x * 0.55} 180 M ${x * 0.55 - 6} 173 L ${x * 0.55} 181 L ${x * 0.55 + 6} 172`,
+        end: 0,
+      }),
+    );
   });
-  const analyst = role('analyst', 'analiz yapmak istiyor', 1);
-  analyst.position([75, 290]);
-  analyst.scale(1.4);
+  view.add([links, schema.root]);
+  yield* all(title.opacity(1, 0.3), schema.root.opacity(1, 0.4), links.opacity(1, 0.3));
+  yield* all(...links.children().map((node) => (node as Path).end(1, 0.65)));
+  yield* waitUntil('access');
+  yield* all(
+    title.opacity(0, 0.3),
+    needed.opacity(0, 0.3),
+    schema.root.opacity(0, 0.3),
+    links.opacity(0, 0.3),
+  );
+  title.children(heading('bu sistemlere ', 'herkes bağlanamaz.').children());
+  const access = new Layout({ opacity: 0 });
+  const boundary = new Path({
+    ...ink,
+    stroke: muted,
+    lineWidth: 2,
+    lineDash: [12, 11],
+    data: 'M -812 -294 Q -825 -314 -797 -315 Q 15 -324 810 -313 Q 829 -312 825 -288 L 821 51 Q 820 70 792 67 Q -20 61 -797 71 Q -819 70 -817 47 Z',
+  });
+  const analyst = role('analyst', 'kaynakları sorgulamak istiyor', 1);
+  analyst.position([-470, 271]);
+  analyst.scale(1.2);
   analyst.opacity(1);
-  const blocked = cartoonArrow('s09-direct-access-boundary', [0, 0], [0, -212], accent, 0);
-  blocked.root.position([0, 172]);
-  blocked.root.scale(0.5);
-  const stop = new Path({
-    data: 'M -13 35 L 13 59 M 13 35 L -13 59',
+  const query = paper(540, 104, '#101315');
+  query.root.position([205, 271]);
+  query.root.add(text('satış · stok · bölge', 30, { fontFamily: theme.fontFamily.mono }));
+  const blocked = new Path({
+    ...ink,
     stroke: accent,
-    lineWidth: 4,
-    lineCap: 'round',
+    lineWidth: 3,
+    data: 'M 203 201 Q 193 158 201 114 M 193 121 L 201 112 L 209 120',
+    end: 0,
+  });
+  const lock = new Path({
+    ...ink,
+    stroke: accent,
+    fill: background,
+    data: 'M 184 73 L 184 59 Q 185 40 201 41 Q 217 43 217 60 L 217 73 M 177 74 L 224 72 L 223 104 L 178 106 Z M 201 84 L 201 95',
   });
   access.add([
     boundary,
     analyst,
-    blocked.root,
-    stop,
-    text('operational network', 23, {
-      position: [-780, -288],
-      offset: [-1, 0],
-      fill: muted,
-      fontFamily: theme.fontFamily.mono,
-    }),
+    query.root,
+    blocked,
+    lock,
+    text('doğrudan erişim yok', 27, { position: [412, 94], fill: accent }),
   ]);
   view.add(access);
-  yield* all(title.opacity(1, 0.3), access.opacity(1, 0.4));
-  yield* blocked.reveal(1, 0.4);
-  yield* blocked.travel(0.7, 0.8);
+  yield* all(title.opacity(1, 0.4), access.opacity(1, 0.4));
+  yield* blocked.end(1, 0.6);
   yield* waitUntil('warehouse');
-  yield* all(title.opacity(0, 0.2), access.opacity(0, 0.4));
+  yield* all(title.opacity(0, 0.3), access.opacity(0, 0.3));
   access.remove();
-  title.children(heading('analiz için ', 'ayrı bir database.').children());
-  yield* all(title.opacity(1, 0.3), landscape.warehouse.root.opacity(1, 0.6));
-  yield* waitUntil('decisions');
-  const decisions = new Layout({ opacity: 0 });
-  decisions.add([
-    text('neyi hazır tutuyoruz?', 30, { position: [-550, 239], fill: accent, fontStyle: 'italic' }),
-    text('ek temsiller', 27, { position: [-550, 290] }),
-    text('nerede çalıştırıyoruz?', 30, { position: [550, 239], fill: accent, fontStyle: 'italic' }),
-    text('ayrı sistem', 27, { position: [550, 290] }),
+  title.children(heading('analizi ', 'ayrı bir database’e', ' taşıyalım.').children());
+  yield* all(title.opacity(1, 0.4), landscape.warehouse.root.opacity(1, 0.6));
+  const purpose = new Layout({ opacity: 0 });
+  purpose.add(text('operational sistemler çalışmaya devam eder', 29, { y: 63, fill: muted }));
+  const operations = paper(340, 118, '#101315');
+  operations.root.position([-590, 280]);
+  operations.root.add([
+    text('sipariş işlemleri', 28, { y: -24 }),
+    text('getOrder(1042)', 25, { y: 24, fill: accent, fontFamily: theme.fontFamily.mono }),
   ]);
-  view.add(decisions);
-  yield* decisions.opacity(1, 0.4);
+  const analytics = paper(340, 118, '#17232f');
+  analytics.root.position([620, 280]);
+  analytics.root.add([
+    text('rapor sorgusu', 28, { y: -24 }),
+    text('SUM(amount)', 25, { y: 24, fill: accent, fontFamily: theme.fontFamily.mono }),
+  ]);
+  const operationalRoute = cartoonArrow(
+    's09-operational-route',
+    [-590, 197],
+    [-570, 44],
+    accent,
+    0,
+  );
+  const analyticalRoute = cartoonArrow('s09-analytical-route', [421, 280], [177, 280], accent, 0);
+  purpose.add([operations.root, analytics.root, operationalRoute.root, analyticalRoute.root]);
+  view.add(purpose);
+  yield* waitUntil('placement');
+  yield* purpose.opacity(1, 0.4);
+  yield* all(operationalRoute.reveal(1, 0.5), analyticalRoute.reveal(1, 0.5));
   yield* waitUntil('next');
-  yield* all(title.opacity(0, 0.2), decisions.opacity(0, 0.25));
-  title.children(heading('peki, bu data ', 'buraya nasıl gelecek?').children());
+  yield* all(title.opacity(0, 0.3), purpose.opacity(0, 0.3));
+  title.children(heading('peki bu data ', 'buraya nasıl gelecek?').children());
   yield* title.opacity(1, 0.3);
   yield* waitUntil('end');
 });
