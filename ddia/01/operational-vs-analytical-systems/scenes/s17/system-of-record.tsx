@@ -11,8 +11,9 @@ import { bookContents } from '../shared/book-contents';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('hangisi ', 'asıl kayıt?');
+  const title = heading('satışın ', 'asıl kaydı hangisi?');
   const previous = recordAndModel();
+  previous.modelBranch.opacity(0.3);
   view.add([title, previous.root]);
   yield loadFonts();
   yield* waitUntil('part');

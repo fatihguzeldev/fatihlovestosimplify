@@ -2,32 +2,36 @@
   "version": 0,
   "timeEvents": [
     {
-      "name": "sync",
+      "name": "store",
       "targetTime": 5
     },
     {
+      "name": "sync",
+      "targetTime": 12
+    },
+    {
       "name": "model",
-      "targetTime": 25
+      "targetTime": 28
     },
     {
       "name": "deploy",
-      "targetTime": 39
+      "targetTime": 42
     },
     {
       "name": "inference",
-      "targetTime": 51
+      "targetTime": 55
     },
     {
       "name": "serving",
-      "targetTime": 70
+      "targetTime": 73
     },
     {
       "name": "outputs",
-      "targetTime": 86
+      "targetTime": 87
     },
     {
       "name": "next",
-      "targetTime": 96
+      "targetTime": 98
     },
     {
       "name": "end",

@@ -1,8 +1,8 @@
-import { Layout, makeScene2D, Path, Rect } from '@motion-canvas/2d';
-import { all, waitUntil } from '@motion-canvas/core';
+import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
+import { all, easeInOutCubic, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
-import { cartoonDatabase, cartoonService } from '../../../../../common/cartoon-system';
+import { cartoonService } from '../../../../../common/cartoon-system';
 import { theme } from '../../theme';
 import {
   accent,
@@ -23,119 +23,144 @@ export default makeScene2D(function* (view) {
   const { title, result } = reviewOutput();
   view.add([title, result.root]);
   yield loadFonts();
-  yield* waitUntil('sync');
-  yield* all(title.opacity(0, 0.2), result.root.opacity(0, 0.4));
+
+  yield* waitUntil('store');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('uyarıyı ', 'warehouse’a kaydediyoruz.').children());
+  const sync = new Layout({});
+  const warehouse = paper(630, 380, '#101315');
+  warehouse.root.position([-500, 75]);
+  warehouse.root.opacity(0);
+  warehouse.root.add([
+    text('warehouse', 29, { y: -141, fill: muted }),
+    text('review_flags', 27, { y: -93, fill: accent, fontFamily: theme.fontFamily.mono }),
+  ]);
   result.root.remove();
-  title.children(heading('bu uyarıyı ', 'CRM’e taşıyalım.').children());
-  const sync = new Layout({ opacity: 0 });
-  const warehouse = cartoonDatabase('data warehouse', accent);
-  warehouse.root.position([-645, 90]);
-  warehouse.root.scale(1.35);
-  warehouse.root.add(
-    text('review_flags', 24, { y: 15, fill: accent, fontFamily: theme.fontFamily.mono }),
-  );
-  const flag = paper(380, 220, '#17232f');
-  flag.root.position([0, 90]);
-  const flagValue = text('review_required', 29, {
-    y: 55,
-    fill: accent,
-    fontFamily: theme.fontFamily.mono,
-    opacity: 0,
-  });
-  flag.root.add([
-    text('customer #17', 29, { y: -62, fontFamily: theme.fontFamily.mono }),
-    text('30 sn · 3 başarısız ödeme', 22, {
-      y: -5,
-      fill: muted,
-      fontFamily: theme.fontFamily.mono,
-    }),
-    flagValue,
-  ]);
-  const crm = paper(360, 270, '#101315');
-  crm.root.position([645, 90]);
-  const crmValue = text('—', 26, { y: 66, fill: accent });
-  crm.root.add([
-    text('CRM · #17', 33, { y: -82 }),
-    text('inceleme durumu', 25, { y: -9, fill: muted, fontFamily: theme.fontFamily.mono }),
-    crmValue,
-  ]);
-  const readFlag = cartoonArrow('s16-read-review-flag', [-445, 90], [-235, 90], accent, 0);
-  const transfer = cartoonArrow('s16-crm-review-sync', [235, 90], [418, 90], accent, 0);
-  sync.add([
-    warehouse.root,
-    flag.root,
-    crm.root,
-    readFlag.root,
-    transfer.root,
-    text('oku', 27, { position: [-340, 6], opacity: () => readFlag.reveal() }),
-    text('sync', 27, { position: [326, 6], fill: accent, opacity: () => transfer.reveal() }),
-    text('reverse ETL', 34, { position: [0, 358], fill: accent, fontStyle: 'italic' }),
-  ]);
+  sync.add([warehouse.root, result.root]);
   view.add(sync);
-  yield* all(title.opacity(1, 0.3), sync.opacity(1, 0.5));
-  yield* readFlag.reveal(1, 0.3);
-  yield* readFlag.travel(0.7);
-  yield* all(readFlag.arrive(), flagValue.opacity(1, 0.3));
-  yield* transfer.reveal(1, 0.3);
-  yield* transfer.travel(0.7);
-  crmValue.text('inceleme bekliyor');
-  yield* transfer.arrive();
-  yield* waitUntil('model');
-  yield* all(title.opacity(0, 0.2), sync.opacity(0, 0.4));
-  sync.remove();
-  title.children(heading('modelde ise ', 'eğitimin çıktısını', ' dağıtıyoruz.').children());
-  const deployment = new Layout({ opacity: 0 });
-  const train = paper(340, 230, '#101315');
-  train.root.position([-645, 90]);
-  train.root.add([
-    text('train', 47, { y: -39, fill: accent, fontFamily: theme.fontFamily.mono }),
-    text('training data', 26, { y: 44 }),
+  yield* all(
+    title.opacity(1, 0.3),
+    result.root.position([-500, 115], 0.9, easeInOutCubic),
+    result.root.scale(0.83, 0.9, easeInOutCubic),
+  );
+  yield* warehouse.root.opacity(1, 0.4);
+  yield* warehouse.face.stroke(accent, 0.2).to(foreground, 0.3);
+
+  yield* waitUntil('sync');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('ekip uyarıyı ', 'CRM’de görüyor.').children());
+  const crm = paper(530, 380, '#101315');
+  crm.root.position([535, 75]);
+  crm.root.opacity(0);
+  const crmValue = text('—', 36, { y: 21, fill: accent });
+  const action = paper(315, 58, '#182638');
+  action.root.position([0, 116]);
+  action.root.opacity(0);
+  action.root.add(text('incelemeyi aç', 27, { fill: accent }));
+  crm.root.add([
+    text('CRM · customer #17', 30, { y: -135 }),
+    new Path({ data: 'M -222 -87 L 222 -87', stroke: muted, lineWidth: 1.5, opacity: 0.5 }),
+    text('inceleme durumu', 27, { y: -37, fill: muted }),
+    crmValue,
+    action.root,
   ]);
-  const artifact = paper(340, 230, '#17232f');
-  artifact.root.position([0, 90]);
-  const modelName = text('model v1', 43, {
-    y: -28,
+  const transfer = cartoonArrow('s16-review-to-crm', [-145, 75], [230, 75], accent, 0);
+  const syncLabel = text('reverse ETL', 31, {
+    position: [38, -13],
     fill: accent,
-    fontFamily: theme.fontFamily.mono,
-    opacity: 0,
+    fontStyle: 'italic',
+    opacity: () => transfer.reveal(),
   });
-  artifact.root.add([modelName, text('artifact', 26, { y: 47, fill: muted })]);
-  const service = cartoonService('recommendation service', accent);
-  service.root.position([645, 90]);
-  service.root.scale(1.1);
-  service.caption.fontSize(27);
-  const modelTag = new Rect({ position: [27, -64], size: [89, 38], fill: background, opacity: 0 });
-  modelTag.add(text('v1', 26, { fill: accent, fontFamily: theme.fontFamily.mono }));
-  service.root.add(modelTag);
-  const output = cartoonArrow('s16-trained-model-artifact', [-428, 90], [-213, 90], accent, 0);
-  const deploy = cartoonArrow('s16-model-deployment', [214, 90], [439, 90], accent, 0);
-  deployment.add([
-    train.root,
-    artifact.root,
-    service.root,
-    output.root,
-    deploy.root,
-    text('deploy', 28, { position: [326, 6], fill: accent, opacity: () => deploy.reveal() }),
+  sync.add([crm.root, transfer.root, syncLabel]);
+  yield* all(title.opacity(1, 0.3), crm.root.opacity(1, 0.4));
+  yield* transfer.reveal(1, 0.4);
+  yield* transfer.travel(1);
+  crmValue.text('inceleme bekliyor');
+  yield* all(transfer.arrive(), action.root.opacity(1, 0.35));
+
+  yield* waitUntil('model');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('eğittiğimiz model de ', 'uygulamaya dönecek.').children());
+  yield* all(
+    title.opacity(1, 0.3),
+    sync.scale(0.47, 0.9, easeInOutCubic),
+    sync.position([0, -212], 0.9, easeInOutCubic),
+    sync.opacity(0.65, 0.6),
+  );
+  const deployment = new Layout({ y: 225, opacity: 0 });
+  const train = paper(410, 210, '#101315');
+  train.root.position([-595, 0]);
+  train.root.add([
+    text('train', 44, { y: -49, fill: accent, fontFamily: theme.fontFamily.mono }),
+    text('geçmiş satışlar', 27, { y: 11 }),
+    text('+ clickstream', 27, { y: 55, fill: muted }),
   ]);
+  const artifact = paper(300, 165, '#17232f');
+  artifact.root.position([0, 0]);
+  artifact.root.opacity(0);
+  artifact.root.add([
+    text('model v1', 40, { y: -25, fill: accent, fontFamily: theme.fontFamily.mono }),
+    text('öneri modeli', 26, { y: 38 }),
+  ]);
+  const service = cartoonService('recommendation service', accent);
+  service.root.position([595, 0]);
+  service.root.scale(0.95);
+  service.caption.fontSize(25);
+  service.root.opacity(0.28);
+  const badge = paper(108, 52, '#17232f');
+  badge.root.position([26, -65]);
+  badge.root.opacity(0);
+  badge.root.add(text('v1', 29, { fill: accent, fontFamily: theme.fontFamily.mono }));
+  service.root.add(badge.root);
+  const output = cartoonArrow('s16-training-output', [-348, 0], [-192, 0], accent, 0);
+  const deploy = cartoonArrow('s16-deploy-model', [196, 0], [417, 0], accent, 0);
+  const deployLabel = text('deploy', 28, {
+    position: [308, -86],
+    fill: accent,
+    opacity: () => deploy.reveal(),
+  });
+  deployment.add([train.root, artifact.root, service.root, output.root, deploy.root, deployLabel]);
   view.add(deployment);
-  yield* all(title.opacity(1, 0.3), deployment.opacity(1, 0.5));
-  yield* output.reveal(1, 0.3);
+  yield* deployment.opacity(1, 0.4);
+  yield* output.reveal(1, 0.35);
   yield* output.travel(0.8);
-  yield* all(output.arrive(), modelName.opacity(1, 0.3));
+  yield* all(output.arrive(), artifact.root.opacity(1, 0.35));
+
   yield* waitUntil('deploy');
-  yield* deploy.reveal(1, 0.3);
-  yield* deploy.travel(0.8);
-  yield* all(deploy.arrive(), modelTag.opacity(1, 0.3));
+  yield* title.opacity(0, 0.2);
+  title.children(heading('modeli ', 'öneri servisine', ' yerleştiriyoruz.').children());
+  yield* all(title.opacity(1, 0.3), service.root.opacity(1, 0.3), deploy.reveal(1, 0.35));
+  const packageCopy = paper(146, 64, '#17232f');
+  packageCopy.root.position([0, 0]);
+  packageCopy.root.add(text('model v1', 24, { fill: accent, fontFamily: theme.fontFamily.mono }));
+  deployment.add(packageCopy.root);
+  yield* all(
+    deploy.travel(1.1),
+    packageCopy.root.position([620, -62], 1.1, easeInOutCubic),
+    packageCopy.root.scale(0.65, 1.1),
+  );
+  yield* all(deploy.arrive(), badge.root.opacity(1, 0.2), packageCopy.root.opacity(0, 0.2));
+  packageCopy.root.remove();
+
   yield* waitUntil('inference');
-  yield* all(title.opacity(0, 0.2), deployment.opacity(0, 0.4));
+  yield* title.opacity(0, 0.2);
+  title.children(heading('muz sayfasında ', 'süt önerisi', ' beliriyor.').children());
   service.root.remove();
+  service.root.position([595, 225]);
+  view.add(service.root);
+  yield* all(
+    sync.opacity(0, 0.4),
+    deployment.opacity(0, 0.4),
+    service.root.position([-560, 75], 1.1, easeInOutCubic),
+    service.root.scale(1.35, 1.1, easeInOutCubic),
+  );
+  sync.remove();
   deployment.remove();
-  service.root.position([585, 90]);
-  service.root.opacity(0);
   const app = createMarket();
   app.cart.remove();
-  app.root.position([-535, 90]);
-  app.root.scale(0.9);
+  app.label.text('müşterinin ekranı');
+  app.root.position([530, 75]);
+  app.root.scale(0.92);
   app.root.opacity(0);
   const fruit = banana();
   fruit.position([-234, -77]);
@@ -161,54 +186,71 @@ export default makeScene2D(function* (view) {
     text('2 kg', 26, { position: [-147, -43], offset: [-1, 0], fill: muted }),
     suggested.root,
   ]);
-  const request = cartoonArrow('s16-recommendation-request', [-195, 13], [367, 13], accent, 0);
-  const response = cartoonArrow('s16-recommendation-response', [367, 199], [-195, 199], accent, 0);
+  const request = cartoonArrow('s16-serving-request', [190, -5], [-322, -5], accent, 0);
+  const response = cartoonArrow('s16-serving-result', [-322, 164], [190, 164], accent, 0);
   const inference = new Layout({});
   inference.add([
     app.root,
-    service.root,
     request.root,
     response.root,
-    text('getRecommendations()', 26, {
-      position: [86, -77],
+    text('getRecommendations()', 25, {
+      position: [-65, -89],
       fontFamily: theme.fontFamily.mono,
       opacity: () => request.reveal(),
     }),
     text('recommendations', 27, {
-      position: [86, 286],
+      position: [-65, 250],
       fill: accent,
       opacity: () => response.reveal(),
     }),
   ]);
   view.add(inference);
-  title.children(heading('kullanıcı ', 'öneri istediğinde…').children());
-  yield* all(title.opacity(1, 0.3), app.root.opacity(1, 0.5), service.root.opacity(1, 0.5));
-  yield* request.reveal(1, 0.3);
+  yield* all(title.opacity(1, 0.3), app.root.opacity(1, 0.4));
+  yield* request.reveal(1, 0.35);
   yield* request.travel(0.9);
-  yield* request.arrive();
-  yield* modelTag.opacity(0.35, 0.12).to(1, 0.25);
-  yield* response.reveal(1, 0.3);
+  yield* all(request.arrive(), badge.face.stroke(accent, 0.25));
+  yield* response.reveal(1, 0.35);
   yield* response.travel(0.9);
-  yield* all(response.arrive(), suggested.root.opacity(1, 0.3));
+  yield* all(
+    response.arrive(),
+    suggested.root.opacity(1, 0.35),
+    badge.face.stroke(foreground, 0.3),
+  );
+
   yield* waitUntil('serving');
   yield* title.opacity(0, 0.2);
-  title.children(heading('servis, ', 'hazır modeli', ' kullanıyor.').children());
-  yield* title.opacity(1, 0.3);
-  yield* request.travel(0.75);
-  yield* request.arrive();
-  yield* response.travel(0.75);
-  yield* response.arrive();
+  title.children(heading('analizde ürettik, ', 'uygulamada kullanıyoruz.').children());
+  const recap = new Layout({ opacity: 0, y: -232 });
+  recap.add([
+    text('uyarı → CRM', 29, { x: -475, fill: muted }),
+    text('model → öneri servisi', 29, { x: 395, fill: accent }),
+  ]);
+  view.add(recap);
+  yield* all(title.opacity(1, 0.3), recap.opacity(1, 0.4));
+
   yield* waitUntil('outputs');
-  yield* all(title.opacity(0, 0.2), inference.opacity(0, 0.4));
+  yield* all(title.opacity(0, 0.2), inference.opacity(0, 0.4), recap.opacity(0, 0.3));
   inference.remove();
-  const relations = recordAndModel();
-  relations.root.opacity(0);
+  recap.remove();
+  title.children(heading('bu çıktıları ', 'kayıtlardan ürettik.').children());
+  yield* all(
+    title.opacity(1, 0.3),
+    service.root.position([595, 10], 1, easeInOutCubic),
+    service.root.scale(0.95, 1, easeInOutCubic),
+  );
+  const relations = recordAndModel(service);
+  relations.records.opacity(0);
+  relations.training.opacity(0);
+  relations.copy.reveal(0);
   view.add(relations.root);
-  title.children(heading('farklı işler için ', 'temsiller ürettik.').children());
-  yield* all(title.opacity(1, 0.3), relations.root.opacity(1, 0.5));
+  yield* all(relations.records.opacity(1, 0.45), relations.training.opacity(1, 0.45));
+  yield* relations.copy.reveal(1, 0.3);
+  yield* relations.copy.travel(0.65);
+  yield* relations.copy.arrive();
+
   yield* waitUntil('next');
   yield* title.opacity(0, 0.2);
-  title.children(heading('hangisi ', 'asıl kayıt?').children());
-  yield* title.opacity(1, 0.3);
+  title.children(heading('satışın ', 'asıl kaydı hangisi?').children());
+  yield* all(title.opacity(1, 0.3), relations.modelBranch.opacity(0.3, 0.5));
   yield* waitUntil('end');
 });
