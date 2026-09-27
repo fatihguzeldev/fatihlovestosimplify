@@ -190,13 +190,14 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('roles');
   const flow = [
     packet.root,
+    record.root,
     activeLine,
     ...[request, query, row, response].map((arrow) => arrow.root),
     ...labels,
   ];
   yield* all(...flow.map((node) => node.opacity(0, 0.35)));
   flow.forEach((node) => node.remove());
-  yield* all(database.x(560, 0.55), record.root.x(560, 0.55));
+  yield* database.x(560, 0.55);
   yield* all(
     frontendBrace.root.opacity(1, 0.35),
     frontendLabel.opacity(1, 0.35),
@@ -233,7 +234,6 @@ export default makeScene2D(function* (view) {
     market.receipt.opacity(0, 0.25),
     service.opacity(0.3, 0.3),
     database.opacity(0.3, 0.3),
-    record.root.opacity(0.3, 0.3),
     stateless.opacity(0, 0.2),
     backendBrace.root.opacity(0.3, 0.3),
     backendLabel.opacity(0.3, 0.3),
@@ -248,7 +248,6 @@ export default makeScene2D(function* (view) {
     market.root.opacity(0.45, 0.3),
     service.opacity(1, 0.3),
     database.opacity(1, 0.3),
-    record.root.opacity(1, 0.3),
     backendBrace.outline.stroke(accent, 0.3),
     backendBrace.root.opacity(1, 0.3),
     backendLabel.opacity(1, 0.3),
