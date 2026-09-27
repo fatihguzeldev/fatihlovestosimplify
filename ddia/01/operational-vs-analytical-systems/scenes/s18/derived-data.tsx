@@ -30,14 +30,8 @@ export default makeScene2D(function* (view) {
   aggregate.stored.root.opacity(0.15);
   aggregate.totals.forEach((value) => value.opacity(0));
   aggregate.note.opacity(0);
-  const context = text('başka bir seçenek · aynı database içinde', 27, {
-    position: [-806, -283],
-    offset: [-1, 0],
-    fill: muted,
-    opacity: 0,
-  });
-  view.add([aggregate.root, context]);
-  yield* all(title.opacity(1, 0.3), context.opacity(1, 0.3), aggregate.root.opacity(1, 0.5));
+  view.add(aggregate.root);
+  yield* all(title.opacity(1, 0.3), aggregate.root.opacity(1, 0.5));
   yield* aggregate.calculate.travel(0.9);
   yield* all(
     aggregate.calculate.arrive(),
@@ -58,7 +52,7 @@ export default makeScene2D(function* (view) {
   aggregate.note.text('SELECT * FROM monthly_totals;');
   aggregate.note.fontFamily(theme.fontFamily.mono);
   yield* waitUntil('cache');
-  yield* all(title.opacity(0, 0.2), aggregate.root.opacity(0, 0.4), context.opacity(0, 0.2));
+  yield* all(title.opacity(0, 0.2), aggregate.root.opacity(0, 0.4));
   title.children(heading('sipariş durumu da ', 'cache’te tutulabilir.').children());
   const cacheExample = new Layout({ opacity: 0 });
   const order = paper(540, 250, '#101315');
