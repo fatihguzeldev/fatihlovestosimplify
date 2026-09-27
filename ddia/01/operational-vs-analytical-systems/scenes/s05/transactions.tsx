@@ -18,6 +18,8 @@ export default makeScene2D(function* (view) {
   market.root.position([-470, 100]);
   market.cart.remove();
   market.receipt.opacity(1);
+  market.receiptDetails.opacity(0);
+  market.status.text('yükleniyor…');
   const { root: database, caption } = cartoonDatabase('sales database', accent);
   database.position([550, 110]);
   database.scale(1.4);
@@ -37,20 +39,20 @@ export default makeScene2D(function* (view) {
   const sql = paper(1610, 96, '#101315');
   sql.root.position([0, 408]);
   sql.root.opacity(0);
-  const code = text('SELECT status FROM orders WHERE id = 1042;', 27, {
+  const code = text('SELECT * FROM orders WHERE id = 1042;', 27, {
     position: [-764, 0],
     offset: [-1, 0],
     fontFamily: theme.fontFamily.mono,
   });
   sql.root.add(code);
   const request = cartoonArrow('s05-select-order', [-318, 84], [-2, 84], accent, 0);
-  const response = cartoonArrow('s05-selected-status', [-2, 218], [-318, 218], accent, 0);
+  const response = cartoonArrow('s05-selected-order', [-2, 218], [-318, 218], accent, 0);
   const queryLabel = text('read', 29, {
     position: request.pointAt(0.5).addY(-80),
     fill: accent,
     opacity: 0,
   });
-  const responseLabel = text('created', 26, {
+  const responseLabel = text('#1042 · created', 26, {
     position: response.pointAt(0.5).addY(76),
     fill: accent,
     fontFamily: theme.fontFamily.mono,
@@ -61,7 +63,6 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('read');
   yield* title.opacity(0, 0.2);
   title.children(heading('aradığımız sipariş: ', '#1042').children());
-  market.status.text('…');
   yield* all(
     title.opacity(1, 0.3),
     sql.root.opacity(1, 0.3),
@@ -77,7 +78,7 @@ export default makeScene2D(function* (view) {
   yield* all(response.reveal(1, 0.4), responseLabel.opacity(1, 0.3));
   yield* response.travel(0.65);
   market.status.text('created');
-  yield* response.arrive();
+  yield* all(response.arrive(), market.receiptDetails.opacity(1, 0.25));
   yield* waitUntil('point-query');
   yield* queryLabel.opacity(0, 0.2);
   queryLabel.text('point query');

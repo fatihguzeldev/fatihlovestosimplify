@@ -76,12 +76,13 @@ export function orderTable() {
     [
       { name: 'id', x: -350 },
       { name: 'status', x: -80 },
+      { name: '…', x: 300 },
     ],
     [
-      ['1041', 'shipped'],
-      ['1042', 'created'],
-      ['1043', 'created'],
-      ['1044', 'created'],
+      ['1041', 'shipped', '…'],
+      ['1042', 'created', '…'],
+      ['1043', 'created', '…'],
+      ['1044', 'created', '…'],
     ],
   );
 }

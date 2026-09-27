@@ -292,7 +292,10 @@ export default makeScene2D(function* (view) {
   );
   yield* report.suggest.travel(0.8);
   yield* waitUntil('return');
+  market.status.text('yükleniyor…');
+  market.receiptDetails.opacity(0);
   yield* all(
+    overviewDetails.opacity(0, 0.25),
     title.opacity(0, 0.25),
     report.root.opacity(0, 0.35),
     scientist.opacity(0, 0.3),
