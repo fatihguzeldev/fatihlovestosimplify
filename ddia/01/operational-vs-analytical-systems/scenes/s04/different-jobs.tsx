@@ -49,7 +49,6 @@ export default makeScene2D(function* (view) {
   market.cart.remove();
   market.receipt.opacity(1);
   market.label.opacity(0);
-  market.status.fontSize(38);
   market.status.text('…');
   const { root: database, top, caption } = cartoonDatabase('sales database', accent);
   database.position([0, 95]);
@@ -233,7 +232,6 @@ export default makeScene2D(function* (view) {
     market.root.opacity(1, 0.3),
     market.root.position([-470, 100], 0.75),
     market.root.scale(1, 0.75),
-    market.status.fontSize(26, 0.75),
     database.position([550, 110], 0.75),
     database.scale(1.4, 0.75),
   );

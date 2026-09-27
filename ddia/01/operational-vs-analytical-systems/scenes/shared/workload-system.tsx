@@ -14,7 +14,6 @@ export function workloadSystem() {
   market.cart.remove();
   market.receipt.opacity(1);
   market.status.text('preparing');
-  market.status.fontSize(38);
   market.label.opacity(0);
   const database = cartoonDatabase('sales database', accent);
   database.root.position([0, 95]);

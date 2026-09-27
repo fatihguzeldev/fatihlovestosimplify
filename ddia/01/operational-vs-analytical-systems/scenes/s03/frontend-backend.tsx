@@ -46,8 +46,6 @@ export default makeScene2D(function* (view) {
   const stage = new Layout({});
   const title = heading('siparişim ', 'ne durumda?');
   const market = createOrderEntry();
-  const statusFontSize = market.status.fontSize();
-  market.status.fontSize(() => statusFontSize / market.root.scale.x());
   const cursor = new Path({
     ...ink,
     fill: background,

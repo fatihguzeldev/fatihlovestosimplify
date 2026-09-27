@@ -89,7 +89,6 @@ export default makeScene2D(function* (view) {
     system.chart.root.opacity(0.3, 0.3),
   );
   system.market.status.text('yanıt bekleniyor…');
-  system.market.status.fontSize(31);
   yield* system.order.travel(0.6);
   yield* system.order.arrive();
   yield* waitFor(0.8);
@@ -112,7 +111,6 @@ export default makeScene2D(function* (view) {
   yield* orderReply.reveal(1, 0.3);
   yield* orderReply.travel(0.6);
   system.market.status.text('preparing');
-  system.market.status.fontSize(38);
   yield* orderReply.arrive();
   yield* waitUntil('sources');
   yield* all(

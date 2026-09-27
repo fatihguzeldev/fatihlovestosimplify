@@ -112,27 +112,33 @@ export function createMarket() {
   ]);
   body.add(cart);
   const receipt = new Layout({ opacity: 0 });
-  const status = text('created', 26, {
-    position: [-249, -34],
+  const status = text('created', 24, {
+    position: [-253, -32],
     offset: [-1, 0],
     fontFamily: theme.fontFamily.mono,
     fill: accent,
   });
   const receiptTotal = text('185 ₺', 32, {
-    position: [269, 91],
+    position: [269, 96],
     offset: [1, 0],
     fontFamily: theme.fontFamily.mono,
   });
   const receiptDetails = new Layout({});
   receiptDetails.add([
-    text('muz · süt', 27, { position: [-269, 57], offset: [-1, 0] }),
-    text('2 kg · 1 litre', 20, { position: [-269, 93], offset: [-1, 0], fill: muted }),
-    text('toplam', 20, { position: [269, 53], offset: [1, 0], fill: muted }),
+    new Path({
+      stroke: foreground,
+      opacity: 0.16,
+      lineWidth: 1.5,
+      data: 'M -269 22 Q 0 24 269 22',
+    }),
+    text('muz · süt', 28, { position: [-269, 58], offset: [-1, 0], fontWeight: 500 }),
+    text('2 kg · 1 litre', 22, { position: [-269, 96], offset: [-1, 0], fill: muted }),
+    text('toplam', 22, { position: [269, 58], offset: [1, 0], fill: muted }),
     receiptTotal,
   ]);
   receipt.add([
-    text('sipariş', 21, { position: [-269, -146], offset: [-1, 0], fill: muted }),
-    text('#1042', 43, {
+    text('sipariş', 22, { position: [-269, -146], offset: [-1, 0], fill: muted }),
+    text('#1042', 40, {
       position: [-269, -103],
       offset: [-1, 0],
       fontFamily: theme.fontFamily.mono,
@@ -145,8 +151,14 @@ export function createMarket() {
       lineWidth: 2.5,
       data: 'M -21 -18 L 3 -26 L 23 -15 L 22 19 L -1 28 L -22 16 Z M -21 -18 L -1 -7 L 23 -15 M -1 -7 L -1 28 M -10 -22 L 11 -11 L 11 0',
     }),
-    new Rect({ position: [0, -34], size: [550, 62], radius: 9, fill: '#182638' }),
-    new Path({ stroke: accent, lineWidth: 3, lineCap: 'round', data: 'M -272 -49 L -272 -19' }),
+    new Rect({
+      position: [-269, -32],
+      offset: [-1, 0],
+      width: () => status.width() + 32,
+      height: 44,
+      radius: 7,
+      fill: '#182638',
+    }),
     status,
     receiptDetails,
   ]);

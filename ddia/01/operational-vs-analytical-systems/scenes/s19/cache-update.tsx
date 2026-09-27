@@ -18,7 +18,6 @@ export function* updateCache(root: Layout, title: Txt) {
   market.label.opacity(0);
   const shown = market.status;
   shown.text('preparing');
-  shown.fontSize(34);
   const service = cartoonService('order service', accent);
   service.root.position([-545, 95]);
   service.root.scale(1.65);

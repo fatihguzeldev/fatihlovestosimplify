@@ -30,11 +30,7 @@ export default makeScene2D(function* (view) {
   yield* all(bridge.root.opacity(0, 0.25), database.opacity(0, 0.3), market.label.opacity(0, 0.25));
   database.remove();
   bridge.root.remove();
-  yield* all(
-    market.root.position([-575, 100], 0.7),
-    market.root.scale(0.66, 0.7),
-    market.status.fontSize(40, 0.7),
-  );
+  yield* all(market.root.position([-575, 100], 0.7), market.root.scale(0.66, 0.7));
   const table = orderTable();
   table.root.position([420, 90]);
   table.root.opacity(0);
