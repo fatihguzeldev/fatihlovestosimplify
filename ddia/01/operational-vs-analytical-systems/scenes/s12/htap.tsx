@@ -1,12 +1,13 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
-import { all, waitUntil } from '@motion-canvas/core';
+import { all, easeInOutCubic, waitFor, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase } from '../../../../../common/cartoon-system';
 import { theme } from '../../theme';
-import { accent, background, heading, muted, paper, text } from '../shared/drawing';
+import { accent, background, heading, muted, text } from '../shared/drawing';
 import { warehouseSystem } from '../shared/warehouse-system';
 import { recommendationSource } from '../shared/recommendation-source';
+import { htapLandscape, htapSystem } from './htap-system';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -30,115 +31,148 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('htap');
   yield* all(title.opacity(0, 0.2), choice.opacity(0, 0.4));
   choice.remove();
-  title.children(heading('aynı uygulamada, ', 'iki workload.').children());
-  const htap = new Layout({ opacity: 0 });
-  const boundary = paper(1360, 410);
-  boundary.root.position([0, 222]);
-  const interfaceBar = paper(1130, 68, '#182638');
-  interfaceBar.root.position([0, 112]);
-  interfaceBar.root.add(text('ortak arayüz', 30));
-  const name = text('HTAP', 38, {
-    position: [0, 53],
-    fontFamily: theme.fontFamily.mono,
-    fill: accent,
-  });
-  const workloads = [-455, 455].map((x, i) => {
-    const card = paper(560, 122, '#101315');
-    card.root.position([x, -173]);
-    card.root.add([
-      text(i ? 'hangi işlemler şüpheli?' : 'sipariş #1042', 30, { y: -25 }),
-      text(i ? 'çok sayıda kaydı tara' : 'oku / güncelle', 25, {
-        y: 26,
-        fill: accent,
-        fontFamily: theme.fontFamily.mono,
-      }),
-    ]);
-    const arrow = cartoonArrow(`s12-htap-input-${i}`, [0, 0], [0, 212], accent, 0);
-    arrow.root.position([x, -80]);
-    arrow.root.scale(0.65);
-    htap.add([card.root, arrow.root]);
-    return arrow;
-  });
-  const promise = text('transactions + analytics', 38, { position: [0, 266], fill: accent });
-  const context = text('alternatif · aynı uygulama', 25, {
-    position: [-806, -283],
-    offset: [-1, 0],
-    fill: muted,
-  });
-  htap.add([boundary.root, interfaceBar.root, name, promise]);
-  boundary.root.moveToBottom();
-  view.add([htap, context]);
-  context.opacity(0);
-  yield* all(title.opacity(1, 0.3), htap.opacity(1, 0.5), context.opacity(1, 0.3));
-  yield* all(...workloads.map((arrow) => arrow.reveal(1, 0.3)));
-  yield* all(...workloads.map((arrow) => arrow.travel(0.6)));
-  yield* all(...workloads.map((arrow) => arrow.arrive()));
+  title.children(heading('iki farklı iş. ', 'aynı uygulama.').children());
+  const system = htapSystem();
+  view.add(system.root);
+  yield* all(title.opacity(1, 0.3), system.root.opacity(1, 0.6));
+  yield* waitFor(0.45);
+  yield* all(...system.requests.map((arrow) => arrow.reveal(1, 0.4)));
+  yield* all(...system.requests.map((arrow) => arrow.travel(0.7)));
+  yield* all(...system.requests.map((arrow) => arrow.arrive()));
+  yield* waitFor(0.6);
+  yield* all(
+    ...system.requests.map((arrow) => arrow.root.opacity(0, 0.2)),
+    ...system.operations.map((label) => label.opacity(0, 0.2)),
+  );
+  yield* all(...system.responses.map((arrow) => arrow.reveal(1, 0.35)));
+  yield* all(...system.responses.map((arrow) => arrow.travel(0.65)));
+  system.orderResult.text('preparing');
+  system.countResult.text('1 sipariş');
+  yield* all(
+    system.orderResult.fill(accent, 0.2),
+    system.countResult.fill(accent, 0.2),
+    ...system.responses.map((arrow) => arrow.arrive()),
+  );
+
   yield* waitUntil('inside');
-  yield* all(title.opacity(0, 0.2), promise.opacity(0, 0.3));
-  title.children(heading('içeride ', 'farklı parçalar', ' olabilir.').children());
-  const internals = new Layout({ opacity: 0 });
-  const oltp = cartoonDatabase('OLTP', accent);
-  oltp.root.position([-345, 270]);
-  oltp.root.scale(0.7);
-  oltp.caption.fontSize(38);
-  const olap = cartoonDatabase('analytical', accent);
-  olap.root.position([345, 270]);
-  olap.root.scale(0.7);
-  olap.caption.fontSize(38);
-  const internalFlow = cartoonArrow('s12-htap-internal-update', [-219, 270], [219, 270], accent, 0);
-  internals.add([
-    oltp.root,
-    olap.root,
-    internalFlow.root,
-    text('iç akış', 26, { position: [0, 190], fill: muted, opacity: () => internalFlow.reveal() }),
-  ]);
-  htap.add(internals);
-  yield* all(title.opacity(1, 0.3), internals.opacity(1, 0.4));
-  yield* internalFlow.reveal(1, 0.4);
-  yield* internalFlow.travel(0.8);
-  yield* internalFlow.arrive();
+  yield* all(title.opacity(0, 0.2), system.expanded.opacity(0, 0.2));
+  title.children(heading('tek arayüzün altında ', 'iki ayrı yapı', ' olabilir.').children());
+  system.internals.opacity(1);
+  system.oltp.selection.y(0);
+  system.oltp.selection.opacity(1);
+  yield* all(
+    title.opacity(1, 0.3),
+    system.name.position([-610, 88], 0.85, easeInOutCubic),
+    system.name.fontSize(42, 0.85, easeInOutCubic),
+    ...system.doors.map((door) => door.width(0, 0.85, easeInOutCubic)),
+    system.facade.opacity(1, 0.85),
+  );
+  yield* waitFor(0.8);
+  yield* all(system.orderResult.opacity(0, 0.2), system.responses[0].root.opacity(0, 0.2));
+  system.order.text('sipariş #1043');
+  system.orderResult.text('hazırlamaya başla');
+  system.operations[0].text('write');
+  system.requests[0].reveal(0);
+  system.requests[0].root.opacity(1);
+  yield* all(system.orderResult.opacity(1, 0.2), system.operations[0].opacity(1, 0.2));
+  yield* system.requests[0].reveal(1, 0.3);
+  yield* system.requests[0].travel(0.65);
+  yield* all(system.requests[0].arrive(), system.oltp.selection.y(48, 0.3));
+  system.oltp.statuses[2].text('preparing');
+  yield* system.oltp.statuses[2].fill(accent, 0.25);
+  yield* all(system.requests[0].root.opacity(0, 0.2), system.operations[0].opacity(0, 0.2));
+  system.responses[0].reveal(0);
+  system.responses[0].root.opacity(1);
+  yield* system.responses[0].reveal(1, 0.3);
+  yield* system.responses[0].travel(0.55);
+  system.orderResult.text('preparing');
+  yield* system.responses[0].arrive();
+
+  yield* system.transfer.reveal(1, 0.4);
+  yield* system.transfer.travel(0.85);
+  system.analytics.selection.y(48);
+  system.analytics.statuses[2].text('preparing');
+  yield* all(
+    system.transfer.arrive(),
+    system.analytics.selection.opacity(1, 0.2),
+    system.analytics.statuses[2].fill(accent, 0.2),
+  );
+  yield* waitFor(0.4);
+  yield* all(
+    system.responses[1].root.opacity(0, 0.2),
+    system.countResult.opacity(0, 0.2),
+    system.analytics.selection.opacity(0, 0.2),
+  );
+  system.countResult.text('hesaplanıyor…');
+  system.countResult.fill(muted);
+  system.requests[1].reveal(0);
+  system.requests[1].root.opacity(1);
+  yield* all(system.countResult.opacity(1, 0.2), system.operations[1].opacity(1, 0.2));
+  yield* system.requests[1].reveal(1, 0.3);
+  yield* system.requests[1].travel(0.65);
+  yield* system.requests[1].arrive();
+  system.analytics.selection.y(-48);
+  yield* system.scanLabel.opacity(0, 0.15);
+  yield* all(system.analytics.selection.opacity(1, 0.2), system.tally.opacity(1, 0.2));
+  yield* waitFor(0.45);
+  for (let index = 1; index < 3; index++) {
+    yield* system.analytics.selection.y(-48 + index * 48, 0.35);
+    system.tally.text(`COUNT → ${index}`);
+    yield* waitFor(0.4);
+  }
+  yield* all(
+    system.requests[1].root.opacity(0, 0.25),
+    system.operations[1].opacity(0, 0.25),
+    system.analytics.selection.height(88, 0.25),
+    system.analytics.selection.y(24, 0.25),
+  );
+  system.responses[1].reveal(0);
+  system.responses[1].root.opacity(1);
+  yield* system.responses[1].reveal(1, 0.3);
+  yield* system.responses[1].travel(0.6);
+  system.countResult.text('2 sipariş');
+  yield* all(system.countResult.fill(accent, 0.2), system.responses[1].arrive());
+
   yield* waitUntil('other-sources');
-  yield* all(title.opacity(0, 0.2), context.opacity(0, 0.2));
-  yield* all(htap.scale(0.72, 0.65), htap.position([-310, 55], 0.65));
-  title.children(heading('diğer kaynaklar ', 'hala ayrı.').children());
-  const outside = new Layout({ opacity: 0 });
-  const inventory = cartoonDatabase('inventory database', accent);
-  inventory.root.position([630, -112]);
-  inventory.root.scale(0.66);
-  inventory.caption.fontSize(37);
-  const crm = paper(220, 108, '#101315');
-  crm.root.position([630, 133]);
-  crm.root.add([
-    text('CRM', 28, { y: -22 }),
-    text('API', 25, { y: 24, fill: accent, fontFamily: theme.fontFamily.mono }),
-  ]);
-  const geo = cartoonDatabase('store database', accent);
-  geo.root.position([630, 347]);
-  geo.root.scale(0.66);
-  geo.caption.fontSize(37);
-  outside.add([inventory.root, crm.root, geo.root]);
-  view.add(outside);
-  yield* all(title.opacity(1, 0.3), outside.opacity(1, 0.4));
+  const landscape = htapLandscape();
+  view.add(landscape.root);
+  yield* title.opacity(0, 0.2);
+  title.children(heading('işletmenin ', 'diğer sistemleri', ' de var.').children());
+  yield* all(
+    system.root.scale(0.3, 0.8, easeInOutCubic),
+    system.root.position([-570, -185], 0.8, easeInOutCubic),
+    system.root.opacity(0, 0.8),
+    landscape.root.opacity(1, 0.8),
+    title.opacity(1, 0.3),
+  );
+  system.root.remove();
+
   yield* waitUntil('combine');
   yield* title.opacity(0, 0.2);
-  title.children(heading('bunları ', 'birlikte analiz etme', ' ihtiyacı sürüyor.').children());
-  yield* title.opacity(1, 0.3);
+  title.children(heading('bu verileri ', 'birlikte sorgulamak', ' istiyoruz.').children());
+  yield* all(title.opacity(1, 0.3), landscape.warehouse.root.opacity(1, 0.5));
+  yield* all(...landscape.routes.map((arrow) => arrow.reveal(1, 0.5)));
+  yield* all(...landscape.routes.map((arrow) => arrow.travel(0.9)));
+  yield* all(...landscape.routes.map((arrow) => arrow.arrive()));
+  yield* landscape.combined.opacity(1, 0.35);
+
   yield* waitUntil('return');
-  yield* all(title.opacity(0, 0.2), htap.opacity(0, 0.4), outside.opacity(0, 0.4));
-  htap.remove();
-  outside.remove();
-  const landscape = warehouseSystem();
-  landscape.root.opacity(0);
-  view.add(landscape.root);
-  title.children(heading('bizim örnekte ', 'ayrı warehouse', ' ile devam.').children());
-  yield* all(title.opacity(1, 0.3), landscape.root.opacity(1, 0.5));
-  yield* waitUntil('specialization');
   yield* title.opacity(0, 0.2);
-  title.children(heading('iş büyüdükçe ', 'uzmanlaşma', ' anlam kazanabilir.').children());
-  yield* title.opacity(1, 0.3);
-  yield* waitUntil('next');
+  title.children(heading('HTAP, ', 'warehouse’un yerini', ' almıyor.').children());
+  yield* all(title.opacity(1, 0.3), landscape.warehouse.top.stroke(accent, 0.4));
+
+  yield* waitUntil('specialization');
   yield* all(title.opacity(0, 0.2), landscape.root.opacity(0, 0.4));
   landscape.root.remove();
+  const main = warehouseSystem();
+  main.root.opacity(0);
+  view.add(main.root);
+  title.children(heading('bizim örnekte ', 'ayrı warehouse', ' ile devam.').children());
+  yield* all(title.opacity(1, 0.3), main.root.opacity(1, 0.5));
+
+  yield* waitUntil('next');
+  yield* all(title.opacity(0, 0.2), main.root.opacity(0, 0.4));
+  main.root.remove();
   title.children(heading('peki, ', 'ürün önerisi', ' hazırlasak?').children());
   const recommendations = recommendationSource();
   recommendations.root.opacity(0);
