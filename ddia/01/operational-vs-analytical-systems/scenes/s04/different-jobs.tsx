@@ -292,8 +292,6 @@ export default makeScene2D(function* (view) {
   );
   yield* report.suggest.travel(0.8);
   yield* waitUntil('return');
-  market.status.text('yükleniyor…');
-  market.receiptDetails.opacity(0);
   yield* all(
     overviewDetails.opacity(0, 0.25),
     title.opacity(0, 0.25),
@@ -320,6 +318,8 @@ export default makeScene2D(function* (view) {
     database.scale(1.4, 0.75),
     caption.y(153, 0.75),
   );
+  market.status.text('yükleniyor…');
+  market.receiptDetails.opacity(0);
   overview.remove();
   market.receipt.opacity(1);
   market.label.text('application');
