@@ -146,12 +146,18 @@ export default makeScene2D(function* (view) {
     chart.root.opacity(0, 0.35),
     resultLabel.opacity(0, 0.25),
   );
-  title.children(heading('promosyonda ', 'ne kadar fazla', ' muz sattık?').children());
+  title.children(heading('kampanya döneminde muz satışları ', 'nasıl değişti?').children());
   const promo = promotion();
-  view.add(promo);
-  yield* all(title.opacity(1, 0.3), promo.opacity(1, 0.5));
+  view.add(promo.root);
+  yield* all(title.opacity(1, 0.3), promo.root.opacity(1, 0.3));
+  for (const period of promo.periods) {
+    yield* all(period.opacity(1, 0.4), period.y(38, 0.4, easeOutCubic));
+    yield* waitFor(0.18);
+  }
+  yield* promo.outline.end(1, 0.65);
+  yield* all(promo.hatch.opacity(1, 0.25), promo.scope.opacity(1, 0.25));
   yield* waitUntil('together');
-  yield* all(title.opacity(0, 0.2), promo.opacity(0, 0.35));
+  yield* all(title.opacity(0, 0.2), promo.root.opacity(0, 0.35));
   title.children(heading('bu bebek beziyle ', 'en çok hangi mama', ' alınıyor?').children());
   const pair = together();
   view.add(pair.root);
