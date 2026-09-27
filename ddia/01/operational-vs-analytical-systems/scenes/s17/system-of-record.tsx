@@ -45,7 +45,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('first-write');
   yield* card.opacity(0, 0.4);
   card.remove();
-  title.children(heading('ilk yazımı ', 'hatırlayalım.').children());
+  title.children(heading('ilk write’ı ', 'hatırlayalım.').children());
   const original = new Layout({ opacity: 0 });
   const service = cartoonService('order service', accent);
   service.root.position([-505, 35]);
