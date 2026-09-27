@@ -18,10 +18,9 @@ export function workloadSystem() {
   const database = cartoonDatabase('sales database', accent);
   database.root.position([0, 75]);
   database.root.scale(1.12);
-  database.root.add([
-    text('orders', 28, { y: -7, fontFamily: theme.fontFamily.mono }),
-    text('sales', 28, { y: 57, fill: accent, fontFamily: theme.fontFamily.mono }),
-  ]);
+  const orders = text('orders', 28, { y: -7, fontFamily: theme.fontFamily.mono });
+  const sales = text('sales', 28, { y: 57, fontFamily: theme.fontFamily.mono });
+  database.root.add([orders, sales]);
   const chart = monthlyChart();
   chart.root.position([620, 75]);
   chart.root.scale(0.63);
@@ -35,9 +34,9 @@ export function workloadSystem() {
     position: query.pointAt(0.5).addY(-79),
     fontFamily: theme.fontFamily.mono,
   });
-  root.add([
+  const context = new Layout({});
+  context.add([
     market.root,
-    database.root,
     chart.root,
     order.root,
     query.root,
@@ -46,5 +45,18 @@ export function workloadSystem() {
     text('siparişin durumu', 30, { position: [-620, -126] }),
     text('ocak satışları', 30, { position: [620, -126] }),
   ]);
-  return { root, market, database, chart, order, query, orderLabel, queryLabel };
+  root.add([context, database.root]);
+  return {
+    root,
+    context,
+    market,
+    database,
+    orders,
+    sales,
+    chart,
+    order,
+    query,
+    orderLabel,
+    queryLabel,
+  };
 }

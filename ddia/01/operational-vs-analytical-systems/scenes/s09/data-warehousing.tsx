@@ -3,7 +3,16 @@ import { all, cancel, loop, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
-import { accent, background, heading, ink, muted, paper, text } from '../shared/drawing';
+import {
+  accent,
+  background,
+  foreground,
+  heading,
+  ink,
+  muted,
+  paper,
+  text,
+} from '../shared/drawing';
 import { role } from '../shared/people';
 import { workloadSystem } from '../shared/workload-system';
 import { warehouseSystem } from '../shared/warehouse-system';
@@ -51,25 +60,48 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('read');
   title.children(heading('siparişin durumunu ', 'okuyoruz.').children());
   system.market.status.text('yanıt bekleniyor…');
+  yield* system.orders.fill(accent, 0.15);
   yield* system.order.travel(0.55);
   yield* system.order.arrive();
   yield* orderReply.reveal(1, 0.25);
   yield* orderReply.travel(0.55);
   system.market.status.text('preparing');
-  yield* orderReply.arrive();
+  yield* all(orderReply.arrive(), system.orders.fill(foreground, 0.25));
   yield* waitUntil('scan');
   title.children(heading('rapor ', 'çok sayıda kaydı', ' tarıyor.').children());
-  system.chart.bars.forEach(({ bar, value }) => {
-    bar.opacity(0);
-    value.opacity(0);
-  });
+  const refreshing = text('yenileniyor…', 32, { y: 235, fill: accent, opacity: 0 });
+  system.chart.root.add(refreshing);
+  yield* all(system.sales.fill(accent, 0.2), refreshing.opacity(1, 0.2));
   yield* system.query.travel(0.7);
   yield* system.query.arrive();
-  yield* all(system.root.opacity(0, 0.4), orderReply.root.opacity(0, 0.4));
   const work = databaseWork();
+  work.root.scale(0.45);
+  work.root.y(35);
   view.add(work.root);
-  yield* work.root.opacity(1, 0.4);
+  yield* all(
+    system.context.opacity(0, 0.4),
+    orderReply.root.opacity(0, 0.4),
+    system.database.caption.opacity(0, 0.4),
+    system.orders.opacity(0, 0.4),
+    system.sales.opacity(0, 0.4),
+    system.database.root.position([0, 35], 0.65),
+    system.database.root.scale(2.5, 0.65),
+  );
   const scanning = yield loop(() => work.sweep());
+  yield* all(
+    system.database.root.opacity(0, 0.4),
+    work.root.opacity(1, 0.4),
+    work.root.scale(1, 0.65),
+    work.root.y(0, 0.65),
+  );
+  system.root.opacity(0);
+  system.database.root.position([0, 75]);
+  system.database.root.scale(1.12);
+  system.database.root.opacity(1);
+  system.database.caption.opacity(1);
+  system.orders.opacity(1);
+  system.sales.opacity(1);
+  system.context.opacity(1);
   yield* waitUntil('resources');
   title.children(heading('iki iş de ', 'aynı kaynakları', ' kullanıyor.').children());
   yield* work.resources.opacity(1, 0.4);
@@ -95,10 +127,7 @@ export default makeScene2D(function* (view) {
   view.add(reportReply.root);
   yield* reportReply.reveal(1, 0.3);
   yield* reportReply.travel(0.6);
-  yield* all(
-    reportReply.arrive(),
-    ...system.chart.bars.flatMap(({ bar, value }) => [bar.opacity(1, 0.3), value.opacity(1, 0.3)]),
-  );
+  yield* all(reportReply.arrive(), refreshing.opacity(0, 0.3), system.sales.fill(foreground, 0.3));
   yield* waitUntil('sources');
   yield* all(title.opacity(0, 0.3), system.root.opacity(0, 0.3), reportReply.root.opacity(0, 0.3));
   system.root.remove();
