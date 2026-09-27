@@ -7,6 +7,7 @@ import { theme } from '../../theme';
 import { accent, background, foreground, heading, muted, paper, text } from '../shared/drawing';
 import { lakeConsumers } from '../shared/lake-system';
 import { missingRecordIntro } from '../shared/missing-record';
+import { reviewOutput } from '../shared/review-output';
 import { batchAndStream } from './batch-and-stream';
 import { accessExample } from './access';
 
@@ -122,18 +123,10 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('next');
   yield* all(title.opacity(0, 0.2), timing.opacity(0, 0.4));
   timing.remove();
-  title.children(heading('sonuç ', 'üründe kullanılacaksa?').children());
-  const result = paper(600, 260, '#17232f');
-  result.root.position([0, 75]);
+  const handoff = reviewOutput();
+  title.children(handoff.title.children());
+  const { result } = handoff;
   result.root.opacity(0);
-  result.root.add([
-    text('inceleme bekliyor', 43, { y: -24, fill: accent }),
-    text('customer #17 · 3 başarısız deneme', 25, {
-      y: 56,
-      fill: muted,
-      fontFamily: theme.fontFamily.mono,
-    }),
-  ]);
   view.add(result.root);
   yield* all(title.opacity(1, 0.3), result.root.opacity(1, 0.5));
   yield* waitUntil('end');

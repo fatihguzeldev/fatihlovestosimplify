@@ -16,20 +16,11 @@ import {
 } from '../shared/drawing';
 import { createMarket } from '../shared/market';
 import { recordAndModel } from '../shared/record-and-model';
+import { reviewOutput } from '../shared/review-output';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('sonuç ', 'üründe kullanılacaksa?');
-  const result = paper(600, 260, '#17232f');
-  result.root.position([0, 75]);
-  result.root.add([
-    text('inceleme bekliyor', 43, { y: -24, fill: accent }),
-    text('customer #17 · 3 başarısız deneme', 25, {
-      y: 56,
-      fill: muted,
-      fontFamily: theme.fontFamily.mono,
-    }),
-  ]);
+  const { title, result } = reviewOutput();
   view.add([title, result.root]);
   yield loadFonts();
   yield* waitUntil('sync');
