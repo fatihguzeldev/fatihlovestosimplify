@@ -251,12 +251,12 @@ export default makeScene2D(function* (view) {
   aggregate.note.opacity(1);
   yield* waitUntil('limits');
   yield* all(title.opacity(0, 0.2), aggregate.root.opacity(0, 0.4));
-  title.children(heading('ama gereken kaynakların ', 'korunması şart.').children());
+  title.children(heading('her şeyi ', 'yeniden üretebilir miyiz?').children());
   const limits = new Layout({ opacity: 0 });
   [
-    ['kaynak + dönüşüm', 'toplamı yeniden hesaplayabiliriz.'],
-    ['kayıp geçmiş', 'bugünkü kayıttan geri çıkaramayız.'],
-    ['yeniden eğitim', 'aynı model dosyasını garanti etmez.'],
+    ['satış toplamı', 'kayıtlar ve sorgu duruyorsa tekrar hesaplarız.'],
+    ['gezinme geçmişi', 'tıklamalar silindiyse sipariş kaydı yeterli olmaz.'],
+    ['öneri modeli', 'aynı data ile yeniden train etsek de model değişebilir.'],
   ].forEach(([label, detail], i) => {
     const y = -100 + i * 165;
     limits.add([
