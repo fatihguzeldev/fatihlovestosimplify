@@ -104,6 +104,15 @@ export function writeExample() {
 }
 
 export function queryExample() {
+  const questions = [
+    { label: 'hangi mağaza ne kadar sattı?', sql: 'GROUP BY store_id' },
+    {
+      label: 'ocakta ne kadar sattık?',
+      sql: "WHERE sold_at >= '2026-01-01'\n  AND sold_at < '2026-02-01'",
+    },
+    { label: 'en yüksek tutarlı satışlar hangileri?', sql: 'ORDER BY amount DESC\nLIMIT 10' },
+    { label: 'ortalama satış tutarı ne?', sql: 'SELECT AVG(amount)' },
+  ];
   const { root, left, right } = pair();
   const fixed = card(left, 540, 245);
   fixed.add(text('getOrder(id)', 34, { y: -77, fill: accent, fontFamily: mono }));
@@ -111,17 +120,27 @@ export function queryExample() {
   const id = text('id: 1042', 30, { y: 13, fontFamily: mono });
   fixed.add([id, text('aynı sorgu · farklı sipariş', 24, { y: 82, fill: muted })]);
   const notebook = card(right, 580, 245);
-  const question = text('hangi mağaza ne kadar sattı?', 28, { y: -77 });
-  const query = text('GROUP BY store_id', 29, { y: 13, fill: accent, fontFamily: mono });
+  const question = text(questions[0].label, 28, { y: -77 });
+  const query = text(questions[0].sql, 27, {
+    y: 13,
+    fill: accent,
+    fontFamily: mono,
+    lineHeight: '130%',
+  });
   notebook.add([question, query, text('soruya göre sorgu da değişir', 24, { y: 82, fill: muted })]);
   divider(notebook, 500, -35);
   function* animate() {
-    yield* waitFor(1.4);
-    yield* all(id.opacity(0, 0.2), question.opacity(0, 0.2), query.opacity(0, 0.2));
-    id.text('id: 1043');
-    question.text('hangi üründen ne kadar sattık?');
-    query.text('GROUP BY product_id');
-    yield* all(id.opacity(1, 0.3), question.opacity(1, 0.3), query.opacity(1, 0.3));
+    const holdDuration = 3.45;
+    for (let i = 0; i < questions.length; i++) {
+      if (i > 0) {
+        yield* all(id.opacity(0, 0.2), question.opacity(0, 0.2), query.opacity(0, 0.2));
+        id.text(`id: ${1042 + i}`);
+        question.text(questions[i].label);
+        query.text(questions[i].sql);
+        yield* all(id.opacity(1, 0.3), question.opacity(1, 0.3), query.opacity(1, 0.3));
+      }
+      yield* waitFor(holdDuration);
+    }
   }
   return { root, animate };
 }
