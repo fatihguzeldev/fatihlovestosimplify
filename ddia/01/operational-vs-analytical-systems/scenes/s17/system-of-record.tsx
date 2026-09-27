@@ -1,4 +1,4 @@
-import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
+import { Layout, makeScene2D, Path, Txt } from '@motion-canvas/2d';
 import { all, waitFor, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
@@ -156,10 +156,18 @@ export default makeScene2D(function* (view) {
   chain.root.opacity(0);
   view.add(chain.root);
   title.children(heading('lake bir sonraki adımın ', 'input’u.').children());
-  const distinction = text('upstream olmak, asıl kayıt olmak demek değil.', 31, {
+  const distinction = new Txt({
     position: [0, 449],
+    fontFamily: theme.fontFamily.sans,
+    fontSize: 31,
     fill: muted,
     opacity: 0,
+    textWrap: false,
+    children: [
+      new Txt({ text: 'upstream olmak ' }),
+      new Txt({ text: '!=', fill: accent, fontFamily: theme.fontFamily.mono }),
+      new Txt({ text: ' asıl kayıt olmak' }),
+    ],
   });
   view.add(distinction);
   yield* all(title.opacity(1, 0.3), chain.root.opacity(1, 0.5));
