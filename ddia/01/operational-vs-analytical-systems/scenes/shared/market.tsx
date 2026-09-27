@@ -149,3 +149,43 @@ export function createMarket() {
   body.add(receipt);
   return { root, body, cart, receipt, receiptTotal, button, shell, label, status };
 }
+
+export function createOrderEntry() {
+  const market = createMarket();
+  market.cart.remove();
+  market.label.opacity(0);
+  market.root.position([0, 80]);
+  const entry = new Layout({});
+  const open = new Path({
+    ...ink,
+    stroke: accent,
+    fill: accent,
+    position: [146, 122],
+    data: 'M -117 -31 Q -5 -34 112 -30 Q 124 -29 122 -15 L 120 22 Q 121 33 109 32 L -110 34 Q -124 33 -122 18 L -123 -18 Q -124 -29 -117 -31 Z',
+  });
+  open.add([
+    text('siparişi aç', 26, { x: -12, fill: background, fontWeight: 500 }),
+    new Path({ ...ink, stroke: background, x: 87, data: 'M -9 -9 L 2 0 L -9 10' }),
+  ]);
+  entry.add([
+    text('son sipariş', 23, { position: [-269, -125], offset: [-1, 0], fill: muted }),
+    text('#1042', 48, {
+      position: [-269, -70],
+      offset: [-1, 0],
+      fontFamily: theme.fontFamily.mono,
+    }),
+    new Path({
+      ...ink,
+      position: [236, -85],
+      scale: 1.4,
+      stroke: accent,
+      data: 'M -21 -18 L 3 -26 L 23 -15 L 22 19 L -1 28 L -22 16 Z M -21 -18 L -1 -7 L 23 -15 M -1 -7 L -1 28 M -10 -22 L 11 -11 L 11 0',
+    }),
+    text('muz · süt', 28, { position: [-269, 9], offset: [-1, 0] }),
+    text('185 ₺', 28, { position: [269, 9], offset: [1, 0], fontFamily: theme.fontFamily.mono }),
+    new Path({ ...ink, opacity: 0.18, lineWidth: 1.5, data: 'M -270 56 Q 0 58 270 55' }),
+    open,
+  ]);
+  market.body.add(entry);
+  return { ...market, entry, open };
+}
