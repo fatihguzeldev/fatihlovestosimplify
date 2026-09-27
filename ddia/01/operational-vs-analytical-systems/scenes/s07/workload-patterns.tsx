@@ -116,8 +116,8 @@ export default makeScene2D(function* (view) {
   );
   yield* waitUntil('machines');
   yield* show(
-    'yazılımlar da ',
-    'bu veriyi kullanır.',
+    'kullanıcı her zaman ',
+    'insan olmak zorunda değil.',
     ['authorization', 'fraud / abuse detection'],
     ['bu siparişi iptal edebilir mi?', 'bu giriş denemeleri şüpheli mi?'],
     machineExample(),
