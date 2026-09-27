@@ -7,6 +7,7 @@ import { theme } from '../../theme';
 import { accent, background, heading, muted, paper, text } from '../shared/drawing';
 import { recordAndModel } from '../shared/record-and-model';
 import { recordChain } from '../shared/record-chain';
+import { bookContents } from '../shared/book-contents';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -17,6 +18,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('part');
   yield* all(title.opacity(0, 0.2), previous.root.opacity(0, 0.4));
   previous.root.remove();
+  yield* bookContents(view, 'warehousing', 'records');
   const card = new Layout({ opacity: 0 });
   const first = text('asıl kayıt ve ', 104, { position: [-806, -35], offset: [-1, 0] });
   const second = text('türevleri.', 104, {
@@ -35,23 +37,7 @@ export default makeScene2D(function* (view) {
     end: 0,
   });
   line.opacity(() => (line.end() > 0 ? 1 : 0));
-  card.add([
-    first,
-    second,
-    line,
-    text('part 3', 29, {
-      position: [-800, -203],
-      offset: [-1, 0],
-      fill: muted,
-      fontFamily: theme.fontFamily.mono,
-    }),
-    text('source & derived data', 32, {
-      position: [-800, 144],
-      offset: [-1, 0],
-      fontFamily: theme.fontFamily.serif,
-      fontStyle: 'italic',
-    }),
-  ]);
+  card.add([first, second, line]);
   view.add(card);
   yield* card.opacity(1, 0.4);
   yield* line.end(1, 0.65);

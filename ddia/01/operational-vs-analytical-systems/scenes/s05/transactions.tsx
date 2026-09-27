@@ -7,9 +7,12 @@ import { theme } from '../../theme';
 import { accent, background, heading, muted, paper, text } from '../shared/drawing';
 import { createMarket } from '../shared/market';
 import { orderTable } from '../shared/records';
+import { bookContents } from '../shared/book-contents';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
+  yield loadFonts();
+  yield* bookContents(view, 'systems', 'transactions');
   const title = heading('bu siparişe ', 'yakından bakalım.');
   const market = createMarket();
   market.root.position([-470, 100]);
@@ -20,8 +23,9 @@ export default makeScene2D(function* (view) {
   database.scale(1.4);
   caption.fontSize(28 / 1.4);
   const bridge = cartoonArrow('s04-return-to-order', [-108, 80], [354, 80], accent);
-  view.add([title, market.root, database, bridge.root]);
-  yield loadFonts();
+  const opening = new Layout({ opacity: 0, children: [title, market.root, database, bridge.root] });
+  view.add(opening);
+  yield* opening.opacity(1, 0.35);
   yield* waitFor(0.6);
   yield* all(bridge.root.opacity(0, 0.25), database.opacity(0, 0.3), market.label.opacity(0, 0.25));
   database.remove();

@@ -8,6 +8,7 @@ import { role } from '../shared/people';
 import { workloadSystem } from '../shared/workload-system';
 import { warehouseSystem } from '../shared/warehouse-system';
 import { storedResult } from './stored-result';
+import { bookContents } from '../shared/book-contents';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -17,6 +18,7 @@ export default makeScene2D(function* (view) {
   yield loadFonts();
   yield* waitUntil('part');
   yield* all(title.opacity(0, 0.25), system.root.opacity(0, 0.4));
+  yield* bookContents(view, 'transactions', 'warehousing');
   const card = new Layout({ opacity: 0 });
   const first = text('data’nın ', 104, { position: [-806, -35], offset: [-1, 0] });
   const second = text('yolculuğu.', 104, {
@@ -35,23 +37,7 @@ export default makeScene2D(function* (view) {
     end: 0,
   });
   line.opacity(() => (line.end() > 0 ? 1 : 0));
-  card.add([
-    first,
-    second,
-    line,
-    text('part 2', 29, {
-      position: [-800, -203],
-      offset: [-1, 0],
-      fill: muted,
-      fontFamily: theme.fontFamily.mono,
-    }),
-    text('data warehousing', 32, {
-      position: [-800, 144],
-      offset: [-1, 0],
-      fontFamily: theme.fontFamily.serif,
-      fontStyle: 'italic',
-    }),
-  ]);
+  card.add([first, second, line]);
   view.add(card);
   yield* card.opacity(1, 0.4);
   yield* line.end(1, 0.65);

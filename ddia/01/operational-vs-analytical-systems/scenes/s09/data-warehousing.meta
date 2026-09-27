@@ -6,6 +6,14 @@
       "targetTime": 2
     },
     {
+      "name": "contents-focus",
+      "targetTime": 3.9
+    },
+    {
+      "name": "contents-close",
+      "targetTime": 6.4
+    },
+    {
       "name": "workloads",
       "targetTime": 10
     },

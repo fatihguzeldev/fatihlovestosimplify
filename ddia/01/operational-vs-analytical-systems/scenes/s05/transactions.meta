@@ -2,6 +2,14 @@
   "version": 0,
   "timeEvents": [
     {
+      "name": "contents-focus",
+      "targetTime": 1.5
+    },
+    {
+      "name": "contents-close",
+      "targetTime": 4
+    },
+    {
       "name": "read",
       "targetTime": 9
     },
