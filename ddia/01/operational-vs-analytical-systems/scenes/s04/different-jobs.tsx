@@ -51,7 +51,7 @@ export default makeScene2D(function* (view) {
   market.label.opacity(0);
   market.status.text('…');
   const { root: database, top, caption } = cartoonDatabase('sales database', accent);
-  database.position([0, 95]);
+  database.position([0, 70]);
   database.scale(1.12);
   caption.fontSize(28 / 1.12);
   const record = text('#1042', 28, { y: -7, fontFamily: theme.fontFamily.mono });
@@ -78,10 +78,10 @@ export default makeScene2D(function* (view) {
   const report = salesReport();
   report.root.position([620, 70]);
   report.root.opacity(0);
-  const request = cartoonArrow('s04-order-question', [-385, 45], [-170, 45], accent, 0);
-  const response = cartoonArrow('s04-order-answer', [-170, 175], [-385, 175], accent, 0);
-  const query = cartoonArrow('s04-january-query', [375, 45], [170, 45], accent, 0);
-  const result = cartoonArrow('s04-january-result', [170, 175], [375, 175], accent, 0);
+  const request = cartoonArrow('s04-order-question', [-385, 20], [-170, 20], accent, 0);
+  const response = cartoonArrow('s04-order-answer', [-170, 140], [-385, 140], accent, 0);
+  const query = cartoonArrow('s04-january-query', [375, 20], [170, 20], accent, 0);
+  const result = cartoonArrow('s04-january-result', [170, 140], [375, 140], accent, 0);
   const readLabel = text('#1042', 23, {
     position: request.pointAt(0.5).addY(-75),
     fontFamily: theme.fontFamily.mono,
