@@ -170,7 +170,7 @@ export function* batchAndStream(stage: Layout, title: Txt) {
   yield* all(emit.arrive(), bell.opacity(1, 0.25), customer.opacity(1, 0.25));
   yield* waitUntil('timeliness');
   yield* title.opacity(0, 0.2);
-  title.children(heading('sonuç aynı, ', 'çok daha erken.').children());
+  title.children(heading('incelemeye ', 'daha erken', ' başlayabiliyoruz.').children());
   const caution = text('bu sinyal inceleme içindir; dolandırıcılık kanıtı değil.', 29, {
     position: [0, 425],
     fill: muted,
