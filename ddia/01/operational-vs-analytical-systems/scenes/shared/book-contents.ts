@@ -17,14 +17,10 @@ function brushData(width: number, height: number) {
     [0.025, -h + 8, 0.3, 3],
     [0.4, -h + 6, 0.22, 2],
     [0.72, -h + 10, 0.24, 2.8],
-    [0.012, -h + 17, 0.15, 2.2],
-    [0.81, -h + 19, 0.18, 2.5],
-    [0.01, -7, 0.075, 2],
-    [0.9, 4, 0.09, 2],
-    [0.025, h - 16, 0.12, 2],
+    [0.12, -h + 13, 0.15, 1.2],
+    [0.025, h - 6, 0.12, 1.8],
     [0.2, h - 8, 0.3, 3],
-    [0.59, h - 10, 0.34, 3.5],
-    [0.36, h - 16, 0.16, 1.5],
+    [0.59, h - 8, 0.34, 2.5],
   ];
   return `M 14 ${-h + 6} Q ${w * 0.3} ${-h - 1} ${w * 0.59} ${-h + 3}
     T ${w - 19} ${-h + 3} L ${w - 24} ${-h + 8} L ${w - 6} ${-h + 10}
@@ -72,17 +68,19 @@ function paintRow(id: Section, label: Txt, visible: number) {
   const brush = new Path({
     key: `contents-brush-${id}`,
     fill: accent,
-    clip: true,
     data: brushData(width, height),
   });
-  brush.add(
+  wipe.add([
+    brush,
     label.snapshotClone({
       key: `contents-ink-${id}`,
       fill: background,
+      stroke: accent,
+      strokeFirst: true,
+      lineWidth: 3,
       position: [22, 0],
     }),
-  );
-  wipe.add(brush);
+  ]);
   return { wipe, progress };
 }
 
