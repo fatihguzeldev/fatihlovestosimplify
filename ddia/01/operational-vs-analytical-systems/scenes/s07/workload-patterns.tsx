@@ -67,7 +67,7 @@ export default makeScene2D(function* (view) {
   yield* show(
     'data nasıl ',
     'yazılıyor?',
-    ['record-level CRUD', 'bulk import / event stream'],
+    ['record-level CRUD', 'bulk import (ETL) / event stream'],
     ['tek tek kayıtlar', 'toplu yükleme veya olay akışı'],
     35,
   );
