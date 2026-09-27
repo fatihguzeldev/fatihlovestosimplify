@@ -1,53 +1,28 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
-import { all, waitUntil } from '@motion-canvas/core';
+import { all, easeInOutCubic, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase } from '../../../../../common/cartoon-system';
 import { theme } from '../../theme';
 import { accent, background, foreground, heading, muted, paper, text } from '../shared/drawing';
 import { lakeConsumers } from '../shared/lake-system';
+import { missingRecordIntro } from '../shared/missing-record';
 import { batchAndStream } from './batch-and-stream';
 import { accessExample } from './access';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('bu kez ', 'eksik bir kayıt', ' geliyor.');
-  const consumers = lakeConsumers();
-  view.add([title, consumers.root]);
+  const { title, record: input } = missingRecordIntro();
+  view.add([title, input.root]);
   yield loadFonts();
   yield* waitUntil('invalid');
-  yield* all(title.opacity(0, 0.2), consumers.root.opacity(0, 0.4));
-  consumers.root.remove();
+  yield* title.opacity(0, 0.2);
   title.children(heading('bu kaydın ', 'mağazası eksik.').children());
-  const quality = new Layout({ opacity: 0 });
-  const input = paper(400, 280, '#101315');
-  input.root.position([-600, 70]);
-  input.root.add([
-    text('#1047', 39, {
-      position: [-150, -87],
-      offset: [-1, 0],
-      fontFamily: theme.fontFamily.mono,
-    }),
-    text('store_id', 25, {
-      position: [-150, -9],
-      offset: [-1, 0],
-      fill: muted,
-      fontFamily: theme.fontFamily.mono,
-    }),
-    text('null', 29, {
-      position: [110, -9],
-      offset: [1, 0],
-      fill: accent,
-      fontFamily: theme.fontFamily.mono,
-    }),
-    text('amount', 25, {
-      position: [-150, 56],
-      offset: [-1, 0],
-      fill: muted,
-      fontFamily: theme.fontFamily.mono,
-    }),
-    text('90', 29, { position: [110, 56], offset: [1, 0], fontFamily: theme.fontFamily.mono }),
-  ]);
+  title.position([-806, -370]);
+  title.offset([-1, 0]);
+  title.fontSize(56);
+  const quality = new Layout({});
+  const processing = new Layout({ opacity: 0 });
   const validate = paper(280, 160, '#101315');
   validate.root.position([0, 70]);
   validate.root.add([
@@ -74,8 +49,7 @@ export default makeScene2D(function* (view) {
     fill: muted,
   });
   const fresh = text('şubat 2026', 25, { position: [-600, 286], fill: muted });
-  quality.add([
-    input.root,
+  processing.add([
     validate.root,
     warehouse.root,
     review.root,
@@ -90,8 +64,14 @@ export default makeScene2D(function* (view) {
       opacity: () => accepted.reveal(),
     }),
   ]);
+  quality.add([input.root, processing]);
   view.add(quality);
-  yield* all(title.opacity(1, 0.3), quality.opacity(1, 0.5));
+  yield* all(
+    title.opacity(1, 0.3),
+    input.root.position([-600, 70], 0.75, easeInOutCubic),
+    input.root.scale(1, 0.75, easeInOutCubic),
+  );
+  yield* processing.opacity(1, 0.45);
   yield* all(read.reveal(1, 0.3), accepted.reveal(1, 0.3));
   yield* read.travel(0.65);
   yield* read.arrive();

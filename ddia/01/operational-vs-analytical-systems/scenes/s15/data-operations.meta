@@ -3,7 +3,7 @@
   "timeEvents": [
     {
       "name": "invalid",
-      "targetTime": 5
+      "targetTime": 0.8
     },
     {
       "name": "incomplete",

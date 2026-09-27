@@ -7,6 +7,7 @@ import { accent, background, foreground, heading, muted, paper, text } from '../
 import { analysisInputs } from '../shared/data-files';
 import { browsingFeatures, browsingReport, clickstreamSource } from '../shared/analysis-story';
 import { lakeConsumers } from '../shared/lake-system';
+import { missingRecordIntro } from '../shared/missing-record';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
@@ -193,12 +194,23 @@ export default makeScene2D(function* (view) {
     consumers.lake.files[1].face.stroke(accent, 0.3),
   );
   yield* waitUntil('next');
+  yield* all(title.opacity(0, 0.35), meaning.opacity(0, 0.35), consumers.root.opacity(0, 0.35));
+  title.remove();
+  meaning.remove();
+  consumers.root.remove();
+  const intro = missingRecordIntro();
+  intro.title.opacity(0);
+  intro.record.root.opacity(0);
+  intro.record.root.y(155);
+  intro.missing.opacity(0);
+  view.add([intro.title, intro.record.root]);
+  yield* intro.title.opacity(1, 0.4);
+  yield* waitFor(0.4);
+  yield* all(intro.record.root.opacity(1, 0.4), intro.record.root.y(100, 0.65, easeInOutCubic));
+  yield* waitFor(0.3);
   yield* all(
-    title.opacity(0, 0.2),
-    meaning.opacity(0, 0.2),
-    consumers.lake.files[1].face.stroke(foreground, 0.3),
+    intro.missing.opacity(1, 0.25),
+    intro.record.face.stroke(accent, 0.25).to(foreground, 0.35),
   );
-  title.children(heading('bu kez ', 'eksik bir kayıt', ' geliyor.').children());
-  yield* title.opacity(1, 0.3);
   yield* waitUntil('end');
 });
