@@ -12,7 +12,7 @@ export function browsingJourney() {
   const surface = paper(650, 340, '#101315');
   surface.root.add([
     text('market · oturum #17', 29, { y: -121, fill: accent }),
-    new Path({ data: 'M -117 -62 Q -122 17 -118 101', stroke: muted, lineWidth: 2 }),
+    new Path({ data: 'M -118 -52 L -118 94', stroke: muted, lineWidth: 2 }),
   ]);
   const rows = browsingEvents.map((event, i) => {
     const y = -52 + i * 73;
