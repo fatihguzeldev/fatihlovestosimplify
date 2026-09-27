@@ -1,5 +1,5 @@
 import { Layout, Line, makeScene2D } from '@motion-canvas/2d';
-import { all, waitUntil } from '@motion-canvas/core';
+import { all, waitFor, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
@@ -134,29 +134,88 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('other');
   yield* all(title.opacity(0, 0.2), search.opacity(0, 0.4));
   search.remove();
-  title.children(heading('bölge bilgisi de, model de ', 'türetilmişti.').children());
+  title.children(heading('mağazanın bölgesini ', 'satış kaydına ekledik.').children());
   const examples = new Layout({ opacity: 0 });
-  const region = paper(690, 300, '#101315');
-  region.root.position([-420, 65]);
-  region.root.add([
-    text('store A → Marmara', 36, { y: -78, fill: accent }),
-    text('satış satırına taşıdık', 32, { y: 12 }),
-    text('denormalized value', 27, { y: 92, fill: muted, fontFamily: theme.fontFamily.mono }),
-  ]);
-  const model = paper(690, 300, '#101315');
-  model.root.position([420, 65]);
-  model.root.add([
-    text('training data → model v1', 31, {
-      y: -78,
-      fill: accent,
+  const regionFlow = new Layout({});
+  const store = paper(620, 250, '#101315');
+  store.root.position([-510, -85]);
+  store.root.add([
+    text('store database', 29, { y: -84 }),
+    text('store_id', 25, {
+      position: [-157, -13],
+      fill: muted,
       fontFamily: theme.fontFamily.mono,
     }),
-    text('servise dağıttık', 32, { y: 12 }),
-    text('derived artifact', 27, { y: 92, fill: muted, fontFamily: theme.fontFamily.mono }),
+    text('region', 25, {
+      position: [115, -13],
+      fill: muted,
+      fontFamily: theme.fontFamily.mono,
+    }),
+    text('A', 34, { position: [-157, 50], fontFamily: theme.fontFamily.mono }),
+    text('Marmara', 34, { position: [115, 50], fill: accent }),
   ]);
-  examples.add([region.root, model.root]);
+  const sale = paper(620, 250, '#101315');
+  sale.root.position([510, -85]);
+  const copiedRegion = text('—', 34, { position: [95, 50], fill: muted });
+  sale.root.add([
+    text('warehouse · sales', 29, { y: -84 }),
+    text('#1042 · store_id: A', 27, { y: -13, fontFamily: theme.fontFamily.mono }),
+    text('region', 25, {
+      position: [-150, 50],
+      fill: muted,
+      fontFamily: theme.fontFamily.mono,
+    }),
+    copiedRegion,
+  ]);
+  const enrich = cartoonArrow('s18-region-copy', [-164, -35], [160, -35], accent, 0);
+  regionFlow.add([
+    store.root,
+    sale.root,
+    enrich.root,
+    text('eşleştir', 28, { position: [0, -127], opacity: () => enrich.reveal() }),
+  ]);
+  const trainingFlow = new Layout({ opacity: 0 });
+  const trainingData = paper(620, 230, '#101315');
+  trainingData.root.position([-510, 265]);
+  trainingData.root.add([
+    text('training data', 29, { y: -74, fill: muted }),
+    text('geçmiş satışlar', 32, { y: -2 }),
+    text('+ clickstream', 30, { y: 58, fill: accent }),
+  ]);
+  const model = paper(300, 165, '#17232f');
+  model.root.position([510, 265]);
+  model.root.opacity(0);
+  model.root.add([
+    text('model v1', 40, { y: -25, fill: accent, fontFamily: theme.fontFamily.mono }),
+    text('öneri modeli', 26, { y: 38 }),
+  ]);
+  const train = cartoonArrow('s18-model-training', [-164, 265], [319, 265], accent, 0);
+  trainingFlow.add([
+    trainingData.root,
+    train.root,
+    model.root,
+    text('train', 31, {
+      position: [78, 178],
+      fontFamily: theme.fontFamily.mono,
+      opacity: () => train.reveal(),
+    }),
+  ]);
+  examples.add([regionFlow, trainingFlow]);
   view.add(examples);
   yield* all(title.opacity(1, 0.3), examples.opacity(1, 0.5));
+  yield* enrich.reveal(1, 0.35);
+  yield* enrich.travel(1);
+  copiedRegion.text('Marmara');
+  copiedRegion.fill(accent);
+  yield* all(enrich.arrive(), sale.face.stroke(accent, 0.3));
+  yield* waitFor(4.3);
+  yield* all(title.opacity(0, 0.2), regionFlow.opacity(0.65, 0.3));
+  title.children(heading('modeli de ', 'training data’dan ürettik.').children());
+  yield* all(title.opacity(1, 0.3), trainingFlow.opacity(1, 0.4));
+  yield* train.reveal(1, 0.35);
+  yield* train.travel(1);
+  yield* all(train.arrive(), model.root.opacity(1, 0.35));
+  yield* regionFlow.opacity(1, 0.3);
   yield* waitUntil('redundant');
   yield* all(title.opacity(0, 0.2), examples.opacity(0, 0.4));
   examples.remove();
