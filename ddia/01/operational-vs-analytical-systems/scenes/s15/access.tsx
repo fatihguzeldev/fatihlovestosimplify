@@ -7,7 +7,7 @@ import { accent, background, foreground, heading, muted, paper, text } from '../
 import { role } from '../shared/people';
 
 export function* accessExample(stage: Layout, title: Txt) {
-  const analyst = role('analyst', 'sorgu editörü', 1);
+  const analyst = role('analyst', '', 1);
   analyst.position([-520, -115]);
   analyst.opacity(1);
   const editor = paper(590, 320, '#101315');
