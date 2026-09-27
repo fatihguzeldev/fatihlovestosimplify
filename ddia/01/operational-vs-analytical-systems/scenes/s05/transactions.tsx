@@ -79,10 +79,6 @@ export default makeScene2D(function* (view) {
   yield* response.travel(0.65);
   market.status.text('created');
   yield* all(response.arrive(), market.receiptDetails.opacity(1, 0.25));
-  yield* waitUntil('point-query');
-  yield* queryLabel.opacity(0, 0.2);
-  queryLabel.text('point query');
-  yield* queryLabel.opacity(1, 0.3);
   yield* waitUntil('update');
   yield* all(
     title.opacity(0, 0.2),

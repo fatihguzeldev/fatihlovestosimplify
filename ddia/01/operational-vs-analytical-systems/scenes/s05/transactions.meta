@@ -14,36 +14,32 @@
       "targetTime": 9
     },
     {
-      "name": "point-query",
-      "targetTime": 24
-    },
-    {
       "name": "update",
-      "targetTime": 35
+      "targetTime": 18
     },
     {
       "name": "crud",
-      "targetTime": 53
+      "targetTime": 36
     },
     {
       "name": "latency",
-      "targetTime": 66
+      "targetTime": 49
     },
     {
       "name": "oltp",
-      "targetTime": 83
+      "targetTime": 66
     },
     {
       "name": "transaction",
-      "targetTime": 98
+      "targetTime": 81
     },
     {
       "name": "next",
-      "targetTime": 111
+      "targetTime": 94
     },
     {
       "name": "end",
-      "targetTime": 122
+      "targetTime": 105
     }
   ],
   "seed": 104205
