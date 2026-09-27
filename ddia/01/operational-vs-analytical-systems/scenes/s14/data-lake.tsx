@@ -21,6 +21,7 @@ export default makeScene2D(function* (view) {
     lineJoin: 'round',
     end: 0,
   });
+  collectionOutline.opacity(() => (collectionOutline.end() > 0 ? 1 : 0));
   const collectionLabels = new Layout({ opacity: 0 });
   collectionLabels.add([
     text('data lake', 36, { position: [-790, -171], offset: [-1, 0], fill: accent }),
