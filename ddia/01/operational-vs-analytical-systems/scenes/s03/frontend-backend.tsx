@@ -71,7 +71,7 @@ export default makeScene2D(function* (view) {
   yield* all(market.root.position([-580, 80], 0.8), market.root.scale(0.72, 0.8));
 
   const code = paper(340, 270, '#10171d');
-  const service = code.root;
+  let service = code.root;
   service.position([100, 80]);
   service.opacity(0);
   const activeLine = new Rect({
@@ -208,16 +208,86 @@ export default makeScene2D(function* (view) {
 
   yield* waitUntil('stateless');
   yield* title.opacity(0, 0.2);
-  title.children(heading('request biter, ', 'kayıt kalır.').children());
-  const stateless = text('often stateless', 25, {
-    position: [100, 309],
+  title.children(heading('aynı sunucuya ', 'dönmek zorunda mıyız?').children());
+  const serverLabel = text('sunucu 1', 25, {
+    position: [100, -100],
     fill: accent,
     fontFamily: theme.fontFamily.mono,
     opacity: 0,
   });
+  const refresh = new Path({
+    ...ink,
+    position: [240, -34],
+    stroke: accent,
+    lineWidth: 2.8,
+    opacity: 0,
+    data: 'M 13 -8 C 3 -25 -23 -15 -17 5 C -13 20 8 23 17 8 M 13 -20 L 15 -6 L 1 -8',
+  });
+  market.receipt.add(refresh);
+  stage.add(serverLabel);
+  yield* all(title.opacity(1, 0.3), serverLabel.opacity(1, 0.3), refresh.opacity(1, 0.3));
+  yield* waitFor(0.8);
+  const previousService = service;
+  service = previousService.snapshotClone({ opacity: 0 });
+  stage.add(service);
+  yield* all(previousService.opacity(0, 0.25), serverLabel.opacity(0, 0.25));
+  previousService.remove();
+  serverLabel.text('sunucu 2');
+  yield* all(service.opacity(1, 0.35), serverLabel.opacity(1, 0.35));
+  yield* waitFor(0.55);
+  cursor.position([-330, 160]);
+  stage.add(cursor);
+  yield* all(cursor.opacity(1, 0.2), cursor.position([-407, 79], 0.35));
+  yield* refresh.stroke(foreground, 0.12).to(accent, 0.12);
+  yield* cursor.opacity(0, 0.15);
+  cursor.remove();
+  market.status.fontFamily(theme.fontFamily.sans);
+  market.status.text('yükleniyor…');
+  const repeatRequest = cartoonArrow(
+    's03-second-server-request',
+    [-307, 45],
+    [-105, 45],
+    accent,
+    0,
+  );
+  const repeatQuery = cartoonArrow('s03-second-server-query', [295, 10], [418, 55], accent, 0);
+  const repeatRow = cartoonArrow('s03-second-server-row', [418, 155], [295, 115], accent, 0);
+  const repeatResponse = cartoonArrow(
+    's03-second-server-response',
+    [-105, 175],
+    [-307, 175],
+    accent,
+    0,
+  );
+  const repeatLabel = text('GET /orders/1042', 21, {
+    position: repeatRequest.pointAt(0.5).addY(-78),
+    fontFamily: theme.fontFamily.mono,
+    opacity: 0,
+  });
+  const repeatFlow = [repeatRequest, repeatQuery, repeatRow, repeatResponse];
+  stage.add([...repeatFlow.map((arrow) => arrow.root), repeatLabel]);
+  for (const [index, arrow] of repeatFlow.entries()) {
+    if (index === 0) yield* repeatLabel.opacity(1, 0.2);
+    yield* arrow.reveal(1, 0.25);
+    yield* arrow.travel(0.5);
+    if (index === 3) {
+      market.status.fontFamily(theme.fontFamily.mono);
+      market.status.text('created');
+    }
+    yield* arrow.arrive(0.18);
+    if (index === 1) yield* top.stroke(accent, 0.12).to(foreground, 0.25);
+    yield* arrow.root.opacity(0, 0.15);
+    arrow.root.remove();
+    if (index === 0) {
+      yield* repeatLabel.opacity(0, 0.15);
+      repeatLabel.remove();
+    }
+  }
+  yield* title.opacity(0, 0.2);
+  title.children(heading('önceki isteği ', 'hatırlaması gerekmiyor.').children());
+  const stateless = text('stateless', 27, { position: [100, 309], fill: accent, opacity: 0 });
   stage.add(stateless);
-  yield* title.opacity(1, 0.3);
-  yield* all(stateless.opacity(1, 0.35), top.stroke(accent, 0.15).to(foreground, 0.35));
+  yield* all(title.opacity(1, 0.3), stateless.opacity(1, 0.3));
   const local = paper(535, 215, '#17232f');
   local.root.y(10);
   local.root.opacity(0);
@@ -235,6 +305,8 @@ export default makeScene2D(function* (view) {
     service.opacity(0.3, 0.3),
     database.opacity(0.3, 0.3),
     stateless.opacity(0, 0.2),
+    serverLabel.opacity(0, 0.3),
+    refresh.opacity(0, 0.3),
     backendBrace.root.opacity(0.3, 0.3),
     backendLabel.opacity(0.3, 0.3),
   );
