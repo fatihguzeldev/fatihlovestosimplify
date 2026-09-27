@@ -8,10 +8,13 @@ import { accent, background, foreground, heading, muted, text } from '../shared/
 import { createMarket } from '../shared/market';
 import { salesReport } from './illustrations';
 import { role } from '../shared/people';
+import { bookContents } from '../shared/book-contents';
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const card = new Layout({});
+  yield loadFonts();
+  yield* bookContents(view, 'introduction', 'systems');
+  const card = new Layout({ opacity: 0 });
   const first = text('aynı data,', 104, { position: [-806, -35], offset: [-1, 0] });
   const second = text('farklı işler.', 104, {
     position: () => [-806 + first.width() + 26, -35],
@@ -32,7 +35,7 @@ export default makeScene2D(function* (view) {
   underline.opacity(() => (underline.end() > 0 ? 1 : 0));
   card.add([first, second, underline]);
   view.add(card);
-  yield loadFonts();
+  yield* card.opacity(1, 0.35);
   yield* underline.end(1, 0.65);
   yield* waitUntil('order');
   yield* card.opacity(0, 0.4);
