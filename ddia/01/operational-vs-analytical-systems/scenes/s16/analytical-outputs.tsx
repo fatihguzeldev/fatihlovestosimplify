@@ -202,13 +202,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('serving');
   yield* title.opacity(0, 0.2);
   title.children(heading('servis, ', 'hazır modeli', ' kullanıyor.').children());
-  const note = text('her istekte yeniden eğitim yok.', 31, {
-    position: [0, 420],
-    fill: muted,
-    opacity: 0,
-  });
-  inference.add(note);
-  yield* all(title.opacity(1, 0.3), note.opacity(1, 0.3));
+  yield* title.opacity(1, 0.3);
   yield* request.travel(0.75);
   yield* request.arrive();
   yield* response.travel(0.75);
