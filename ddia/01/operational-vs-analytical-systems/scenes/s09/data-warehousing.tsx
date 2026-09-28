@@ -55,6 +55,7 @@ export default makeScene2D(function* (view) {
   card.remove();
   title.children(heading('iki iş de ', 'aynı database’de.').children());
   yield* all(title.opacity(1, 0.3), system.root.opacity(1, 0.5));
+  yield* waitUntil('narration-start');
   const orderReply = cartoonArrow('s09-order-result', [-170, 208], [-385, 208], accent, 0);
   view.add(orderReply.root);
   yield* waitUntil('read');
@@ -63,8 +64,10 @@ export default makeScene2D(function* (view) {
   yield* system.orders.fill(accent, 0.15);
   yield* system.order.travel(0.55);
   yield* system.order.arrive();
+  yield* waitUntil('read-response');
   yield* orderReply.reveal(1, 0.25);
   yield* orderReply.travel(0.55);
+  yield* waitUntil('read-status');
   system.market.status.text('preparing');
   yield* all(orderReply.arrive(), system.orders.fill(foreground, 0.25));
   yield* waitUntil('scan');
@@ -74,6 +77,7 @@ export default makeScene2D(function* (view) {
   yield* all(system.sales.fill(accent, 0.2), waiting.opacity(1, 0.2));
   yield* system.query.travel(0.7);
   yield* system.query.arrive();
+  yield* waitUntil('scan-detail');
   const work = databaseWork();
   work.root.scale(0.45);
   work.root.y(35);
@@ -143,15 +147,26 @@ export default makeScene2D(function* (view) {
   const landscape = warehouseSystem();
   landscape.root.opacity(0);
   landscape.warehouse.root.opacity(0);
+  landscape.sources.forEach((source) => source.root.opacity(0.2));
   view.add(landscape.root);
   const needed = new Layout({ opacity: 0 });
-  ['satışlar', 'stoklar', 'mağazanın bölgesi'].forEach((label, i) => {
-    needed.add(text(label, 29, { position: [-570 + i * 570, 67], fill: accent }));
+  const sourceLabels = ['satışlar', 'stoklar', 'mağazanın bölgesi'].map((label, i) =>
+    text(label, 29, { position: [-570 + i * 570, 67], fill: accent, opacity: 0.2 }),
+  );
+  needed.add(sourceLabels);
+  const sourceNote = text('ihtiyacımız olan bilgiler farklı sistemlerde.', 36, {
+    y: 254,
+    opacity: 0,
   });
-  const sourceNote = text('ihtiyacımız olan bilgiler farklı sistemlerde.', 36, { y: 254 });
   needed.add(sourceNote);
   view.add(needed);
   yield* all(title.opacity(1, 0.4), landscape.root.opacity(1, 0.4), needed.opacity(1, 0.4));
+  for (const [i, cue] of ['source-sales', 'source-stock', 'source-store'].entries()) {
+    yield* waitUntil(cue);
+    yield* all(landscape.sources[i].root.opacity(1, 0.4), sourceLabels[i].opacity(1, 0.4));
+  }
+  yield* waitUntil('sources-together');
+  yield* sourceNote.opacity(1, 0.4);
   yield* waitUntil('layouts');
   yield* all(title.opacity(0, 0.25), sourceNote.opacity(0, 0.25));
   title.children(heading('bu bilgileri ', 'birlikte sorgulamak', ' istiyoruz.').children());
@@ -159,7 +174,7 @@ export default makeScene2D(function* (view) {
   schema.root.position([0, 310]);
   schema.root.opacity(0);
   schema.root.add([
-    text('analize uygun bir görünüm', 26, { y: -37, fill: muted }),
+    text('analize uygun schema', 26, { y: -37, fill: muted }),
     text('mağaza  ·  bölge  ·  satış  ·  stok', 36, {
       y: 24,
       fontFamily: theme.fontFamily.mono,
@@ -175,7 +190,9 @@ export default makeScene2D(function* (view) {
     return arrow;
   });
   view.add([links, schema.root]);
-  yield* all(title.opacity(1, 0.3), schema.root.opacity(1, 0.4), links.opacity(1, 0.3));
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('schema');
+  yield* all(schema.root.opacity(1, 0.4), links.opacity(1, 0.3));
   yield* all(...sourceLinks.map((arrow) => arrow.reveal(1, 0.65)));
   yield* waitUntil('access');
   yield* all(
@@ -184,7 +201,7 @@ export default makeScene2D(function* (view) {
     schema.root.opacity(0, 0.3),
     links.opacity(0, 0.3),
   );
-  title.children(heading('bu sistemlere ', 'herkes bağlanamaz.').children());
+  title.children(heading('kaynak sistemlere ', 'erişim gerekiyor.').children());
   const access = new Layout({ opacity: 0 });
   const boundary = new Path({
     ...ink,
@@ -207,28 +224,38 @@ export default makeScene2D(function* (view) {
     data: 'M 203 201 Q 193 158 201 114 M 193 121 L 201 112 L 209 120',
     end: 0,
   });
+  blocked.opacity(() => (blocked.end() > 0 ? 1 : 0));
   const lock = new Path({
     ...ink,
     stroke: accent,
     fill: background,
+    opacity: 0,
     data: 'M 184 73 L 184 59 Q 185 40 201 41 Q 217 43 217 60 L 217 73 M 177 74 L 224 72 L 223 104 L 178 106 Z M 201 84 L 201 95',
   });
-  access.add([
-    boundary,
-    analyst,
-    query.root,
-    blocked,
-    lock,
-    text('doğrudan erişim yok', 27, { position: [412, 94], fill: accent }),
-  ]);
+  const restriction = text('doğrudan erişim yok', 27, {
+    position: [412, 94],
+    fill: accent,
+    opacity: 0,
+  });
+  access.add([boundary, analyst, query.root, blocked, lock, restriction]);
   view.add(access);
   yield* all(title.opacity(1, 0.4), access.opacity(1, 0.4));
+  yield* waitUntil('access-restriction');
+  title.children(heading('bu sistemlere ', 'herkes bağlanamaz.').children());
+  yield* all(lock.opacity(1, 0.3), restriction.opacity(1, 0.3));
   yield* blocked.end(1, 0.6);
-  yield* waitUntil('warehouse');
+  yield* waitUntil('summary');
   yield* all(title.opacity(0, 0.3), access.opacity(0, 0.3));
   access.remove();
+  title.children(heading('analiz için ', 'ayrı kaynaklar.').children());
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('warehouse');
+  yield* title.opacity(0, 0.3);
   title.children(heading('analizi ', 'ayrı bir database’e', ' taşıyalım.').children());
+  landscape.warehouse.caption.opacity(0);
   yield* all(title.opacity(1, 0.4), landscape.warehouse.root.opacity(1, 0.6));
+  yield* waitUntil('warehouse-name');
+  yield* landscape.warehouse.caption.opacity(1, 0.35);
   const purpose = new Layout({ opacity: 0 });
   purpose.add(text('operational sistemler çalışmaya devam eder', 29, { y: 63, fill: muted }));
   const operations = paper(340, 118, '#101315');
@@ -239,6 +266,7 @@ export default makeScene2D(function* (view) {
   ]);
   const analytics = paper(340, 118, '#17232f');
   analytics.root.position([620, 280]);
+  analytics.root.opacity(0);
   analytics.root.add([
     text('rapor sorgusu', 28, { y: -24 }),
     text('SUM(amount)', 25, { y: 24, fill: accent, fontFamily: theme.fontFamily.mono }),
@@ -255,9 +283,15 @@ export default makeScene2D(function* (view) {
   view.add(purpose);
   yield* waitUntil('placement');
   yield* purpose.opacity(1, 0.4);
-  yield* all(operationalRoute.reveal(1, 0.5), analyticalRoute.reveal(1, 0.5));
-  yield* waitUntil('next');
+  yield* operationalRoute.reveal(1, 0.5);
+  yield* waitUntil('placement-analytics');
+  yield* all(analytics.root.opacity(1, 0.4), analyticalRoute.reveal(1, 0.5));
+  yield* waitUntil('empty');
   yield* all(title.opacity(0, 0.3), purpose.opacity(0, 0.3));
+  title.children(heading('warehouse şu anda ', 'boş.').children());
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('next');
+  yield* title.opacity(0, 0.2);
   title.children(heading('veriyi ', 'warehouse’a nasıl taşıyacağız?').children());
   yield* title.opacity(1, 0.3);
   yield* waitUntil('end');

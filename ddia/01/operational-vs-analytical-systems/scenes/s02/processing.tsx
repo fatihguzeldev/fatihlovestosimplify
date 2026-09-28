@@ -92,33 +92,34 @@ export function* showProcessing(view: View2D) {
   let sum = 0;
   let chart = 'M -134 122';
   for (const [i, order] of orders.entries()) {
+    if (i > 0) yield* waitUntil(i === 1 ? 'stream-second' : 'stream-third');
     const slip = slips[i];
     const input = inputs[i];
-    if (i > 0) yield* inputs[i - 1].root.opacity(0, 0.15);
+    if (i > 0) yield* inputs[i - 1].root.opacity(0, 0.05);
     if (i === 0) {
-      yield* slip.face.stroke(accent, 0.3);
+      yield* slip.face.stroke(accent, 0.15);
     } else {
       slip.root.y(-40 + i * 128);
       slip.root.rotation(i % 2 ? 2 : -2);
       yield* all(
-        slip.root.opacity(1, 0.25),
-        slip.root.y(-48 + i * 128, 0.3, easeOutCubic),
-        slip.root.rotation(0, 0.3),
-        slip.face.stroke(accent, 0.3),
+        slip.root.opacity(1, 0.15),
+        slip.root.y(-48 + i * 128, 0.15, easeOutCubic),
+        slip.root.rotation(0, 0.15),
+        slip.face.stroke(accent, 0.15),
       );
     }
-    yield* input.reveal(1, 0.25);
-    yield* input.travel(0.5);
+    yield* input.reveal(1, 0.15);
+    yield* input.travel(0.2);
     machine.expression.text(`${sum} + ${order.amount}`);
-    yield* all(input.arrive(), machine.display.lineWidth(3.5, 0.1).to(2, 0.2));
-    yield* waitFor(0.25);
-    yield* machine.equals.scale(0.86, 0.12).to(1, 0.18);
+    yield* all(input.arrive(0.1), machine.display.lineWidth(3.5, 0.05).to(2, 0.05));
+    yield* machine.equals.scale(0.86, 0.05).to(1, 0.05);
     const previous = sum;
     sum += order.amount;
     machine.result.text(`${sum}`);
-    yield* slip.stamp.end(1, 0.2);
-    if (i === 0) yield* output.reveal(1, 0.35);
-    yield* output.travel(0.5);
+    yield* slip.stamp.end(1, 0.1);
+    if (i === 0) yield* output.reveal(1, 0.1);
+    yield* output.travel(0.2);
+    yield* waitUntil(['stream-first-result', 'stream-second-result', 'stream-third-result'][i]);
     report.total.text(`${sum}₺`);
     report.count.text(`${i + 1} sipariş`);
     report.updated.text(order.updated);
@@ -127,12 +128,11 @@ export function* showProcessing(view: View2D) {
     report.chart.data(chart);
     report.chart.end(1);
     yield* all(
-      output.arrive(),
-      report.total.scale(1.04, 0.12).to(1, 0.2),
-      report.face.stroke(accent, 0.12).to(foreground, 0.25),
-      slip.face.stroke(foreground, 0.3),
+      output.arrive(0.15),
+      report.total.scale(1.04, 0.05).to(1, 0.1),
+      report.face.stroke(accent, 0.05).to(foreground, 0.1),
+      slip.face.stroke(foreground, 0.15),
     );
-    yield* waitFor(0.55);
   }
   yield* waitUntil('batch');
   yield* all(
@@ -180,6 +180,7 @@ export function* showProcessing(view: View2D) {
   yield* machine.equals.scale(0.86, 0.12).to(1, 0.18);
   machine.result.text(`${sum}`);
   yield* sequence(0.08, ...slips.map((slip) => slip.stamp.end(1, 0.2)));
+  yield* waitUntil('batch-result');
   yield* output.root.opacity(1, 0.3);
   yield* output.travel(0.65);
   report.total.text(`${sum}₺`);

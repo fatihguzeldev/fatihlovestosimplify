@@ -10,36 +10,80 @@
       "targetTime": 4
     },
     {
+      "name": "narration-start",
+      "targetTime": 6.75
+    },
+    {
       "name": "read",
-      "targetTime": 9
+      "targetTime": 9.95
+    },
+    {
+      "name": "read-response",
+      "targetTime": 15.45
     },
     {
       "name": "update",
-      "targetTime": 18
+      "targetTime": 29.4
+    },
+    {
+      "name": "update-click",
+      "targetTime": 34.6
+    },
+    {
+      "name": "update-request",
+      "targetTime": 35.85
+    },
+    {
+      "name": "update-apply",
+      "targetTime": 43.85
+    },
+    {
+      "name": "update-response",
+      "targetTime": 45.5
     },
     {
       "name": "crud",
-      "targetTime": 36
+      "targetTime": 51.7
     },
     {
       "name": "latency",
-      "targetTime": 49
+      "targetTime": 72.5
+    },
+    {
+      "name": "repeat-read",
+      "targetTime": 77.7
+    },
+    {
+      "name": "repeat-response",
+      "targetTime": 81.25
+    },
+    {
+      "name": "response-time",
+      "targetTime": 87.3
     },
     {
       "name": "oltp",
-      "targetTime": 66
+      "targetTime": 111.2
+    },
+    {
+      "name": "oltp-expansion",
+      "targetTime": 117.3
     },
     {
       "name": "transaction",
-      "targetTime": 81
+      "targetTime": 119.85
+    },
+    {
+      "name": "transaction-group",
+      "targetTime": 126.45
     },
     {
       "name": "next",
-      "targetTime": 94
+      "targetTime": 149.75
     },
     {
       "name": "end",
-      "targetTime": 105
+      "targetTime": 160.483333
     }
   ],
   "seed": 104205

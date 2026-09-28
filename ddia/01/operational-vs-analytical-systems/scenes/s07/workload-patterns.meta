@@ -3,43 +3,139 @@
   "timeEvents": [
     {
       "name": "compare",
-      "targetTime": 4
+      "targetTime": 8.116667
     },
     {
       "name": "write",
-      "targetTime": 19
+      "targetTime": 19.7
+    },
+    {
+      "name": "write-create",
+      "targetTime": 22.1
+    },
+    {
+      "name": "write-update",
+      "targetTime": 24.933333
+    },
+    {
+      "name": "write-bulk",
+      "targetTime": 32.2
+    },
+    {
+      "name": "write-import",
+      "targetTime": 34.783333
+    },
+    {
+      "name": "write-etl",
+      "targetTime": 40.416667
+    },
+    {
+      "name": "write-event",
+      "targetTime": 48.516667
     },
     {
       "name": "queries",
-      "targetTime": 35
+      "targetTime": 52.3
+    },
+    {
+      "name": "query-id",
+      "targetTime": 56.333333
+    },
+    {
+      "name": "query-analyst",
+      "targetTime": 67.033333
+    },
+    {
+      "name": "query-january",
+      "targetTime": 73.616667
+    },
+    {
+      "name": "query-largest",
+      "targetTime": 76.616667
+    },
+    {
+      "name": "query-average",
+      "targetTime": 78.683333
     },
     {
       "name": "workload",
-      "targetTime": 51
+      "targetTime": 85.25
+    },
+    {
+      "name": "workload-oltp",
+      "targetTime": 88.7
+    },
+    {
+      "name": "workload-olap",
+      "targetTime": 92.55
     },
     {
       "name": "people",
-      "targetTime": 66
+      "targetTime": 104.7
+    },
+    {
+      "name": "people-customer",
+      "targetTime": 107.716667
+    },
+    {
+      "name": "people-analyst",
+      "targetTime": 109.866667
     },
     {
       "name": "machines",
-      "targetTime": 79
+      "targetTime": 115.35
+    },
+    {
+      "name": "machine-authorization",
+      "targetTime": 121.266667
+    },
+    {
+      "name": "machine-permitted",
+      "targetTime": 126.133333
+    },
+    {
+      "name": "machine-attempts",
+      "targetTime": 128.666667
+    },
+    {
+      "name": "machine-detection",
+      "targetTime": 133.483333
     },
     {
       "name": "time",
-      "targetTime": 93
+      "targetTime": 135.7
+    },
+    {
+      "name": "history-created",
+      "targetTime": 143.766667
+    },
+    {
+      "name": "history-preparing",
+      "targetTime": 145.083333
+    },
+    {
+      "name": "history-shipped",
+      "targetTime": 146.833333
     },
     {
       "name": "size",
-      "targetTime": 109
+      "targetTime": 160.583333
+    },
+    {
+      "name": "size-oltp",
+      "targetTime": 163.216667
+    },
+    {
+      "name": "size-olap",
+      "targetTime": 165.666667
     },
     {
       "name": "next",
-      "targetTime": 124
+      "targetTime": 184.55
     },
     {
       "name": "end",
-      "targetTime": 138
+      "targetTime": 196
     }
   ],
   "seed": 104207

@@ -39,27 +39,36 @@ export default makeScene2D(function* (view) {
   view.add(alternative.root);
   yield* alternative.root.opacity(1, 0.5);
   for (const [i, record] of [alternative.sales, alternative.stores].entries()) {
+    yield* waitUntil(['load-sales', 'load-stores'][i]);
     const load = alternative.loads[i];
     yield* load.reveal(1, 0.35);
     yield* load.travel(0.75);
     yield* all(load.arrive(), record.root.opacity(1, 0.3));
   }
+  yield* waitUntil('loaded');
   yield* alternative.pending.opacity(1, 0.3);
   yield* waitUntil('transform');
   yield* all(title.opacity(0, 0.2), alternative.pending.opacity(0, 0.2));
   title.children(heading('mağaza bilgisini ', 'warehouse içinde', ' ekliyoruz.').children());
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('match-sales');
+  yield* alternative.sales.cells[1].fill(accent, 0.3);
+  yield* waitUntil('match-store');
   yield* all(
-    title.opacity(1, 0.3),
-    alternative.sales.cells[1].fill(accent, 0.3),
     alternative.stores.cells[0].fill(accent, 0.3),
     alternative.match.opacity(1, 0.3),
   );
+  yield* waitUntil('enrich');
   yield* all(...alternative.transforms.map((arrow) => arrow.reveal(1, 0.5)));
   yield* all(...alternative.transforms.map((arrow) => arrow.travel(0.85)));
   yield* all(
     ...alternative.transforms.map((arrow) => arrow.arrive()),
     alternative.result.root.opacity(1, 0.4),
   );
+  yield* waitUntil('elt-name');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('extract, load, transform: ', 'ELT.').children());
+  yield* title.opacity(1, 0.3);
   yield* waitUntil('return');
   yield* all(
     title.opacity(0, 0.2),
@@ -72,25 +81,50 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('crm');
   yield* all(title.opacity(0, 0.2), pipeline.root.opacity(0, 0.4));
   pipeline.root.remove();
-  title.children(heading('bu kaynağa ', 'API üzerinden', ' erişiyoruz.').children());
+  title.children(heading('müşteri bilgileri ', 'external CRM’de.').children());
   const crm = crmPipeline();
   crm.root.opacity(0);
+  crm.api.opacity(0);
+  crm.connector.root.opacity(0);
   view.add(crm.root);
   yield* all(title.opacity(1, 0.3), crm.root.opacity(1, 0.5));
+  yield* waitUntil('api');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('bu kaynağa ', 'API üzerinden', ' erişiyoruz.').children());
+  yield* all(title.opacity(1, 0.3), crm.api.opacity(1, 0.3));
   yield* waitUntil('connector');
+  yield* crm.connector.root.opacity(1, 0.4);
+  yield* waitUntil('request');
   yield* crm.request.reveal(1, 0.35);
   yield* crm.request.travel(0.7);
   yield* crm.request.arrive();
+  yield* waitUntil('response');
   yield* crm.response.reveal(1, 0.35);
   yield* crm.response.travel(0.7);
-  yield* crm.response.arrive();
-  yield* all(...crm.connector.lights.map((light) => light.opacity(1, 0.15).to(0.65, 0.3)));
+  yield* all(
+    crm.response.arrive(),
+    ...crm.connector.lights.map((light) => light.opacity(1, 0.15).to(0.65, 0.3)),
+  );
+  yield* waitUntil('load-customers');
   yield* crm.load.reveal(1, 0.35);
   yield* crm.load.travel(0.7);
   yield* all(crm.load.arrive(), crm.customers.opacity(1, 0.3));
   yield* waitUntil('own-analysis');
   yield* title.opacity(0, 0.2);
   title.children(heading('analizi ', 'kendi sistemimizde', ' yapabiliriz.').children());
+  yield* title.opacity(1, 0.3);
+  const sales = text('sales', 25, {
+    y: 42,
+    fill: accent,
+    fontFamily: theme.fontFamily.mono,
+    opacity: 0,
+  });
+  crm.warehouse.root.add(sales);
+  yield* waitUntil('sales');
+  yield* all(crm.customers.y(-12, 0.35), sales.opacity(1, 0.35));
+  yield* waitUntil('source-access');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('kaynağa göre ', 'farklı erişim yolları.').children());
   yield* title.opacity(1, 0.3);
   yield* waitUntil('next');
   yield* all(title.opacity(0, 0.2), crm.root.opacity(0, 0.4));
@@ -110,7 +144,11 @@ export default makeScene2D(function* (view) {
     text('ETL', 30, { y: -15, fill: muted, fontFamily: theme.fontFamily.mono }),
   ]);
   view.add(choice);
-  title.children(heading('ikisini ', 'tek sistemde', ' çalıştırsak?').children());
+  title.children(heading('iki workload, ', 'iki ayrı sistem.').children());
   yield* all(title.opacity(1, 0.3), choice.opacity(1, 0.5));
+  yield* waitUntil('htap');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('ikisini ', 'tek sistemde', ' çalıştırsak?').children());
+  yield* title.opacity(1, 0.3);
   yield* waitUntil('end');
 });

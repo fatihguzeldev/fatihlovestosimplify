@@ -1,4 +1,5 @@
 import { makeProject } from '@motion-canvas/core';
+import narration from './audio/narration.mp3';
 import intro from './scenes/s00/intro?scene';
 import dataIntensive from './scenes/s01/data-intensive?scene';
 import buildingBlocks from './scenes/s02/building-blocks?scene';
@@ -19,9 +20,11 @@ import analyticalOutputs from './scenes/s16/analytical-outputs?scene';
 import systemOfRecord from './scenes/s17/system-of-record?scene';
 import derivedData from './scenes/s18/derived-data?scene';
 import maintainingDerived from './scenes/s19/maintaining-derived?scene';
+import outro from './scenes/s20/outro?scene';
 
 export default makeProject({
   name: 'ddia_chapter1_operational_vs_analytical_systems',
+  audio: narration,
   scenes: [
     intro,
     dataIntensive,
@@ -43,5 +46,6 @@ export default makeProject({
     systemOfRecord,
     derivedData,
     maintainingDerived,
+    outro,
   ],
 });

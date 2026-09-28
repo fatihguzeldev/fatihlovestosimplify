@@ -3,35 +3,119 @@
   "timeEvents": [
     {
       "name": "htap",
-      "targetTime": 5
+      "targetTime": 0.7
+    },
+    {
+      "name": "expansion",
+      "targetTime": 6.7
+    },
+    {
+      "name": "application",
+      "targetTime": 15.5
+    },
+    {
+      "name": "payment-history",
+      "targetTime": 18.55
+    },
+    {
+      "name": "history-query",
+      "targetTime": 21.45
+    },
+    {
+      "name": "two-failures",
+      "targetTime": 26.85
+    },
+    {
+      "name": "rule",
+      "targetTime": 32.7
     },
     {
       "name": "inside",
-      "targetTime": 22
+      "targetTime": 39
+    },
+    {
+      "name": "new-payment",
+      "targetTime": 46.5
+    },
+    {
+      "name": "write",
+      "targetTime": 51.45
+    },
+    {
+      "name": "write-record",
+      "targetTime": 55.35
+    },
+    {
+      "name": "write-response",
+      "targetTime": 56.95
+    },
+    {
+      "name": "sync",
+      "targetTime": 59.4
+    },
+    {
+      "name": "analytical-query",
+      "targetTime": 61.9
+    },
+    {
+      "name": "three-failures",
+      "targetTime": 67.85
+    },
+    {
+      "name": "analytical-response",
+      "targetTime": 72.2
+    },
+    {
+      "name": "flag",
+      "targetTime": 73.25
+    },
+    {
+      "name": "benefit",
+      "targetTime": 86.6
     },
     {
       "name": "other-sources",
-      "targetTime": 38
+      "targetTime": 102.6
+    },
+    {
+      "name": "inventory",
+      "targetTime": 105.4
+    },
+    {
+      "name": "stores",
+      "targetTime": 107.85
     },
     {
       "name": "combine",
-      "targetTime": 52
+      "targetTime": 116.4
     },
     {
       "name": "return",
-      "targetTime": 63
+      "targetTime": 124.25
+    },
+    {
+      "name": "general-purpose",
+      "targetTime": 130.9
     },
     {
       "name": "specialization",
-      "targetTime": 74
+      "targetTime": 136.4
+    },
+    {
+      "name": "main-architecture",
+      "targetTime": 143.45
     },
     {
       "name": "next",
-      "targetTime": 86
+      "targetTime": 147.9
+    },
+    {
+      "name": "report-result",
+      "targetTime": 149.4
     },
     {
       "name": "end",
-      "targetTime": 98
+      "targetTime": 160.4166666667
     }
   ],
   "seed": 104212

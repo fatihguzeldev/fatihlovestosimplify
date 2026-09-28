@@ -155,6 +155,7 @@ export default makeScene2D(function* (view) {
     phone.root.y(10, 0.95, easeOutCubic),
     phone.root.rotation(-3, 0.95),
   );
+  yield* waitUntil('read-message');
   incoming.root.scale(0.88);
   yield* all(
     incoming.root.opacity(1, 0.25),
@@ -171,6 +172,7 @@ export default makeScene2D(function* (view) {
   phone.chat.add(outgoing.root);
   yield* phone.keyboardProgress(1, 0.55, easeInOutCubic);
   yield* phone.input.text('tamam, bekliyorum.', 1.15);
+  yield* waitUntil('send-message');
   yield* phone.send.scale(0.84, 0.12).to(1, 0.22);
   phone.input.text('');
   yield* all(
@@ -395,8 +397,10 @@ export default makeScene2D(function* (view) {
   );
   yield* all(edited.body.lineWidth(3, 0.2), editPreview.opacity(1, 0.2));
   writer.input.text('birazdan oradayım.');
+  yield* waitUntil('edit-message');
   yield* writer.input.text('', 0.18);
   yield* writer.input.text('on dakika gecikeceğim.', 0.62);
+  yield* waitUntil('edit-save');
   yield* writer.send.scale(0.84, 0.12).to(1, 0.18);
   writer.input.text('');
   editMode.text('kaydediliyor…');
@@ -415,6 +419,7 @@ export default makeScene2D(function* (view) {
     editPreview.opacity(0, 0.2),
     edited.body.lineWidth(0, 0.3),
   );
+  yield* waitUntil('edit-deliver');
   yield* updatePath.reveal(1, 0.2);
   yield* updatePath.travel(0.45);
   incoming.body.stroke(accent);
@@ -444,6 +449,7 @@ export default makeScene2D(function* (view) {
     opacity: 0,
   });
   phone.chat.add(readerLoading);
+  yield* waitUntil('concurrent-requests');
   yield* all(writer.send.scale(0.84, 0.12).to(1, 0.18), incoming.root.opacity(0, 0.2));
   yield* all(readerLoading.opacity(1, 0.3), readPath.reveal(1, 0.3), readLabel.opacity(1, 0.3));
   editMode.text('kaydediliyor…');
@@ -523,7 +529,9 @@ export default makeScene2D(function* (view) {
   delivery.add([sendPath.root, returnPath.root, sendLabel, returnLabel, interruption]);
   view.add(delivery);
   yield* all(service.opacity(1, 0.5), delivery.opacity(1, 0.5));
+  yield* waitUntil('write-request');
   yield* sendPath.travel(0.85);
+  yield* waitUntil('response-lost');
   yield* all(sendPath.arrive(), returnPath.travel(0.65, 0.43));
   yield* all(
     interruption.opacity(1, 0.25),
@@ -546,6 +554,7 @@ export default makeScene2D(function* (view) {
   interruption.opacity(0);
   returnLabel.opacity(0);
   returnPath.root.opacity(0);
+  yield* waitUntil('unavailable-read');
   yield* all(
     sendPath.travel(0.85, 0.57),
     service.opacity(0.35, 0.85),

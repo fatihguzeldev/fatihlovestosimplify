@@ -1,5 +1,5 @@
 import { Circle, Layout, Path, Rect } from '@motion-canvas/2d';
-import { all, easeOutCubic, waitFor } from '@motion-canvas/core';
+import { all, easeOutCubic, waitUntil } from '@motion-canvas/core';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
 import { accent, background, foreground, ink, muted, paper, text } from '../shared/drawing';
@@ -59,6 +59,8 @@ function cursor(x: number, y: number) {
 export function writeExample() {
   const { root, left, right } = pair();
   const record = card(left, 540, 220);
+  record.opacity(0);
+  right.opacity(0);
   record.add(
     text('orders / #1042', 29, { position: [-232, -73], offset: [-1, 0], fontFamily: mono }),
   );
@@ -74,6 +76,7 @@ export function writeExample() {
   for (let i = 0; i < 3; i++) card(batch, 132, 62, i * 8, i * 8);
   batch.add(text('sales', 25, { position: [16, 16], fontFamily: mono }));
   const event = card(right, 140, 60, -206, 90);
+  event.opacity(0);
   event.add(text('event', 24, { fontFamily: mono }));
   const target = card(right, 180, 205, 211, 10);
   target.add(text('analytics', 24, { y: -63 }));
@@ -84,19 +87,26 @@ export function writeExample() {
   const eventArrow = cartoonArrow('s07-events', [-110, 90], [102, 90], accent);
   batchArrow.root.scale(0.9);
   eventArrow.root.scale(0.9);
-  right.add([
-    batchArrow.root,
-    eventArrow.root,
-    text('ETL', 24, { position: [-10, -91], fontFamily: mono }),
-  ]);
+  eventArrow.root.opacity(0);
+  const etl = text('ETL', 24, { position: [-10, -91], fontFamily: mono, opacity: 0 });
+  right.add([batchArrow.root, eventArrow.root, etl]);
   function* animate() {
-    yield* waitFor(0.45);
-    yield* all(update.opacity(1, 0.3), batchArrow.travel(0.8));
+    yield* waitUntil('write-create');
+    yield* record.opacity(1, 0.35);
+    yield* waitUntil('write-update');
+    yield* update.opacity(1, 0.3);
     yield* status.opacity(0, 0.2);
     status.text('preparing');
-    loaded.text('3 kayıt');
     yield* status.opacity(1, 0.3);
-    yield* waitFor(0.7);
+    yield* waitUntil('write-bulk');
+    yield* right.opacity(1, 0.35);
+    yield* waitUntil('write-import');
+    yield* batchArrow.travel(0.8);
+    loaded.text('3 kayıt');
+    yield* waitUntil('write-etl');
+    yield* etl.opacity(1, 0.3);
+    yield* waitUntil('write-event');
+    yield* all(event.opacity(1, 0.3), eventArrow.root.opacity(1, 0.3));
     yield* eventArrow.travel(0.8);
     loaded.text('4 kayıt');
   }
@@ -120,6 +130,7 @@ export function queryExample() {
   const id = text('id: 1042', 30, { y: 13, fontFamily: mono });
   fixed.add([id, text('aynı sorgu · farklı sipariş', 24, { y: 82, fill: muted })]);
   const notebook = card(right, 580, 245);
+  notebook.opacity(0);
   const question = text(questions[0].label, 28, { y: -77 });
   const query = text(questions[0].sql, 27, {
     y: 13,
@@ -130,16 +141,19 @@ export function queryExample() {
   notebook.add([question, query, text('soruya göre sorgu da değişir', 24, { y: 82, fill: muted })]);
   divider(notebook, 500, -35);
   function* animate() {
-    const holdDuration = 3.45;
-    for (let i = 0; i < questions.length; i++) {
-      if (i > 0) {
-        yield* all(id.opacity(0, 0.2), question.opacity(0, 0.2), query.opacity(0, 0.2));
-        id.text(`id: ${1042 + i}`);
-        question.text(questions[i].label);
-        query.text(questions[i].sql);
-        yield* all(id.opacity(1, 0.3), question.opacity(1, 0.3), query.opacity(1, 0.3));
-      }
-      yield* waitFor(holdDuration);
+    yield* waitUntil('query-id');
+    yield* id.opacity(0, 0.2);
+    id.text('id: 1043');
+    yield* id.opacity(1, 0.3);
+    yield* waitUntil('query-analyst');
+    yield* notebook.opacity(1, 0.35);
+    const cues = ['query-january', 'query-largest', 'query-average'];
+    for (let i = 1; i < questions.length; i++) {
+      yield* waitUntil(cues[i - 1]);
+      yield* all(question.opacity(0, 0.15), query.opacity(0, 0.15));
+      question.text(questions[i].label);
+      query.text(questions[i].sql);
+      yield* all(question.opacity(1, 0.25), query.opacity(1, 0.25));
     }
   }
   return { root, animate };
@@ -171,13 +185,15 @@ export function workloadExample() {
     return row;
   });
   function* animate() {
+    yield* waitUntil('workload-oltp');
     for (let i = 0; i < 6; i++) {
       yield* tickets[i].ticket.opacity(1, 0.16);
       tickets[i].done.opacity(1);
-      yield* all(
-        tickets[i].done.end(1, 0.18),
-        ...rows.slice(i * 6, i * 6 + 6).map((row) => row.stroke(accent, 0.18)),
-      );
+      yield* tickets[i].done.end(1, 0.18);
+    }
+    yield* waitUntil('workload-olap');
+    for (let i = 0; i < 6; i++) {
+      yield* all(...rows.slice(i * 6, i * 6 + 6).map((row) => row.stroke(accent, 0.3)));
     }
   }
   return { root, animate };
@@ -234,26 +250,27 @@ export function peopleExample() {
   const pointer = cursor(149, -41);
   report.add(pointer);
   function* animate() {
-    yield* waitFor(0.4);
-    yield* all(finger.position([104, -10], 0.5), pointer.position([115, -93], 0.5));
-    yield* all(
-      order.fill('#29425e', 0.15).to(bluePaper, 0.25),
-      filter.fill('#29425e', 0.15).to(bluePaper, 0.25),
-    );
+    yield* waitUntil('people-customer');
+    yield* finger.position([104, -10], 0.5);
+    yield* order.fill('#29425e', 0.15).to(bluePaper, 0.25);
+    yield* all(status.opacity(1, 0.35), finger.opacity(0, 0.3));
+    yield* waitUntil('people-analyst');
+    yield* pointer.position([115, -93], 0.5);
+    yield* filter.fill('#29425e', 0.15).to(bluePaper, 0.25);
     period.text('ocak 2026  ▾');
     yield* all(
-      status.opacity(1, 0.35),
       ...bars.map(({ bar, value, amount }) =>
         all(bar.height(amount * 0.26, 0.65, easeOutCubic), value.opacity(1, 0.35)),
       ),
     );
-    yield* all(finger.opacity(0, 0.3), pointer.opacity(0, 0.3));
+    yield* pointer.opacity(0, 0.3);
   }
   return { root, animate };
 }
 
 export function machineExample() {
   const { root, left, right } = pair();
+  right.opacity(0);
   const permission = card(left, 558, 268);
   permission.add([
     text("#1042'yi iptal et", 29, { position: [-239, -94], offset: [-1, 0] }),
@@ -298,12 +315,17 @@ export function machineExample() {
   const detected = text('şüpheli girişler', 25, { y: 109, fill: accent, opacity: 0 });
   log.add([lens, detected]);
   function* animate() {
-    yield* waitFor(0.4);
-    yield* all(match.opacity(1, 0.3), attempts[0].opacity(1, 0.3));
+    yield* waitUntil('machine-authorization');
+    yield* match.opacity(1, 0.3);
+    yield* waitUntil('machine-permitted');
     check.opacity(1);
-    yield* all(check.end(1, 0.4), decision.opacity(1, 0.4), attempts[1].opacity(1, 0.4));
-    yield* waitFor(0.5);
+    yield* all(check.end(1, 0.4), decision.opacity(1, 0.4));
+    yield* waitUntil('machine-attempts');
+    yield* right.opacity(1, 0.35);
+    yield* attempts[0].opacity(1, 0.3);
+    yield* attempts[1].opacity(1, 0.3);
     yield* attempts[2].opacity(1, 0.3);
+    yield* waitUntil('machine-detection');
     yield* all(lens.opacity(1, 0.35), detected.opacity(1, 0.35));
   }
   return { root, animate };
@@ -314,8 +336,8 @@ export function historyExample() {
   const current = card(left, 540, 258);
   current.add(text('sipariş #1042', 30, { y: -90 }));
   divider(current, 462, -53);
-  const status = text('created', 44, { y: 6, fill: accent, fontFamily: mono });
-  const updated = text('10:00', 25, { y: 84, fill: muted, fontFamily: mono });
+  const status = text('shipped', 44, { y: 6, fill: accent, fontFamily: mono });
+  const updated = text('10:18', 25, { y: 84, fill: muted, fontFamily: mono });
   current.add([status, updated]);
   const history = card(right, 580, 258);
   history.add(text('sipariş #1042', 30, { y: -90 }));
@@ -323,7 +345,7 @@ export function historyExample() {
   const states = ['created', 'preparing', 'shipped'];
   const times = ['10:00', '10:04', '10:18'];
   const rows = states.map((state, i) => {
-    const row = new Layout({ y: -18 + i * 51, opacity: i ? 0 : 1 });
+    const row = new Layout({ y: -18 + i * 51, opacity: 0 });
     row.add([
       new Circle({ position: [-233, 0], size: 9, fill: accent }),
       text(times[i], 25, { position: [-204, 0], offset: [-1, 0], fill: muted, fontFamily: mono }),
@@ -333,12 +355,10 @@ export function historyExample() {
     return row;
   });
   function* animate() {
-    for (let i = 1; i < states.length; i++) {
-      yield* waitFor(1.4);
-      yield* status.opacity(0, 0.2);
-      status.text(states[i]);
-      updated.text(times[i]);
-      yield* all(status.opacity(1, 0.35), rows[i].opacity(1, 0.35));
+    const cues = ['history-created', 'history-preparing', 'history-shipped'];
+    for (let i = 0; i < states.length; i++) {
+      yield* waitUntil(cues[i]);
+      yield* rows[i].opacity(1, 0.35);
     }
   }
   return { root, animate };
@@ -390,9 +410,12 @@ export function sizeExample() {
     return range;
   });
   function* animate() {
-    yield* waitFor(0.3);
-    ranges.forEach((range) => range.opacity(1));
-    yield* all(...ranges.map((range) => range.end(1, 0.75, easeOutCubic)));
+    yield* waitUntil('size-oltp');
+    ranges[0].opacity(1);
+    yield* ranges[0].end(1, 0.75, easeOutCubic);
+    yield* waitUntil('size-olap');
+    ranges[1].opacity(1);
+    yield* ranges[1].end(1, 0.75, easeOutCubic);
   }
   return { root, animate };
 }

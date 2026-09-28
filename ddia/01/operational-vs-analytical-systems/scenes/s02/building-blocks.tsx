@@ -1,5 +1,5 @@
 import { Layout, makeScene2D, Path, Txt } from '@motion-canvas/2d';
-import { all, easeOutCubic, waitFor, waitUntil } from '@motion-canvas/core';
+import { all, easeOutCubic, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase } from '../../../../../common/cartoon-system';
@@ -31,7 +31,7 @@ export default makeScene2D(function* (view) {
   ]);
   view.add(bridge);
   yield loadFonts();
-  yield* waitFor(0.4);
+  yield* waitUntil('market');
   yield* bridge.opacity(0, 0.45);
   bridge.remove();
   const stage = new Layout({ opacity: 0 });
@@ -114,8 +114,9 @@ export default makeScene2D(function* (view) {
   stage.add([title, market.root, database, saved, write.root, read.root, writeLabel, readLabel]);
   view.add(stage);
   yield* stage.opacity(1, 0.65);
-  yield* waitUntil('store');
+  yield* waitUntil('order-submit');
   yield* market.button.scale(0.96, 0.12).to(1, 0.18);
+  yield* waitUntil('store');
   yield* database.opacity(1, 0.45);
   yield* all(write.reveal(1, 0.45), writeLabel.opacity(1, 0.3));
   yield* write.travel(0.65);
@@ -133,10 +134,9 @@ export default makeScene2D(function* (view) {
   yield* market.cart.opacity(0, 0.25);
   market.cart.remove();
   yield* market.receipt.opacity(1, 0.35);
-  yield* waitFor(2.1);
+  yield* waitUntil('retrieve');
   yield* all(saved.opacity(0, 0.18), saved.scale(0.96, 0.18), saved.y(-178, 0.18));
   saved.remove();
-  yield* waitUntil('retrieve');
   yield* all(title.opacity(0, 0.2), writeLabel.opacity(0, 0.2), market.receipt.opacity(0, 0.3));
   title.children(heading('siparişi ', 'tekrar açalım.').children());
   writeLabel.text('getOrder(1042)');
@@ -183,12 +183,12 @@ export default makeScene2D(function* (view) {
   cache.root.add(refresh);
   view.add(cache.root);
   yield* cache.root.opacity(1, 0.5);
-  yield* waitFor(1.6);
+  yield* waitUntil('traffic-change');
   yield* cache.title.opacity(0, 0.15);
   cache.title.children(heading('yolda trafik ', 'sıkıştı.').children());
   yield* cache.title.opacity(1, 0.25);
   yield* cache.traffic.opacity(1, 0.65);
-  yield* waitFor(0.35);
+  yield* waitUntil('eta-recalculate');
   yield* cache.calculationResult.opacity(0, 0.15);
   cache.calculationResult.text('24 dk');
   yield* cache.calculationResult.opacity(1, 0.35);
@@ -196,7 +196,7 @@ export default makeScene2D(function* (view) {
   yield* cache.title.opacity(0, 0.15);
   cache.title.children(heading('cache’teki tahmin ', 'güncel değil.').children());
   yield* all(cache.title.opacity(1, 0.3), cache.cache.face.stroke(accent, 0.4));
-  yield* waitFor(0.8);
+  yield* waitUntil('cache-refresh-question');
   yield* refresh.opacity(1, 0.4);
   yield* waitUntil('next');
   yield* cache.root.opacity(0, 0.4);

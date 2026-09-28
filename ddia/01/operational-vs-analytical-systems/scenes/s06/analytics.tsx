@@ -15,7 +15,7 @@ export default makeScene2D(function* (view) {
   previous.rows[1].cells[1].text('preparing');
   view.add([title, previous.root]);
   yield loadFonts();
-  yield* waitFor(0.65);
+  yield* waitUntil('table');
   yield* all(previous.root.opacity(0, 0.35), title.opacity(0, 0.25));
   previous.root.remove();
   title.children(heading('ocakta hangi mağaza ', 'ne kadar sattı?').children());
@@ -45,9 +45,10 @@ export default makeScene2D(function* (view) {
     sql.opacity(1, 0.35),
     lines[2].fill(accent, 0.25),
     lines[3].fill(accent, 0.25),
-    table.rows[5].root.opacity(0.2, 0.4),
     ...table.rows.slice(0, 5).map((row) => row.cells[2].fill(accent, 0.3)),
   );
+  yield* waitUntil('exclude-february');
+  yield* table.rows[5].root.opacity(0.2, 0.4);
   yield* waitUntil('group');
   yield* all(
     lines[2].fill(muted, 0.25),
@@ -65,7 +66,6 @@ export default makeScene2D(function* (view) {
   );
   groups.add(groupLabels);
   view.add(groups);
-  yield* all(...groupLabels.map((label) => label.opacity(1, 0.3)));
   const counters = [0, 0];
   const values = sales.slice(0, 5).map((row, i) => {
     const column = row.store === 'A' ? 0 : 1;
@@ -77,11 +77,18 @@ export default makeScene2D(function* (view) {
     });
     node.position([-430 + 202 + node.width(), 80 + table.rows[i].root.y()]);
     groups.add(node);
-    return { node, target: [282 + column * 360, 199 + slot * 55] as [number, number] };
+    return { column, node, target: [282 + column * 360, 199 + slot * 55] as [number, number] };
   });
-  for (const { node, target } of values) {
-    yield* node.opacity(1, 0.1);
-    yield* node.position(target, 0.38);
+  for (const column of [0, 1]) {
+    yield* waitUntil(column === 0 ? 'group-a' : 'group-b');
+    yield* all(
+      groupLabels[column].opacity(1, 0.3),
+      ...values
+        .filter((value) => value.column === column)
+        .map(({ node, target }) =>
+          all(node.opacity(1, 0.2), node.position(target, 0.65, easeOutCubic)),
+        ),
+    );
   }
   yield* waitUntil('sum');
   yield* all(lines[4].fill(muted, 0.25), lines[0].fill(accent, 0.25));
@@ -94,16 +101,19 @@ export default makeScene2D(function* (view) {
     }),
   );
   groups.add(totals);
-  yield* all(...values.map(({ node }) => node.opacity(0, 0.3)));
-  yield* all(...totals.map((total) => total.opacity(1, 0.4)));
-  yield* waitUntil('chart');
-  yield* all(
-    title.opacity(0, 0.2),
-    table.root.opacity(0, 0.4),
-    sql.opacity(0, 0.3),
-    groups.opacity(0, 0.3),
-  );
+  for (const column of [0, 1]) {
+    yield* waitUntil(column === 0 ? 'sum-a' : 'sum-b');
+    yield* all(
+      ...values.filter((value) => value.column === column).map(({ node }) => node.opacity(0, 0.25)),
+    );
+    yield* totals[column].opacity(1, 0.35);
+  }
+  yield* waitUntil('aggregation');
+  yield* title.opacity(0, 0.2);
   title.children(heading('bu işleme ', 'aggregation', ' diyoruz.').children());
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('chart');
+  yield* all(table.root.opacity(0, 0.4), sql.opacity(0, 0.3), groups.opacity(0, 0.3));
   const chart = monthlyChart();
   chart.root.position([0, 35]);
   chart.root.scale(1.3);
@@ -120,7 +130,7 @@ export default makeScene2D(function* (view) {
     opacity: 0,
   });
   view.add([chart.root, resultLabel]);
-  yield* all(title.opacity(1, 0.3), chart.root.opacity(1, 0.45), resultLabel.opacity(1, 0.35));
+  yield* all(chart.root.opacity(1, 0.45), resultLabel.opacity(1, 0.35));
   yield* waitFor(0.25);
   yield* all(
     ...chart.bars.map(({ bar, value, amount }) =>
@@ -138,7 +148,9 @@ export default makeScene2D(function* (view) {
     opacity: 0,
   });
   view.add(expansion);
-  yield* all(title.opacity(1, 0.3), expansion.opacity(1, 0.3));
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('olap-expansion');
+  yield* expansion.opacity(1, 0.3);
   yield* waitUntil('promotion');
   yield* all(
     title.opacity(0, 0.2),
@@ -150,10 +162,11 @@ export default makeScene2D(function* (view) {
   const promo = promotion();
   view.add(promo.root);
   yield* all(title.opacity(1, 0.3), promo.root.opacity(1, 0.3));
-  for (const period of promo.periods) {
+  for (const [index, period] of promo.periods.entries()) {
+    yield* waitUntil(index === 0 ? 'without-promotion' : 'with-promotion');
     yield* all(period.opacity(1, 0.4), period.y(38, 0.4, easeOutCubic));
-    yield* waitFor(0.18);
   }
+  yield* waitUntil('compare-periods');
   yield* promo.outline.end(1, 0.65);
   yield* all(promo.hatch.opacity(1, 0.25), promo.scope.opacity(1, 0.25));
   yield* waitUntil('together');
@@ -162,13 +175,21 @@ export default makeScene2D(function* (view) {
   const pair = together();
   view.add(pair.root);
   yield* all(title.opacity(1, 0.3), pair.root.opacity(1, 0.5));
+  yield* waitUntil('pair-question');
   yield* pair.arrow.travel(0.8);
   yield* waitUntil('compare');
   yield* all(title.opacity(0, 0.2), pair.root.opacity(0, 0.4));
   title.children(heading('iki soru, ', 'iki erişim biçimi.').children());
   const examples = workloadExamples();
   examples.root.opacity(0);
+  examples.order.root.opacity(0);
+  examples.chart.root.opacity(0);
+  examples.labels.forEach((label) => label.opacity(0));
   view.add(examples.root);
   yield* all(title.opacity(1, 0.3), examples.root.opacity(1, 0.5));
+  yield* waitUntil('point-question');
+  yield* all(examples.order.root.opacity(1, 0.4), examples.labels[0].opacity(1, 0.4));
+  yield* waitUntil('aggregate-question');
+  yield* all(examples.chart.root.opacity(1, 0.4), examples.labels[1].opacity(1, 0.4));
   yield* waitUntil('end');
 });

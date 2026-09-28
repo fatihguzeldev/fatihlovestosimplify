@@ -110,6 +110,7 @@ export function* showCompute(view: View2D) {
   comparison.add([title, caption, detail, image]);
   view.add(comparison);
   yield* comparison.opacity(1, 0.6);
+  yield* waitUntil('compute-pixels');
   yield* serial(side * 9, 2.2, linear);
 
   yield* waitUntil('parallel-computation');
@@ -131,7 +132,9 @@ export function* showCompute(view: View2D) {
     ),
   );
   yield* all(caption.opacity(1, 0.4), detail.opacity(1, 0.4));
+  yield* waitUntil('parallel-render');
   yield* all(...regions.map(({ progress }) => progress(half * half, 3, linear)));
+  yield* waitUntil('parallel-finish');
   yield* all(
     ...regions.map(({ tile, border, x, y }) =>
       all(tile.position([x, y], 0.85, easeInOutCubic), border.opacity(0, 0.65)),

@@ -2,40 +2,96 @@
   "version": 0,
   "timeEvents": [
     {
+      "name": "table",
+      "targetTime": 7.55
+    },
+    {
       "name": "filter",
       "targetTime": 16
     },
     {
+      "name": "exclude-february",
+      "targetTime": 20.22
+    },
+    {
       "name": "group",
-      "targetTime": 29
+      "targetTime": 24.35
+    },
+    {
+      "name": "group-a",
+      "targetTime": 28.15
+    },
+    {
+      "name": "group-b",
+      "targetTime": 30.3
     },
     {
       "name": "sum",
-      "targetTime": 43
+      "targetTime": 35.75
+    },
+    {
+      "name": "sum-a",
+      "targetTime": 44.4
+    },
+    {
+      "name": "sum-b",
+      "targetTime": 49.45
+    },
+    {
+      "name": "aggregation",
+      "targetTime": 57.6
     },
     {
       "name": "chart",
-      "targetTime": 56
+      "targetTime": 70.6
     },
     {
       "name": "olap",
-      "targetTime": 69
+      "targetTime": 81.9
+    },
+    {
+      "name": "olap-expansion",
+      "targetTime": 85.2
     },
     {
       "name": "promotion",
-      "targetTime": 84
+      "targetTime": 91.2
+    },
+    {
+      "name": "without-promotion",
+      "targetTime": 91.85
+    },
+    {
+      "name": "with-promotion",
+      "targetTime": 97.3
+    },
+    {
+      "name": "compare-periods",
+      "targetTime": 101.35
     },
     {
       "name": "together",
-      "targetTime": 101
+      "targetTime": 119.3
+    },
+    {
+      "name": "pair-question",
+      "targetTime": 126.15
     },
     {
       "name": "compare",
-      "targetTime": 120
+      "targetTime": 147.45
+    },
+    {
+      "name": "point-question",
+      "targetTime": 150.55
+    },
+    {
+      "name": "aggregate-question",
+      "targetTime": 156.15
     },
     {
       "name": "end",
-      "targetTime": 140
+      "targetTime": 177.11666666666667
     }
   ],
   "seed": 104206

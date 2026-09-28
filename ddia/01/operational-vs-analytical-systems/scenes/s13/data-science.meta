@@ -3,35 +3,135 @@
   "timeEvents": [
     {
       "name": "question",
+      "targetTime": 0.3
+    },
+    {
+      "name": "missing",
       "targetTime": 6
     },
     {
+      "name": "banana-view",
+      "targetTime": 12.25
+    },
+    {
+      "name": "milk-view",
+      "targetTime": 13.5
+    },
+    {
+      "name": "add-to-cart",
+      "targetTime": 15.1
+    },
+    {
       "name": "events",
-      "targetTime": 23
+      "targetTime": 16.45
+    },
+    {
+      "name": "event-fields",
+      "targetTime": 20.65
+    },
+    {
+      "name": "event-actions",
+      "targetTime": 21.6
+    },
+    {
+      "name": "clickstream",
+      "targetTime": 29.4
+    },
+    {
+      "name": "report-question",
+      "targetTime": 35.35
     },
     {
       "name": "schema",
-      "targetTime": 40
+      "targetTime": 41.15
+    },
+    {
+      "name": "schema-on-write",
+      "targetTime": 52.7
     },
     {
       "name": "report",
-      "targetTime": 54
+      "targetTime": 54.65
+    },
+    {
+      "name": "banana-count",
+      "targetTime": 59.2
+    },
+    {
+      "name": "milk-count",
+      "targetTime": 60.1
+    },
+    {
+      "name": "report-detail",
+      "targetTime": 63.95
     },
     {
       "name": "features",
-      "targetTime": 69
+      "targetTime": 72
+    },
+    {
+      "name": "feature-views",
+      "targetTime": 79.02
+    },
+    {
+      "name": "feature-cart",
+      "targetTime": 80.1
+    },
+    {
+      "name": "feature-time",
+      "targetTime": 82.55
+    },
+    {
+      "name": "training-input",
+      "targetTime": 86.05
+    },
+    {
+      "name": "feature-engineering",
+      "targetTime": 93.85
+    },
+    {
+      "name": "representations",
+      "targetTime": 95.72
+    },
+    {
+      "name": "summary-detail",
+      "targetTime": 107.7
+    },
+    {
+      "name": "reprocess",
+      "targetTime": 116.5
+    },
+    {
+      "name": "warehouse-detail",
+      "targetTime": 121.5
     },
     {
       "name": "preserve",
-      "targetTime": 85
+      "targetTime": 128.65
+    },
+    {
+      "name": "sales-file",
+      "targetTime": 129.14
+    },
+    {
+      "name": "reviews-file",
+      "targetTime": 130.4
+    },
+    {
+      "name": "image-file",
+      "targetTime": 131.4
+    },
+    {
+      "name": "future-questions",
+      "targetTime": 138.3
     },
     {
       "name": "next",
-      "targetTime": 100
+      "targetTime": 143.6
     },
     {
       "name": "end",
-      "targetTime": 112
+      "targetTime": 152.6666666667
     }
   ],
   "seed": 104213

@@ -3,43 +3,95 @@
   "timeEvents": [
     {
       "name": "sources",
-      "targetTime": 4
+      "targetTime": 1.9
+    },
+    {
+      "name": "inventory-actor",
+      "targetTime": 6.55
+    },
+    {
+      "name": "store-actor",
+      "targetTime": 9.05
+    },
+    {
+      "name": "record",
+      "targetTime": 20.2
     },
     {
       "name": "extract",
-      "targetTime": 20
+      "targetTime": 26.25
+    },
+    {
+      "name": "copy",
+      "targetTime": 28.65
+    },
+    {
+      "name": "retained",
+      "targetTime": 30.85
     },
     {
       "name": "transform",
-      "targetTime": 36
+      "targetTime": 36.95
+    },
+    {
+      "name": "lookup",
+      "targetTime": 44.55
+    },
+    {
+      "name": "lookup-region",
+      "targetTime": 47.85
+    },
+    {
+      "name": "enrich",
+      "targetTime": 52.3
     },
     {
       "name": "schema",
-      "targetTime": 49
+      "targetTime": 63.7
     },
     {
       "name": "load",
-      "targetTime": 59
+      "targetTime": 84.13
+    },
+    {
+      "name": "etl",
+      "targetTime": 88.58
     },
     {
       "name": "other-sources",
-      "targetTime": 74
+      "targetTime": 95.63
     },
     {
       "name": "query",
-      "targetTime": 100
+      "targetTime": 109.63
+    },
+    {
+      "name": "query-result",
+      "targetTime": 125.38
     },
     {
       "name": "responsibility",
-      "targetTime": 123
+      "targetTime": 135.73
+    },
+    {
+      "name": "roles",
+      "targetTime": 157.97
+    },
+    {
+      "name": "roles-overlap",
+      "targetTime": 172.52
+    },
+    {
+      "name": "recap",
+      "targetTime": 174.42
     },
     {
       "name": "next",
-      "targetTime": 143
+      "targetTime": 179.92
     },
     {
       "name": "end",
-      "targetTime": 155
+      "targetTime": 187.85
     }
   ],
   "seed": 104210

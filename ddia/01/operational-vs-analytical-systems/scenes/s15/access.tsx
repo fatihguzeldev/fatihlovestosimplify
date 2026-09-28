@@ -44,9 +44,14 @@ export function* accessExample(stage: Layout, title: Txt) {
   const warehouse = cartoonDatabase('data warehouse', accent);
   warehouse.root.position([580, 130]);
   warehouse.root.scale(1.55);
+  const storedAmount = text('amount: 185', 26, {
+    y: 39,
+    fill: accent,
+    fontFamily: theme.fontFamily.mono,
+  });
   warehouse.root.add([
     text('sales · #1042', 23, { y: -19, fontFamily: theme.fontFamily.mono }),
-    text('amount: 185', 26, { y: 39, fill: accent, fontFamily: theme.fontFamily.mono }),
+    storedAmount,
   ]);
   const policy = text('analyst · read only', 27, {
     position: [580, -87],
@@ -98,9 +103,11 @@ export function* accessExample(stage: Layout, title: Txt) {
   stage.opacity(0);
   title.children(heading('bu rolde yalnızca ', 'okuma izni', ' var.').children());
   yield* all(title.opacity(1, 0.3), stage.opacity(1, 0.5));
+  yield* waitUntil('read-query');
   yield* request.reveal(1, 0.3);
   yield* request.travel(0.65);
   yield* request.arrive();
+  yield* waitUntil('read-response');
   yield* response.reveal(1, 0.3);
   yield* response.travel(0.65);
   result.text('185');
@@ -125,15 +132,24 @@ export function* accessExample(stage: Layout, title: Txt) {
   result.text('permission denied');
   result.fontSize(29);
   yield* title.opacity(1, 0.3);
+  yield* waitUntil('write-query');
   yield* request.reveal(1, 0.3);
   yield* request.travel(0.65);
+  yield* request.arrive();
+  yield* waitUntil('write-denied');
   yield* lock.opacity(1, 0.15);
   response.reveal(0);
   response.root.opacity(1);
   returned.text('permission denied');
   returned.fontSize(24);
   returned.opacity(() => response.reveal());
-  yield* all(response.reveal(1, 0.3), unchanged.opacity(1, 0.25));
+  yield* response.reveal(1, 0.3);
   yield* response.travel(0.65);
   yield* all(response.arrive(), result.opacity(1, 0.25));
+  yield* waitUntil('write-unchanged');
+  yield* all(unchanged.opacity(1, 0.25), storedAmount.scale(1.08, 0.2).to(1, 0.3));
+  yield* waitUntil('access-summary');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('okumak ve değiştirmek için ', 'ayrı izinler.').children());
+  yield* title.opacity(1, 0.3);
 }

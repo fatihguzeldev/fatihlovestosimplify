@@ -3,7 +3,19 @@
   "timeEvents": [
     {
       "name": "start-video",
-      "targetTime": 8
+      "targetTime": 46.3
+    },
+    {
+      "name": "contents-focus",
+      "targetTime": 47.5
+    },
+    {
+      "name": "contents-close",
+      "targetTime": 50
+    },
+    {
+      "name": "end",
+      "targetTime": 50.3
     }
   ],
   "seed": 16628796

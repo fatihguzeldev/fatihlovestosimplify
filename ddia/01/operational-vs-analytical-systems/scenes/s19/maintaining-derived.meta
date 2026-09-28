@@ -3,75 +3,203 @@
   "timeEvents": [
     {
       "name": "focus",
-      "targetTime": 7
+      "targetTime": 0.4
+    },
+    {
+      "name": "initial-total",
+      "targetTime": 5.45
     },
     {
       "name": "correct",
-      "targetTime": 24
+      "targetTime": 16.15
+    },
+    {
+      "name": "correct-value",
+      "targetTime": 18.2
     },
     {
       "name": "stale-query",
-      "targetTime": 40
+      "targetTime": 26.8
+    },
+    {
+      "name": "stale-result",
+      "targetTime": 31.05
     },
     {
       "name": "diagnosis",
-      "targetTime": 54
+      "targetTime": 32.8
     },
     {
       "name": "pipeline",
-      "targetTime": 69
+      "targetTime": 42.8
     },
     {
       "name": "lake",
-      "targetTime": 83
+      "targetTime": 47.85
+    },
+    {
+      "name": "lake-updated",
+      "targetTime": 51.2
+    },
+    {
+      "name": "warehouse-stale",
+      "targetTime": 52.9
     },
     {
       "name": "load",
-      "targetTime": 96
+      "targetTime": 56.1
+    },
+    {
+      "name": "loaded",
+      "targetTime": 62.1
     },
     {
       "name": "new-query",
-      "targetTime": 112
+      "targetTime": 64.6
+    },
+    {
+      "name": "new-result",
+      "targetTime": 68.25
+    },
+    {
+      "name": "unchanged-b",
+      "targetTime": 77.9
+    },
+    {
+      "name": "lag",
+      "targetTime": 79.35
     },
     {
       "name": "materialized",
-      "targetTime": 128
+      "targetTime": 100
+    },
+    {
+      "name": "materialized-correct",
+      "targetTime": 110.45
+    },
+    {
+      "name": "materialized-stale",
+      "targetTime": 114.95
     },
     {
       "name": "refresh",
-      "targetTime": 145
+      "targetTime": 116.15
+    },
+    {
+      "name": "refreshed",
+      "targetTime": 120.55
     },
     {
       "name": "cache",
-      "targetTime": 158
+      "targetTime": 130.9
+    },
+    {
+      "name": "shipped",
+      "targetTime": 133.35
+    },
+    {
+      "name": "shipped-record",
+      "targetTime": 137.2
+    },
+    {
+      "name": "cache-stale",
+      "targetTime": 138.35
     },
     {
       "name": "invalidate",
-      "targetTime": 173
+      "targetTime": 149.45
+    },
+    {
+      "name": "invalidated",
+      "targetTime": 154.4
     },
     {
       "name": "miss",
-      "targetTime": 184
+      "targetTime": 158.95
+    },
+    {
+      "name": "miss-result",
+      "targetTime": 162.95
     },
     {
       "name": "read",
-      "targetTime": 194
+      "targetTime": 164.65
+    },
+    {
+      "name": "response",
+      "targetTime": 166.45
+    },
+    {
+      "name": "read-result",
+      "targetTime": 168.2
     },
     {
       "name": "refill",
-      "targetTime": 206
+      "targetTime": 168.7
+    },
+    {
+      "name": "refilled",
+      "targetTime": 170.45
+    },
+    {
+      "name": "maintenance-copy",
+      "targetTime": 174.9
+    },
+    {
+      "name": "maintenance-refresh",
+      "targetTime": 178.1
+    },
+    {
+      "name": "maintenance-cache",
+      "targetTime": 181.1
+    },
+    {
+      "name": "maintenance",
+      "targetTime": 185.85
     },
     {
       "name": "closing",
-      "targetTime": 220
+      "targetTime": 201.35
+    },
+    {
+      "name": "closing-analytical",
+      "targetTime": 204.15
+    },
+    {
+      "name": "closing-operational",
+      "targetTime": 211.9
+    },
+    {
+      "name": "closing-analysis",
+      "targetTime": 214.4
+    },
+    {
+      "name": "tradeoff",
+      "targetTime": 233.7
     },
     {
       "name": "recap",
-      "targetTime": 238
+      "targetTime": 242
+    },
+    {
+      "name": "question-work",
+      "targetTime": 246.25
+    },
+    {
+      "name": "question-representation",
+      "targetTime": 254.1
+    },
+    {
+      "name": "question-source",
+      "targetTime": 263.9
+    },
+    {
+      "name": "question-maintenance",
+      "targetTime": 268.7
     },
     {
       "name": "end",
-      "targetTime": 254
+      "targetTime": 280.03333333333336
     }
   ],
   "seed": 104219

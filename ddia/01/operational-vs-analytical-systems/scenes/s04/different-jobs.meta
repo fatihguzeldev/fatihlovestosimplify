@@ -3,51 +3,95 @@
   "timeEvents": [
     {
       "name": "contents-focus",
-      "targetTime": 1.5
+      "targetTime": 0.8
     },
     {
       "name": "contents-close",
-      "targetTime": 4
+      "targetTime": 2.65
     },
     {
       "name": "order",
-      "targetTime": 8
+      "targetTime": 6.516667
+    },
+    {
+      "name": "narration-start",
+      "targetTime": 7.5
     },
     {
       "name": "operational",
-      "targetTime": 16
+      "targetTime": 19.666667
+    },
+    {
+      "name": "order-response",
+      "targetTime": 22.066667
+    },
+    {
+      "name": "operational-label",
+      "targetTime": 34.183333
     },
     {
       "name": "engineer",
-      "targetTime": 26
+      "targetTime": 36.716667
     },
     {
       "name": "analytical",
-      "targetTime": 38
+      "targetTime": 46.666667
     },
     {
       "name": "report",
-      "targetTime": 47
+      "targetTime": 57.183333
+    },
+    {
+      "name": "report-result",
+      "targetTime": 61.433333
+    },
+    {
+      "name": "report-store-a",
+      "targetTime": 62.933333
+    },
+    {
+      "name": "report-store-b",
+      "targetTime": 64.033333
+    },
+    {
+      "name": "analytical-label",
+      "targetTime": 69.883333
+    },
+    {
+      "name": "business-analyst",
+      "targetTime": 71.6
     },
     {
       "name": "bi",
-      "targetTime": 58
+      "targetTime": 75.7
+    },
+    {
+      "name": "bi-label",
+      "targetTime": 91.9
     },
     {
       "name": "compare",
-      "targetTime": 68
+      "targetTime": 95.833333
     },
     {
       "name": "recommendation",
-      "targetTime": 78
+      "targetTime": 114.3
+    },
+    {
+      "name": "recommendation-query",
+      "targetTime": 116.75
+    },
+    {
+      "name": "data-scientist",
+      "targetTime": 119.5
     },
     {
       "name": "return",
-      "targetTime": 100
+      "targetTime": 145.083333
     },
     {
       "name": "end",
-      "targetTime": 114
+      "targetTime": 151.916667
     }
   ],
   "seed": 104204

@@ -165,9 +165,12 @@ export default makeScene2D(function* (view) {
     frontendNote,
   ]);
   yield* service.opacity(1, 0.4);
+  yield* waitUntil('http-request');
   yield* all(request.reveal(1, 0.4), labels[0].opacity(1, 0.3));
   yield* request.travel(0.65);
-  yield* all(request.arrive(), packet.root.opacity(1, 0.3));
+  yield* request.arrive();
+  yield* waitUntil('request-id');
+  yield* packet.root.opacity(1, 0.3);
 
   yield* waitUntil('query');
   yield* all(activeLine.opacity(1, 0.25), database.opacity(1, 0.4), record.root.opacity(1, 0.4));
@@ -180,6 +183,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('response');
   yield* all(response.reveal(1, 0.4), labels[3].opacity(1, 0.3));
   yield* response.travel(0.65);
+  yield* waitUntil('response-received');
   market.status.fontFamily(theme.fontFamily.mono);
   market.status.text('created');
   market.receiptDetails.opacity(1);
@@ -201,7 +205,7 @@ export default makeScene2D(function* (view) {
     frontendLabel.opacity(1, 0.35),
     frontendNote.opacity(1, 0.35),
   );
-  yield* waitFor(0.2);
+  yield* waitUntil('backend-role');
   yield* all(backendBrace.root.opacity(1, 0.35), backendLabel.opacity(1, 0.35));
 
   yield* waitUntil('stateless');
@@ -224,7 +228,7 @@ export default makeScene2D(function* (view) {
   market.receipt.add(refresh);
   stage.add(serverLabel);
   yield* all(title.opacity(1, 0.3), serverLabel.opacity(1, 0.3), refresh.opacity(1, 0.3));
-  yield* waitFor(0.8);
+  yield* waitUntil('second-server');
   const previousService = service;
   service = previousService.snapshotClone({ opacity: 0 });
   stage.add(service);
@@ -232,7 +236,7 @@ export default makeScene2D(function* (view) {
   previousService.remove();
   serverLabel.text('sunucu 2');
   yield* all(service.opacity(1, 0.35), serverLabel.opacity(1, 0.35));
-  yield* waitFor(0.55);
+  yield* waitUntil('repeat-request');
   cursor.position([-330, 160]);
   stage.add(cursor);
   yield* all(cursor.opacity(1, 0.2), cursor.position([-407, 79], 0.35));
@@ -241,6 +245,7 @@ export default makeScene2D(function* (view) {
   cursor.remove();
   market.status.fontFamily(theme.fontFamily.sans);
   market.status.text('yükleniyor…');
+  market.receiptDetails.opacity(0);
   const repeatRequest = cartoonArrow(
     's03-second-server-request',
     [-307, 45],
@@ -265,12 +270,15 @@ export default makeScene2D(function* (view) {
   const repeatFlow = [repeatRequest, repeatQuery, repeatRow, repeatResponse];
   stage.add([...repeatFlow.map((arrow) => arrow.root), repeatLabel]);
   for (const [index, arrow] of repeatFlow.entries()) {
+    if (index === 1) yield* waitUntil('repeat-query');
+    if (index === 3) yield* waitUntil('repeat-response');
     if (index === 0) yield* repeatLabel.opacity(1, 0.2);
     yield* arrow.reveal(1, 0.25);
     yield* arrow.travel(0.5);
     if (index === 3) {
       market.status.fontFamily(theme.fontFamily.mono);
       market.status.text('created');
+      market.receiptDetails.opacity(1);
     }
     yield* arrow.arrive(0.18);
     if (index === 1) yield* top.stroke(accent, 0.12).to(foreground, 0.25);
@@ -281,11 +289,23 @@ export default makeScene2D(function* (view) {
       repeatLabel.remove();
     }
   }
+  yield* waitUntil('stateless-conclusion');
   yield* title.opacity(0, 0.2);
   title.children(heading('önceki isteği ', 'hatırlaması gerekmiyor.').children());
   const stateless = text('stateless', 27, { position: [100, 309], fill: accent, opacity: 0 });
   stage.add(stateless);
-  yield* all(title.opacity(1, 0.3), stateless.opacity(1, 0.3));
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('stateless-label');
+  yield* stateless.opacity(1, 0.3);
+  record.root.x(560);
+  stage.add(record.root);
+  yield* waitUntil('stored-state');
+  yield* record.root.opacity(1, 0.35);
+  yield* waitUntil('application-stateless');
+  yield* all(
+    service.scale(1.025, 0.16).to(1, 0.24),
+    stateless.fill(foreground, 0.15).to(accent, 0.25),
+  );
   const local = paper(535, 215, '#17232f');
   local.root.y(10);
   local.root.opacity(0);
@@ -302,12 +322,14 @@ export default makeScene2D(function* (view) {
     market.receipt.opacity(0, 0.25),
     service.opacity(0.3, 0.3),
     database.opacity(0.3, 0.3),
+    record.root.opacity(0, 0.3),
     stateless.opacity(0, 0.2),
     serverLabel.opacity(0, 0.3),
     refresh.opacity(0, 0.3),
     backendBrace.root.opacity(0.3, 0.3),
     backendLabel.opacity(0.3, 0.3),
   );
+  yield* waitUntil('local-storage');
   yield* local.root.opacity(1, 0.4);
   yield* waitUntil('backend-focus');
   yield* all(title.opacity(0, 0.2), local.root.opacity(0, 0.25));
@@ -326,9 +348,9 @@ export default makeScene2D(function* (view) {
     frontendNote.opacity(0.45, 0.3),
     backendLabel.fill(accent, 0.3),
   );
-  yield* waitUntil('next');
+  yield* waitUntil('user-perspective');
   yield* title.opacity(0, 0.2);
-  title.children(heading('aynı veriyi ', 'başka kim', ' kullanıyor?').children());
+  title.children(heading('siparişim ', 'ne durumda?').children());
   yield* all(
     title.opacity(1, 0.3),
     market.root.opacity(1, 0.3),
@@ -338,5 +360,9 @@ export default makeScene2D(function* (view) {
     frontendNote.opacity(1, 0.3),
     backendLabel.fill(foreground, 0.3),
   );
+  yield* waitUntil('next');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('aynı veriyi ', 'başka kim', ' kullanıyor?').children());
+  yield* title.opacity(1, 0.3);
   yield* waitUntil('end');
 });

@@ -1,4 +1,4 @@
-import { Layout, makeScene2D, Path } from '@motion-canvas/2d';
+import { Layout, makeScene2D, Path, Txt } from '@motion-canvas/2d';
 import { all, easeInOutCubic, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
@@ -48,7 +48,7 @@ export default makeScene2D(function* (view) {
 
   yield* waitUntil('sync');
   yield* title.opacity(0, 0.2);
-  title.children(heading('ekip uyarıyı ', 'CRM’de görüyor.').children());
+  title.children(heading('inceleme ekibi ', 'CRM’i kullanıyor.').children());
   const crm = paper(530, 380, '#101315');
   crm.root.position([535, 75]);
   crm.root.opacity(0);
@@ -69,14 +69,23 @@ export default makeScene2D(function* (view) {
     position: [38, -13],
     fill: accent,
     fontStyle: 'italic',
-    opacity: () => transfer.reveal(),
+    opacity: 0,
   });
   sync.add([crm.root, transfer.root, syncLabel]);
   yield* all(title.opacity(1, 0.3), crm.root.opacity(1, 0.4));
+  yield* waitUntil('crm-transfer');
   yield* transfer.reveal(1, 0.4);
   yield* transfer.travel(1);
+  yield* transfer.arrive();
+  yield* waitUntil('crm-result');
   crmValue.text('inceleme bekliyor');
-  yield* all(transfer.arrive(), action.root.opacity(1, 0.35));
+  yield* crm.face.stroke(accent, 0.2).to(foreground, 0.3);
+  yield* waitUntil('crm-action');
+  yield* action.root.opacity(1, 0.35);
+  yield* waitUntil('reverse-etl');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('hazırladığımız veriyi ', 'uygulamaya taşıyoruz.').children());
+  yield* all(title.opacity(1, 0.3), syncLabel.opacity(1, 0.35));
 
   yield* waitUntil('model');
   yield* title.opacity(0, 0.2);
@@ -122,9 +131,12 @@ export default makeScene2D(function* (view) {
   deployment.add([train.root, artifact.root, service.root, output.root, deploy.root, deployLabel]);
   view.add(deployment);
   yield* deployment.opacity(1, 0.4);
+  yield* waitUntil('training-output');
   yield* output.reveal(1, 0.35);
   yield* output.travel(0.8);
-  yield* all(output.arrive(), artifact.root.opacity(1, 0.35));
+  yield* output.arrive();
+  yield* waitUntil('trained-model');
+  yield* artifact.root.opacity(1, 0.35);
 
   yield* waitUntil('deploy');
   yield* title.opacity(0, 0.2);
@@ -144,7 +156,7 @@ export default makeScene2D(function* (view) {
 
   yield* waitUntil('inference');
   yield* title.opacity(0, 0.2);
-  title.children(heading('muz sayfasında ', 'süt önerisi', ' beliriyor.').children());
+  title.children(heading('müşteri ', 'muz sayfasını', ' açıyor.').children());
   service.root.remove();
   service.root.position([595, 225]);
   view.add(service.root);
@@ -206,27 +218,39 @@ export default makeScene2D(function* (view) {
   ]);
   view.add(inference);
   yield* all(title.opacity(1, 0.3), app.root.opacity(1, 0.4));
+  yield* waitUntil('recommendation-request');
   yield* request.reveal(1, 0.35);
   yield* request.travel(0.9);
-  yield* all(request.arrive(), badge.face.stroke(accent, 0.25));
+  yield* request.arrive();
+  yield* waitUntil('model-use');
+  yield* badge.face.stroke(accent, 0.25);
+  yield* badge.root.scale(1.1, 0.25).to(1, 0.35);
+  yield* waitUntil('recommendation-response');
   yield* response.reveal(1, 0.35);
   yield* response.travel(0.9);
+  yield* response.arrive();
+  yield* waitUntil('recommendation-result');
   yield* all(
-    response.arrive(),
+    title.opacity(0, 0.2),
     suggested.root.opacity(1, 0.35),
     badge.face.stroke(foreground, 0.3),
   );
+  title.children(heading('muz sayfasında ', 'süt önerisi', ' beliriyor.').children());
+  yield* title.opacity(1, 0.3);
 
   yield* waitUntil('serving');
   yield* title.opacity(0, 0.2);
   title.children(heading('analizde ürettik, ', 'uygulamada kullanıyoruz.').children());
   const recap = new Layout({ opacity: 0, y: -232 });
-  recap.add([
-    text('uyarı → CRM', 29, { x: -475, fill: muted }),
-    text('model → öneri servisi', 29, { x: 395, fill: accent }),
-  ]);
+  const crmRecap = text('uyarı → CRM', 29, { x: -475, fill: muted, opacity: 0 });
+  const modelRecap = text('model → öneri servisi', 29, { x: 395, fill: accent, opacity: 0 });
+  recap.add([crmRecap, modelRecap]);
   view.add(recap);
   yield* all(title.opacity(1, 0.3), recap.opacity(1, 0.4));
+  yield* waitUntil('recap-crm');
+  yield* crmRecap.opacity(1, 0.35);
+  yield* waitUntil('recap-model');
+  yield* modelRecap.opacity(1, 0.35);
 
   yield* waitUntil('outputs');
   yield* all(title.opacity(0, 0.2), inference.opacity(0, 0.4), recap.opacity(0, 0.3));
@@ -242,11 +266,28 @@ export default makeScene2D(function* (view) {
   relations.records.opacity(0);
   relations.training.opacity(0);
   relations.copy.reveal(0);
+  const recordValues = relations.cards.map((card) =>
+    card.root
+      .children()
+      .filter(
+        (node) => node instanceof Txt && (node.text() === '#1042' || node.text() === 'amount: 185'),
+      ),
+  );
+  recordValues.flat().forEach((node) => node.opacity(0));
   view.add(relations.root);
-  yield* all(relations.records.opacity(1, 0.45), relations.training.opacity(1, 0.45));
+  yield* relations.records.opacity(1, 0.45);
+  yield* waitUntil('training-recap');
+  yield* relations.training.opacity(1, 0.45);
+  yield* waitUntil('record-focus');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('1042 numaralı ', 'satışa dönelim.').children());
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('source-record');
+  yield* all(...recordValues[0].map((node) => node.opacity(1, 0.35)));
+  yield* waitUntil('copy-record');
   yield* relations.copy.reveal(1, 0.3);
   yield* relations.copy.travel(0.65);
-  yield* relations.copy.arrive();
+  yield* all(relations.copy.arrive(), ...recordValues[1].map((node) => node.opacity(1, 0.35)));
 
   yield* waitUntil('next');
   yield* title.opacity(0, 0.2);

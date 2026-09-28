@@ -1,5 +1,5 @@
 import { Circle, Layout, Path, Txt, View2D } from '@motion-canvas/2d';
-import { all, delay, linear, waitFor } from '@motion-canvas/core';
+import { all, delay, linear, waitFor, waitUntil } from '@motion-canvas/core';
 import { theme } from '../../theme';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase, cartoonService } from '../../../../../common/cartoon-system';
@@ -129,8 +129,9 @@ export function* showQueryRate(view: View2D) {
     yield* all(queryArrow.arrive(), databaseTop.stroke(accent, 0.04).to(foreground, 0.16));
   }
 
+  yield* waitUntil('query-rate-single');
   yield* all(delay(arrivalsBegin, progress.end(1, 1, linear)), fetchMessages(0, 0));
-  yield* waitFor(0.65);
+  yield* waitUntil('query-rate-increase');
   yield* meter.opacity(0, 0.15);
   rate.text('4');
   progress.end(0);

@@ -2,64 +2,124 @@
   "version": 0,
   "timeEvents": [
     {
+      "name": "market",
+      "targetTime": 8.316667
+    },
+    {
+      "name": "order-submit",
+      "targetTime": 14.9
+    },
+    {
       "name": "store",
-      "targetTime": 5
+      "targetTime": 22.233333
     },
     {
       "name": "retrieve",
-      "targetTime": 13
+      "targetTime": 25.4
     },
     {
       "name": "cache",
-      "targetTime": 22
+      "targetTime": 28.916667
+    },
+    {
+      "name": "cache-calculate",
+      "targetTime": 31.766667
     },
     {
       "name": "cache-store",
-      "targetTime": 28
+      "targetTime": 44.933333
+    },
+    {
+      "name": "cache-return",
+      "targetTime": 46.35
     },
     {
       "name": "cache-hit",
-      "targetTime": 34
+      "targetTime": 47.7
     },
     {
       "name": "search",
-      "targetTime": 43
+      "targetTime": 51.666667
+    },
+    {
+      "name": "search-type",
+      "targetTime": 53.533333
     },
     {
       "name": "search-results",
-      "targetTime": 48
+      "targetTime": 59.316667
+    },
+    {
+      "name": "search-return",
+      "targetTime": 66.766667
     },
     {
       "name": "stream",
-      "targetTime": 56
+      "targetTime": 69.4
     },
     {
       "name": "stream-events",
-      "targetTime": 60
+      "targetTime": 75.45
+    },
+    {
+      "name": "stream-first-result",
+      "targetTime": 76.6
+    },
+    {
+      "name": "stream-second",
+      "targetTime": 77.05
+    },
+    {
+      "name": "stream-second-result",
+      "targetTime": 78.2
+    },
+    {
+      "name": "stream-third",
+      "targetTime": 78.55
+    },
+    {
+      "name": "stream-third-result",
+      "targetTime": 79.7
     },
     {
       "name": "batch",
-      "targetTime": 72
+      "targetTime": 87.533333
     },
     {
       "name": "batch-run",
-      "targetTime": 79
+      "targetTime": 94.083333
+    },
+    {
+      "name": "batch-result",
+      "targetTime": 99.666667
     },
     {
       "name": "tradeoffs",
-      "targetTime": 88
+      "targetTime": 115.483333
+    },
+    {
+      "name": "traffic-change",
+      "targetTime": 121.133333
+    },
+    {
+      "name": "eta-recalculate",
+      "targetTime": 126.283333
     },
     {
       "name": "cache-stale",
-      "targetTime": 94
+      "targetTime": 128.2
+    },
+    {
+      "name": "cache-refresh-question",
+      "targetTime": 138.05
     },
     {
       "name": "next",
-      "targetTime": 102
+      "targetTime": 156.15
     },
     {
       "name": "end",
-      "targetTime": 110
+      "targetTime": 167.233333
     }
   ],
   "seed": 104202

@@ -181,19 +181,23 @@ export default makeScene2D(function* (view) {
   ]);
   view.add(stage);
   yield* stage.opacity(1, 0.5);
+  // The chapter map and title card finish before the voiceover begins.
+  yield* waitUntil('narration-start');
   yield* waitUntil('operational');
   yield* all(request.reveal(1, 0.4), readLabel.opacity(1, 0.3));
   yield* request.travel(0.6);
   yield* all(request.arrive(), top.stroke(accent, 0.12).to(foreground, 0.3));
+  yield* waitUntil('order-response');
   yield* all(response.reveal(1, 0.4), responseLabel.opacity(1, 0.3));
   yield* response.travel(0.6);
   market.status.text('created');
   yield* all(
     response.arrive(),
     overviewDetails.opacity(1, 0.3),
-    operational.opacity(1, 0.35),
     market.shell.stroke(accent, 0.12).to(foreground, 0.3),
   );
+  yield* waitUntil('operational-label');
+  yield* operational.opacity(1, 0.35);
   yield* waitUntil('engineer');
   yield* title.opacity(0, 0.2);
   title.children(heading('bu isteği ', 'bir servis', ' karşılar.').children());
@@ -225,17 +229,20 @@ export default makeScene2D(function* (view) {
   yield* all(query.reveal(1, 0.4), queryLabel.opacity(1, 0.3));
   yield* query.travel(0.6);
   yield* all(query.arrive(), top.stroke(accent, 0.12).to(foreground, 0.3));
+  yield* waitUntil('report-result');
   yield* result.reveal(1, 0.4);
   yield* result.travel(0.6);
-  yield* all(
-    result.arrive(),
-    ...report.bars.map(({ bar, amount }) => bar.height(amount * 0.37, 0.65)),
-  );
-  yield* all(
-    ...report.bars.map(({ value }) => value.opacity(1, 0.3)),
-    analytical.opacity(1, 0.35),
-    analyst.opacity(1, 0.4),
-  );
+  yield* result.arrive();
+  yield* waitUntil('report-store-a');
+  yield* report.bars[0].bar.height(report.bars[0].amount * 0.37, 0.65);
+  yield* report.bars[0].value.opacity(1, 0.3);
+  yield* waitUntil('report-store-b');
+  yield* report.bars[1].bar.height(report.bars[1].amount * 0.37, 0.65);
+  yield* report.bars[1].value.opacity(1, 0.3);
+  yield* waitUntil('analytical-label');
+  yield* analytical.opacity(1, 0.35);
+  yield* waitUntil('business-analyst');
+  yield* analyst.opacity(1, 0.4);
   yield* waitUntil('bi');
   yield* title.opacity(0, 0.2);
   title.children(heading('raporlar ', 'karar vermemize', ' yardımcı olur.').children());
@@ -245,7 +252,9 @@ export default makeScene2D(function* (view) {
     opacity: 0,
   });
   stage.add(bi);
-  yield* all(title.opacity(1, 0.35), reportQuestion.opacity(1, 0.35), bi.opacity(1, 0.35));
+  yield* all(title.opacity(1, 0.35), reportQuestion.opacity(1, 0.35));
+  yield* waitUntil('bi-label');
+  yield* bi.opacity(1, 0.35);
   yield* waitUntil('compare');
   yield* title.opacity(0, 0.2);
   title.children(heading('aynı data, ', 'farklı işler.').children());
@@ -288,9 +297,11 @@ export default makeScene2D(function* (view) {
     title.opacity(1, 0.35),
     report.period.opacity(1, 0.35),
     report.suggestions.opacity(1, 0.4),
-    scientist.opacity(1, 0.4),
   );
+  yield* waitUntil('recommendation-query');
   yield* report.suggest.travel(0.8);
+  yield* waitUntil('data-scientist');
+  yield* scientist.opacity(1, 0.4);
   yield* waitUntil('return');
   yield* all(
     overviewDetails.opacity(0, 0.25),

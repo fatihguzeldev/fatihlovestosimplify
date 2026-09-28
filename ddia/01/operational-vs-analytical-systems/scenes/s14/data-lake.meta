@@ -2,40 +2,176 @@
   "version": 0,
   "timeEvents": [
     {
+      "name": "lake",
+      "targetTime": 0.95
+    },
+    {
       "name": "files",
-      "targetTime": 5
+      "targetTime": 5.45
+    },
+    {
+      "name": "clickstream-file",
+      "targetTime": 6.68
+    },
+    {
+      "name": "review-file",
+      "targetTime": 8.05
+    },
+    {
+      "name": "image-file",
+      "targetTime": 10.78
+    },
+    {
+      "name": "formats",
+      "targetTime": 12.84
+    },
+    {
+      "name": "prepare",
+      "targetTime": 18.35
     },
     {
       "name": "read",
-      "targetTime": 18
+      "targetTime": 22.38
+    },
+    {
+      "name": "fields",
+      "targetTime": 26.5
+    },
+    {
+      "name": "interpret",
+      "targetTime": 29.55
+    },
+    {
+      "name": "time-field",
+      "targetTime": 33.7
+    },
+    {
+      "name": "event-field",
+      "targetTime": 36.7
+    },
+    {
+      "name": "schema-on-read",
+      "targetTime": 43.02
     },
     {
       "name": "report",
-      "targetTime": 28
+      "targetTime": 45.1
+    },
+    {
+      "name": "report-fields",
+      "targetTime": 47.35
+    },
+    {
+      "name": "report-count",
+      "targetTime": 50.55
+    },
+    {
+      "name": "banana-count",
+      "targetTime": 54.55
+    },
+    {
+      "name": "milk-count",
+      "targetTime": 55.4
     },
     {
       "name": "features",
-      "targetTime": 44
+      "targetTime": 56.25
+    },
+    {
+      "name": "feature-source",
+      "targetTime": 58.85
+    },
+    {
+      "name": "cart-event",
+      "targetTime": 61.9
+    },
+    {
+      "name": "event-times",
+      "targetTime": 63.9
+    },
+    {
+      "name": "two-outputs",
+      "targetTime": 66
+    },
+    {
+      "name": "model-source",
+      "targetTime": 74.75
     },
     {
       "name": "reuse",
-      "targetTime": 57
+      "targetTime": 77.35
+    },
+    {
+      "name": "preserved-times",
+      "targetTime": 80.9
+    },
+    {
+      "name": "preserved-cart",
+      "targetTime": 82.35
+    },
+    {
+      "name": "new-question",
+      "targetTime": 84.8
     },
     {
       "name": "consumers",
-      "targetTime": 69
+      "targetTime": 90.1
+    },
+    {
+      "name": "warehouse-read",
+      "targetTime": 93.1
+    },
+    {
+      "name": "warehouse-load",
+      "targetTime": 94.6
+    },
+    {
+      "name": "training-source",
+      "targetTime": 96.85
+    },
+    {
+      "name": "training-features",
+      "targetTime": 98.25
+    },
+    {
+      "name": "training-output",
+      "targetTime": 100.15
+    },
+    {
+      "name": "shared-sources",
+      "targetTime": 102.55
     },
     {
       "name": "meaning",
-      "targetTime": 80
+      "targetTime": 108.85
+    },
+    {
+      "name": "meaning-view",
+      "targetTime": 114
+    },
+    {
+      "name": "quality",
+      "targetTime": 129.95
     },
     {
       "name": "next",
-      "targetTime": 94
+      "targetTime": 134.65
+    },
+    {
+      "name": "missing-record",
+      "targetTime": 135.95
+    },
+    {
+      "name": "missing-store",
+      "targetTime": 138.5
+    },
+    {
+      "name": "store-question",
+      "targetTime": 140.75
     },
     {
       "name": "end",
-      "targetTime": 106
+      "targetTime": 143.6166666667
     }
   ],
   "seed": 104214

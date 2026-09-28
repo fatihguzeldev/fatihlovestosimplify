@@ -73,10 +73,14 @@ export default makeScene2D(function* (view) {
     input.root.scale(1, 0.75, easeInOutCubic),
   );
   yield* processing.opacity(1, 0.45);
-  yield* all(read.reveal(1, 0.3), accepted.reveal(1, 0.3));
+  yield* accepted.reveal(1, 0.3);
+  yield* waitUntil('validation-read');
+  yield* read.reveal(1, 0.3);
   yield* read.travel(0.65);
   yield* read.arrive();
+  yield* waitUntil('invalid-record');
   yield* validate.face.stroke(accent, 0.2).to(foreground, 0.3);
+  yield* waitUntil('review-record');
   yield* rejected.reveal(1, 0.35);
   yield* rejected.travel(0.7);
   yield* all(rejected.arrive(), review.root.opacity(1, 0.3));
@@ -97,16 +101,40 @@ export default makeScene2D(function* (view) {
   systems.root.opacity(0);
   view.add(systems.root);
   title.children(heading('bu akışın ', 'sorumluluğu', ' bizde.').children());
-  const tags = new Layout({ opacity: 0 });
-  tags.add([
-    text('access', 29, { position: [-540, -255], fill: accent, fontStyle: 'italic' }),
-    text('quality', 29, { position: [115, -205], fill: accent, fontStyle: 'italic' }),
-    text('monitoring', 29, { position: [650, -255], fill: accent, fontStyle: 'italic' }),
-    text('data ops', 24, { position: [0, 426], fill: muted, fontFamily: theme.fontFamily.mono }),
-  ]);
+  const tags = new Layout({});
+  const accessTag = text('access', 29, {
+    position: [-540, -255],
+    fill: accent,
+    fontStyle: 'italic',
+    opacity: 0,
+  });
+  const qualityTag = text('quality', 29, {
+    position: [115, -205],
+    fill: accent,
+    fontStyle: 'italic',
+    opacity: 0,
+  });
+  const monitoringTag = text('monitoring', 29, {
+    position: [650, -255],
+    fill: accent,
+    fontStyle: 'italic',
+    opacity: 0,
+  });
+  const dataOps = text('DataOps', 29, {
+    position: [0, 426],
+    fill: accent,
+    fontFamily: theme.fontFamily.mono,
+    opacity: 0,
+  });
+  tags.add([accessTag, qualityTag, monitoringTag, dataOps]);
   view.add(tags);
   yield* all(title.opacity(1, 0.3), systems.root.opacity(1, 0.5));
-  yield* tags.opacity(1, 0.4);
+  yield* waitUntil('monitoring');
+  yield* all(qualityTag.opacity(1, 0.35), monitoringTag.opacity(1, 0.35));
+  yield* waitUntil('data-ops');
+  yield* dataOps.opacity(1, 0.35);
+  yield* waitUntil('responsibility');
+  yield* accessTag.opacity(1, 0.35);
   yield* waitUntil('privacy');
   yield* all(title.opacity(0, 0.2), systems.root.opacity(0, 0.4), tags.opacity(0, 0.3));
   systems.root.remove();
@@ -114,6 +142,10 @@ export default makeScene2D(function* (view) {
   const access = new Layout({});
   view.add(access);
   yield* accessExample(access, title);
+  yield* waitUntil('usable');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('sonucu ', 'ne zaman kullanabiliyoruz?').children());
+  yield* title.opacity(1, 0.3);
   yield* waitUntil('batch');
   yield* all(title.opacity(0, 0.2), access.opacity(0, 0.4));
   access.remove();

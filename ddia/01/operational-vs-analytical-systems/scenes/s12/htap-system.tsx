@@ -122,7 +122,7 @@ export function htapSystem() {
     fontFamily: theme.fontFamily.mono,
     fill: accent,
   });
-  const expanded = text('hybrid transactional / analytical processing', 30, {
+  const expanded = text('hybrid transactional and analytical processing', 30, {
     position: [0, 302],
     fill: muted,
   });
@@ -266,16 +266,17 @@ export function htapLandscape() {
     arrow.root.scale(scale);
     return arrow;
   });
+  const labels = ['ödemeler ve satışlar', 'stoklar', 'mağazalar ve bölgeler'].map((label, index) =>
+    text(label, 27, { position: [-570 + index * 570, 83], fill: accent }),
+  );
   root.add([
     local.root,
     text('satış uygulaması', 28, { position: [-570, 31] }),
     inventory.root,
     stores.root,
-    ...['ödemeler ve satışlar', 'stoklar', 'mağazalar ve bölgeler'].map((label, index) =>
-      text(label, 27, { position: [-570 + index * 570, 83], fill: accent }),
-    ),
+    ...labels,
     warehouse.root,
     ...routes.map((arrow) => arrow.root),
   ]);
-  return { root, local, warehouse, combined, routes };
+  return { root, local, inventory, stores, labels, warehouse, combined, routes };
 }

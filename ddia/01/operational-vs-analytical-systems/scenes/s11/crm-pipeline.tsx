@@ -8,10 +8,11 @@ export function crmPipeline() {
   const root = new Layout({});
   const crm = paper(330, 260, '#101315');
   crm.root.position([-645, 95]);
+  const api = text('API', 56, { y: 20, fill: accent, fontFamily: theme.fontFamily.mono });
   crm.root.add([
     text('external CRM', 29, { y: -87 }),
     new Path({ data: 'M -129 -44 L 129 -44', stroke: foreground, lineWidth: 1.5, opacity: 0.4 }),
-    text('API', 56, { y: 20, fill: accent, fontFamily: theme.fontFamily.mono }),
+    api,
     text('customers', 23, { y: 84, fill: muted, fontFamily: theme.fontFamily.mono }),
   ]);
   const connector = cartoonService('connector', accent);
@@ -49,5 +50,5 @@ export function crmPipeline() {
     load.root,
     labels,
   ]);
-  return { root, crm, connector, warehouse, customers, request, response, load };
+  return { root, crm, api, connector, warehouse, customers, request, response, load };
 }

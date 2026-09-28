@@ -3,39 +3,103 @@
   "timeEvents": [
     {
       "name": "store",
-      "targetTime": 5
+      "targetTime": 4
     },
     {
       "name": "sync",
-      "targetTime": 12
+      "targetTime": 6.65
+    },
+    {
+      "name": "crm-transfer",
+      "targetTime": 16.25
+    },
+    {
+      "name": "crm-result",
+      "targetTime": 21.9
+    },
+    {
+      "name": "crm-action",
+      "targetTime": 24.2
+    },
+    {
+      "name": "reverse-etl",
+      "targetTime": 31.95
     },
     {
       "name": "model",
-      "targetTime": 28
+      "targetTime": 42.2
+    },
+    {
+      "name": "training-output",
+      "targetTime": 48.6
+    },
+    {
+      "name": "trained-model",
+      "targetTime": 50.75
     },
     {
       "name": "deploy",
-      "targetTime": 42
+      "targetTime": 59.05
     },
     {
       "name": "inference",
-      "targetTime": 55
+      "targetTime": 64.05
+    },
+    {
+      "name": "recommendation-request",
+      "targetTime": 69.25
+    },
+    {
+      "name": "model-use",
+      "targetTime": 73.5
+    },
+    {
+      "name": "recommendation-response",
+      "targetTime": 77.2
+    },
+    {
+      "name": "recommendation-result",
+      "targetTime": 79.5
     },
     {
       "name": "serving",
-      "targetTime": 73
+      "targetTime": 83.15
+    },
+    {
+      "name": "recap-crm",
+      "targetTime": 88.75
+    },
+    {
+      "name": "recap-model",
+      "targetTime": 91.45
     },
     {
       "name": "outputs",
-      "targetTime": 87
+      "targetTime": 112.3
+    },
+    {
+      "name": "training-recap",
+      "targetTime": 118.45
+    },
+    {
+      "name": "record-focus",
+      "targetTime": 126.2
+    },
+    {
+      "name": "source-record",
+      "targetTime": 129.25
+    },
+    {
+      "name": "copy-record",
+      "targetTime": 132
     },
     {
       "name": "next",
-      "targetTime": 98
+      "targetTime": 139.1
     },
     {
       "name": "end",
-      "targetTime": 108
+      "targetTime": 143.1166666667
     }
   ],
   "seed": 104216

@@ -1,5 +1,5 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
-import { all, easeOutCubic, waitFor, waitUntil } from '@motion-canvas/core';
+import { all, easeOutCubic, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
@@ -21,8 +21,9 @@ export default makeScene2D(function* (view) {
   title.children(heading('her kayıt, ', 'bir işin', ' parçası.').children());
   const actors = new Layout({ opacity: 0 });
   const applications = ['ecommerce', 'stock-keeping', 'store directory'];
-  ['müşteri', 'depo çalışanı', 'mağaza yöneticisi'].forEach((name, i) => {
+  const actorGroups = ['müşteri', 'depo çalışanı', 'mağaza yöneticisi'].map((name, i) => {
     const x = -570 + i * 570;
+    const group = new Layout({ opacity: i === 0 ? 1 : 0 });
     const person = role(
       name,
       ['sipariş veriyor', 'stokları takip ediyor', 'mağaza bilgilerini güncelliyor'][i],
@@ -36,12 +37,18 @@ export default makeScene2D(function* (view) {
     const arrow = cartoonArrow(`s10-app-${i}-records`, [0, 0], [0, 126], accent, 0);
     arrow.root.position([x, 29]);
     arrow.root.scale(0.75);
-    actors.add([person, application.root, arrow.root]);
+    group.add([person, application.root, arrow.root]);
+    actors.add(group);
     arrow.reveal(1);
+    return group;
   });
   view.add(actors);
   yield* all(title.opacity(1, 0.3), actors.opacity(1, 0.4));
-  yield* waitUntil('extract');
+  yield* waitUntil('inventory-actor');
+  yield* actorGroups[1].opacity(1, 0.35);
+  yield* waitUntil('store-actor');
+  yield* actorGroups[2].opacity(1, 0.35);
+  yield* waitUntil('record');
   yield* all(title.opacity(0, 0.2), actors.opacity(0, 0.3), landscape.root.opacity(0, 0.4));
   actors.remove();
   landscape.root.remove();
@@ -51,9 +58,14 @@ export default makeScene2D(function* (view) {
   pipeline.load.reveal(0);
   pipeline.transform.root.opacity(0.25);
   pipeline.warehouse.root.opacity(0.25);
-  title.children(heading('önce kaydın ', 'kopyasını alıyoruz.').children());
+  title.children(heading('1042 numaralı ', 'satış kaydını', ' izleyelim.').children());
   view.add(pipeline.root);
   yield* all(title.opacity(1, 0.3), pipeline.root.opacity(1, 0.5));
+  yield* waitUntil('extract');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('önce kaydın ', 'kopyasını alıyoruz.').children());
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('copy');
   yield* pipeline.extract.reveal(1, 0.4);
   yield* pipeline.extract.travel(0.8);
   yield* all(
@@ -67,6 +79,7 @@ export default makeScene2D(function* (view) {
     opacity: 0,
   });
   view.add(retained);
+  yield* waitUntil('retained');
   yield* retained.opacity(1, 0.3);
   yield* waitUntil('transform');
   yield* all(title.opacity(0, 0.2), retained.opacity(0, 0.2));
@@ -74,14 +87,23 @@ export default makeScene2D(function* (view) {
   const lookup = paper(380, 94, '#17232f');
   lookup.root.position([0, -202]);
   lookup.root.opacity(0);
+  const regionValue = text('A → Marmara', 27, {
+    y: 18,
+    fill: accent,
+    fontFamily: theme.fontFamily.mono,
+    opacity: 0,
+  });
   lookup.root.add([
     text('store database · lookup', 21, { y: -22, fill: muted, fontFamily: theme.fontFamily.mono }),
-    text('A → Marmara', 27, { y: 18, fill: accent, fontFamily: theme.fontFamily.mono }),
+    regionValue,
   ]);
   view.add(lookup.root);
   yield* title.opacity(1, 0.3);
+  yield* waitUntil('lookup');
   yield* lookup.root.opacity(1, 0.4);
-  yield* waitFor(1.1);
+  yield* waitUntil('lookup-region');
+  yield* regionValue.opacity(1, 0.3);
+  yield* waitUntil('enrich');
   yield* all(
     pipeline.region.opacity(1, 0.45),
     pipeline.transform.face.stroke(accent, 0.2).to(foreground, 0.5),
@@ -101,6 +123,10 @@ export default makeScene2D(function* (view) {
     pipeline.warehouse.root.opacity(1, 0.3),
     pipeline.stored.opacity(1, 0.3),
   );
+  yield* waitUntil('etl');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('extract, transform, load: ', 'ETL.').children());
+  yield* title.opacity(1, 0.3);
   yield* waitUntil('other-sources');
   yield* all(title.opacity(0, 0.2), pipeline.root.opacity(0, 0.4));
   title.children(heading('diğer kaynaklar da ', 'kendi yolundan', ' geliyor.').children());
@@ -190,6 +216,7 @@ export default makeScene2D(function* (view) {
   yield* query.reveal(1, 0.4);
   yield* query.travel(0.9);
   yield* query.arrive();
+  yield* waitUntil('query-result');
   yield* reply.reveal(1, 0.4);
   yield* reply.travel(0.9);
   yield* all(
@@ -212,19 +239,26 @@ export default makeScene2D(function* (view) {
   title.children(heading('bu akışı ', 'kurup işletmek', ' gerekiyor.').children());
   const engineer = role('data engineer', 'entegrasyon ve işletim', 0);
   engineer.position([-448, 386]);
-  const modeller = role('analytics engineer', 'analytical modelleme', 2);
+  const modeller = role('analytics engineer', 'veri modelleri', 2);
   modeller.position([427, 386]);
   const note = text('roller örtüşebilir.', 22, { position: [0, 478], fill: muted, opacity: 0 });
   view.add([engineer, modeller, note]);
   yield* all(title.opacity(1, 0.3), final.root.opacity(1, 0.5));
-  yield* all(engineer.opacity(1, 0.4), modeller.opacity(1, 0.4), note.opacity(1, 0.4));
-  yield* waitUntil('next');
+  yield* waitUntil('roles');
+  yield* all(engineer.opacity(1, 0.4), modeller.opacity(1, 0.4));
+  yield* waitUntil('roles-overlap');
+  yield* note.opacity(1, 0.3);
+  yield* waitUntil('recap');
   yield* all(
     title.opacity(0, 0.2),
     engineer.opacity(0, 0.3),
     modeller.opacity(0, 0.3),
     note.opacity(0, 0.3),
   );
+  title.children(heading('önce extract, sonra transform, ', 'en son load.').children());
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('next');
+  yield* title.opacity(0, 0.2);
   title.children(heading('dönüşümü ', 'önce yapmak', ' şart mı?').children());
   yield* title.opacity(1, 0.3);
   yield* waitUntil('end');

@@ -3,7 +3,19 @@
   "timeEvents": [
     {
       "name": "invalid",
-      "targetTime": 0.8
+      "targetTime": 0.4
+    },
+    {
+      "name": "validation-read",
+      "targetTime": 5
+    },
+    {
+      "name": "invalid-record",
+      "targetTime": 8.85
+    },
+    {
+      "name": "review-record",
+      "targetTime": 16.15
     },
     {
       "name": "incomplete",
@@ -11,43 +23,135 @@
     },
     {
       "name": "operations",
-      "targetTime": 33
+      "targetTime": 29.5
+    },
+    {
+      "name": "monitoring",
+      "targetTime": 36.45
+    },
+    {
+      "name": "data-ops",
+      "targetTime": 44.45
+    },
+    {
+      "name": "responsibility",
+      "targetTime": 52.65
     },
     {
       "name": "privacy",
-      "targetTime": 46
+      "targetTime": 58.5
+    },
+    {
+      "name": "read-query",
+      "targetTime": 63.85
+    },
+    {
+      "name": "read-response",
+      "targetTime": 66.4
     },
     {
       "name": "write-access",
-      "targetTime": 52
+      "targetTime": 68.1
+    },
+    {
+      "name": "write-query",
+      "targetTime": 69.1
+    },
+    {
+      "name": "write-denied",
+      "targetTime": 72
+    },
+    {
+      "name": "write-unchanged",
+      "targetTime": 74.25
+    },
+    {
+      "name": "access-summary",
+      "targetTime": 76.55
+    },
+    {
+      "name": "usable",
+      "targetTime": 82.1
     },
     {
       "name": "batch",
-      "targetTime": 57
+      "targetTime": 85.5
+    },
+    {
+      "name": "payment-events",
+      "targetTime": 89.9
+    },
+    {
+      "name": "payment-rule",
+      "targetTime": 92.25
+    },
+    {
+      "name": "batch-schedule",
+      "targetTime": 96.8
     },
     {
       "name": "batch-run",
-      "targetTime": 67
+      "targetTime": 104.2
+    },
+    {
+      "name": "batch-event-times",
+      "targetTime": 106.55
+    },
+    {
+      "name": "batch-match",
+      "targetTime": 109.55
+    },
+    {
+      "name": "batch-result",
+      "targetTime": 112.45
+    },
+    {
+      "name": "batch-delay",
+      "targetTime": 114.2
     },
     {
       "name": "stream",
-      "targetTime": 80
+      "targetTime": 122.3
+    },
+    {
+      "name": "stream-first",
+      "targetTime": 129
+    },
+    {
+      "name": "stream-second",
+      "targetTime": 130.95
+    },
+    {
+      "name": "stream-third",
+      "targetTime": 135.25
+    },
+    {
+      "name": "stream-result",
+      "targetTime": 138.55
     },
     {
       "name": "timeliness",
-      "targetTime": 94
+      "targetTime": 141.25
     },
     {
       "name": "latency",
-      "targetTime": 106
+      "targetTime": 146.9
+    },
+    {
+      "name": "two-seconds",
+      "targetTime": 152.5
+    },
+    {
+      "name": "nonzero-latency",
+      "targetTime": 154.55
     },
     {
       "name": "next",
-      "targetTime": 118
+      "targetTime": 162.75
     },
     {
       "name": "end",
-      "targetTime": 130
+      "targetTime": 169.5833333333
     }
   ],
   "seed": 104215

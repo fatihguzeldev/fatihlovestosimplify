@@ -3,35 +3,71 @@
   "timeEvents": [
     {
       "name": "product",
-      "targetTime": 6
+      "targetTime": 0.4
     },
     {
       "name": "fresh",
-      "targetTime": 16
+      "targetTime": 9.15
     },
     {
       "name": "read",
-      "targetTime": 25
+      "targetTime": 18.95
+    },
+    {
+      "name": "sale-total",
+      "targetTime": 24.4
+    },
+    {
+      "name": "freshness",
+      "targetTime": 28.55
     },
     {
       "name": "latency",
-      "targetTime": 36
+      "targetTime": 38.6
+    },
+    {
+      "name": "panel-open",
+      "targetTime": 42.4
+    },
+    {
+      "name": "response",
+      "targetTime": 46.2
     },
     {
       "name": "dimensions",
-      "targetTime": 49
+      "targetTime": 47.85
+    },
+    {
+      "name": "stale",
+      "targetTime": 51.15
+    },
+    {
+      "name": "slow",
+      "targetTime": 57.15
+    },
+    {
+      "name": "balanced",
+      "targetTime": 64.8
+    },
+    {
+      "name": "analytical",
+      "targetTime": 72
     },
     {
       "name": "name",
-      "targetTime": 59
+      "targetTime": 84.55
     },
     {
       "name": "next",
-      "targetTime": 70
+      "targetTime": 97.6
+    },
+    {
+      "name": "contention",
+      "targetTime": 105.75
     },
     {
       "name": "end",
-      "targetTime": 84
+      "targetTime": 117.1
     }
   ],
   "seed": 104208

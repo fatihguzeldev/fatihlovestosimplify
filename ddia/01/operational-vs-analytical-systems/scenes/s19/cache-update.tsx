@@ -1,5 +1,5 @@
 import { Layout, Rect, type Txt } from '@motion-canvas/2d';
-import { all, waitFor, waitUntil } from '@motion-canvas/core';
+import { all, waitUntil } from '@motion-canvas/core';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { cartoonDatabase, cartoonService } from '../../../../../common/cartoon-system';
 import { theme } from '../../theme';
@@ -7,7 +7,7 @@ import { accent, foreground, heading, muted, paper, text } from '../shared/drawi
 import { createMarket } from '../shared/market';
 
 export function* updateCache(root: Layout, title: Txt) {
-  title.children(heading('sipariş ', 'yola çıktı.').children());
+  title.children(heading('siparişin ', 'durumuna bakalım.').children());
   const market = createMarket();
   market.cart.remove();
   market.receipt.opacity(1);
@@ -70,9 +70,17 @@ export function* updateCache(root: Layout, title: Txt) {
     replyLabel,
   ]);
   yield* all(title.opacity(1, 0.3), root.opacity(1, 0.5));
-  yield* waitFor(0.8);
+  yield* waitUntil('shipped');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('sipariş ', 'yola çıktı.').children());
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('shipped-record');
   status.text('shipped');
   yield* db.top.stroke(accent, 0.15).to(foreground, 0.35);
+  yield* waitUntil('cache-stale');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('cache’te hâlâ ', 'preparing', ' var.').children());
+  yield* all(title.opacity(1, 0.3), cache.face.stroke(accent, 0.3));
   yield* waitUntil('invalidate');
   yield* title.opacity(0, 0.2);
   title.children(heading('eski cache kaydını ', 'kaldıralım.').children());
@@ -80,6 +88,7 @@ export function* updateCache(root: Layout, title: Txt) {
   yield* all(title.opacity(1, 0.3), cacheLabel.opacity(1, 0.3), get.reveal(1, 0.3));
   yield* get.travel(0.8);
   yield* all(get.arrive(), cache.face.stroke(accent, 0.3));
+  yield* waitUntil('invalidated');
   yield* cached.opacity(0, 0.2);
   cached.text('—');
   cached.fill(muted);
@@ -89,16 +98,19 @@ export function* updateCache(root: Layout, title: Txt) {
   get.root.opacity(1);
   yield* waitUntil('miss');
   yield* title.opacity(0, 0.2);
-  title.children(heading('sonraki istekte ', 'cache miss.').children());
+  title.children(heading('servis önce ', 'cache’e bakıyor.').children());
   cacheLabel.text('get("order:1042")');
   shown.text('…');
   yield* all(title.opacity(1, 0.3), cacheLabel.opacity(1, 0.3), get.reveal(1, 0.3));
   yield* get.travel(0.8);
   yield* get.arrive();
+  yield* waitUntil('miss-result');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('kayıt bulunamadı: ', 'cache miss.').children());
   get.root.opacity(0);
   cacheLabel.text('miss');
   cacheLabel.fill(accent);
-  yield* miss.reveal(1, 0.25);
+  yield* all(title.opacity(1, 0.3), miss.reveal(1, 0.25));
   yield* miss.travel(0.8);
   yield* miss.arrive();
   yield* waitUntil('read');
@@ -107,22 +119,27 @@ export function* updateCache(root: Layout, title: Txt) {
   yield* all(title.opacity(1, 0.3), read.reveal(1, 0.3), readLabel.opacity(1, 0.3));
   yield* read.travel(0.8);
   yield* read.arrive();
+  yield* waitUntil('response');
   yield* all(reply.reveal(1, 0.3), replyLabel.opacity(1, 0.3));
   yield* reply.travel(0.8);
+  yield* reply.arrive();
+  yield* waitUntil('read-result');
   shown.text('shipped');
   responseStatus.text('shipped');
-  yield* reply.arrive();
+  responseStatus.opacity(0);
+  yield* responseStatus.opacity(1, 0.25);
   yield* waitUntil('refill');
   yield* title.opacity(0, 0.2);
   title.children(heading('yeni değeri ', 'cache’e de yazalım.').children());
-  get.root.opacity(1);
+  get.root.opacity(0);
   cacheLabel.text('set("order:1042", "shipped")');
   cacheLabel.fontSize(23);
   cacheLabel.fill(foreground);
-  yield* all(title.opacity(1, 0.3), cacheLabel.opacity(1, 0.3));
+  yield* all(title.opacity(1, 0.3), cacheLabel.opacity(1, 0.3), get.root.opacity(1, 0.3));
   yield* get.travel(0.8);
-  cached.text('shipped');
-  cached.fill(accent);
   yield* get.arrive();
+  yield* waitUntil('refilled');
+  cached.text('shipped');
+  yield* cached.fill(accent, 0.25);
   return { market, shown };
 }

@@ -60,6 +60,7 @@ export default makeScene2D(function* (view) {
   });
   view.add([table.root, sql.root, request.root, response.root, queryLabel, responseLabel]);
   yield* table.root.opacity(1, 0.4);
+  yield* waitUntil('narration-start');
   yield* waitUntil('read');
   yield* title.opacity(0, 0.2);
   title.children(heading('aradığımız sipariş: ', '#1042').children());
@@ -75,6 +76,7 @@ export default makeScene2D(function* (view) {
     table.rows[1].highlight.opacity(1, 0.25),
     ...table.rows.filter((_, i) => i !== 1).map((row) => row.root.opacity(0.32, 0.3)),
   );
+  yield* waitUntil('read-response');
   yield* all(response.reveal(1, 0.4), responseLabel.opacity(1, 0.3));
   yield* response.travel(0.65);
   market.status.text('created');
@@ -102,13 +104,16 @@ export default makeScene2D(function* (view) {
   queryLabel.text('update');
   code.text("UPDATE orders SET status = 'preparing' WHERE id = 1042;");
   yield* all(title.opacity(1, 0.3), market.label.opacity(1, 0.3), action.opacity(1, 0.3));
-  yield* waitFor(1.2);
+  yield* waitUntil('update-click');
   yield* action.scale(0.96, 0.12).to(1, 0.18);
+  yield* waitUntil('update-request');
   yield* all(sql.root.opacity(1, 0.3), queryLabel.opacity(1, 0.3));
   yield* request.travel(0.7);
   yield* request.arrive();
+  yield* waitUntil('update-apply');
   table.rows[1].cells[1].text('preparing');
   table.rows[1].cells[1].fill(accent);
+  yield* waitUntil('update-response');
   responseLabel.text('updated');
   response.reveal(0);
   response.root.opacity(1);
@@ -145,18 +150,22 @@ export default makeScene2D(function* (view) {
   latency.fontSize(40);
   latency.opacity(0);
   view.add(latency);
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('repeat-read');
   queryLabel.text('read');
   responseLabel.text('preparing');
   response.root.opacity(0.25);
   market.status.text('yanıt bekleniyor…');
-  yield* all(title.opacity(1, 0.3), queryLabel.opacity(1, 0.3), latency.opacity(1, 0.35));
+  yield* queryLabel.opacity(1, 0.3);
   yield* request.travel(0.8);
   yield* request.arrive();
-  yield* waitFor(0.45);
+  yield* waitUntil('repeat-response');
   yield* all(response.root.opacity(1, 0.2), responseLabel.opacity(1, 0.2));
   yield* response.travel(0.8);
   market.status.text('preparing');
   yield* response.arrive();
+  yield* waitUntil('response-time');
+  yield* latency.opacity(1, 0.35);
   yield* waitUntil('oltp');
   yield* all(title.opacity(0, 0.2), latency.opacity(0, 0.2));
   title.children(heading('bu işin adı: ', 'OLTP').children());
@@ -173,13 +182,17 @@ export default makeScene2D(function* (view) {
     opacity: 0,
   });
   view.add([expansion, pattern]);
-  yield* all(title.opacity(1, 0.3), expansion.opacity(1, 0.35), pattern.opacity(1, 0.35));
+  yield* all(title.opacity(1, 0.3), pattern.opacity(1, 0.35));
+  yield* waitUntil('oltp-expansion');
+  yield* expansion.opacity(1, 0.35);
   yield* waitUntil('transaction');
   yield* all(title.opacity(0, 0.2), expansion.opacity(0, 0.2), pattern.opacity(0, 0.2));
   title.children(heading('transaction yalnızca ', 'ödeme', ' demek değil.').children());
   pattern.text('birlikte ele alınan read / write işlemleri');
   pattern.position(title.position().addY(76));
-  yield* all(title.opacity(1, 0.3), pattern.opacity(1, 0.35));
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('transaction-group');
+  yield* pattern.opacity(1, 0.35);
   yield* waitUntil('next');
   yield* all(
     title.opacity(0, 0.2),

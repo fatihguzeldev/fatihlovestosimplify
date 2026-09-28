@@ -84,7 +84,7 @@ function paintRow(id: Section, label: Txt, visible: number) {
   return { wipe, progress };
 }
 
-export function* bookContents(view: Node, from: Section, to: Section) {
+export function* bookContents(view: Node, from: Section | null, to: Section) {
   const root = new Layout({ key: 'book-contents', opacity: 0 });
   const chapter = text('chapter 1', 31, {
     position: [-780, -360],
@@ -146,13 +146,16 @@ export function* bookContents(view: Node, from: Section, to: Section) {
     ...rows.map(({ label }) => label),
   ]);
   view.add(root);
-  const initial = paintRow(from, rows.find(({ id }) => id === from)!.label, 1);
+  const initial = from ? paintRow(from, rows.find(({ id }) => id === from)!.label, 1) : null;
   const target = paintRow(to, rows.find(({ id }) => id === to)!.label, 0);
-  root.add([initial.wipe, target.wipe]);
+  if (initial) root.add(initial.wipe);
+  root.add(target.wipe);
   yield* root.opacity(1, 0.3);
   yield* waitUntil('contents-focus');
-  yield* initial.progress(0, 0.42, easeInOutCubic);
-  yield* waitFor(0.1);
+  if (initial) {
+    yield* initial.progress(0, 0.42, easeInOutCubic);
+    yield* waitFor(0.1);
+  }
   yield* target.progress(1, 0.66, easeOutCubic);
   yield* waitUntil('contents-close');
   yield* root.opacity(0, 0.27);

@@ -21,11 +21,8 @@
     "resolutionScale": 1,
     "colorSpace": "srgb",
     "exporter": {
-      "name": "@motion-canvas/ffmpeg",
-      "options": {
-        "fastStart": true,
-        "includeAudio": true
-      }
+      "name": "custom-export",
+      "options": {}
     }
   }
 }

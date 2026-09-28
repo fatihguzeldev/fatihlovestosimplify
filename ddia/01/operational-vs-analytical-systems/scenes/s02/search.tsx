@@ -130,6 +130,7 @@ export function* showSearch(view: View2D) {
   ]);
   view.add(root);
   yield* root.opacity(1, 0.5);
+  yield* waitUntil('search-type');
   yield* placeholder.opacity(0, 0.15);
   yield* query.text('muz', 0.55);
   yield* cursor.opacity(1, 0.15).to(0, 0.2);
@@ -152,6 +153,7 @@ export function* showSearch(view: View2D) {
       ),
     ),
   );
+  yield* waitUntil('search-return');
   yield* all(response.reveal(1, 0.4), responseLabel.opacity(1, 0.3));
   yield* response.travel(0.6);
   yield* all(response.arrive(), loading.opacity(0, 0.15));

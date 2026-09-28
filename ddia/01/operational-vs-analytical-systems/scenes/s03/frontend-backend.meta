@@ -3,39 +3,95 @@
   "timeEvents": [
     {
       "name": "request",
-      "targetTime": 2
+      "targetTime": 1.833333
+    },
+    {
+      "name": "http-request",
+      "targetTime": 4.183333
+    },
+    {
+      "name": "request-id",
+      "targetTime": 9.133333
     },
     {
       "name": "query",
-      "targetTime": 11
+      "targetTime": 13.8
     },
     {
       "name": "response",
-      "targetTime": 19
+      "targetTime": 18.45
+    },
+    {
+      "name": "response-received",
+      "targetTime": 19.533333
     },
     {
       "name": "roles",
-      "targetTime": 27
+      "targetTime": 28.05
+    },
+    {
+      "name": "backend-role",
+      "targetTime": 34.733333
     },
     {
       "name": "stateless",
-      "targetTime": 43
+      "targetTime": 42.516667
+    },
+    {
+      "name": "second-server",
+      "targetTime": 53.333333
+    },
+    {
+      "name": "repeat-request",
+      "targetTime": 55.25
+    },
+    {
+      "name": "repeat-query",
+      "targetTime": 57.533333
+    },
+    {
+      "name": "repeat-response",
+      "targetTime": 60.133333
+    },
+    {
+      "name": "stateless-conclusion",
+      "targetTime": 63.45
+    },
+    {
+      "name": "stateless-label",
+      "targetTime": 72.083333
+    },
+    {
+      "name": "stored-state",
+      "targetTime": 74.75
+    },
+    {
+      "name": "application-stateless",
+      "targetTime": 78.533333
     },
     {
       "name": "client-data",
-      "targetTime": 58
+      "targetTime": 83.933333
+    },
+    {
+      "name": "local-storage",
+      "targetTime": 88.35
     },
     {
       "name": "backend-focus",
-      "targetTime": 72
+      "targetTime": 95.45
+    },
+    {
+      "name": "user-perspective",
+      "targetTime": 106.733333
     },
     {
       "name": "next",
-      "targetTime": 83
+      "targetTime": 114.25
     },
     {
       "name": "end",
-      "targetTime": 90
+      "targetTime": 119.15
     }
   ],
   "seed": 104203

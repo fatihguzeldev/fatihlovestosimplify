@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Measure render duration</title>
+  </head>
+  <body>
+    <script type="module">
+      import { Player } from '@motion-canvas/core';
+      import project from '/ddia/01/operational-vs-analytical-systems/project.ts?project';
+
+      try {
+        const player = new Player(project, project.meta.getFullRenderingSettings());
+        const total = await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error('Duration probe timed out.')), 60_000);
+          player.onDurationChanged.subscribe((duration) => {
+            if (duration > 0) {
+              clearTimeout(timeout);
+              resolve(duration + 1);
+            }
+          });
+        });
+        player.deactivate();
+        window.renderInfo = { total };
+      } catch (error) {
+        window.renderInfo = { error: String(error) };
+      }
+    </script>
+  </body>
+</html>

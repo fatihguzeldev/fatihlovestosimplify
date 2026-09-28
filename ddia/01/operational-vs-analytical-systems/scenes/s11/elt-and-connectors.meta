@@ -3,39 +3,95 @@
   "timeEvents": [
     {
       "name": "etl",
-      "targetTime": 3
+      "targetTime": 0.03
     },
     {
       "name": "elt",
-      "targetTime": 9
+      "targetTime": 0.38
+    },
+    {
+      "name": "load-sales",
+      "targetTime": 3
+    },
+    {
+      "name": "load-stores",
+      "targetTime": 9.1
+    },
+    {
+      "name": "loaded",
+      "targetTime": 13.25
     },
     {
       "name": "transform",
-      "targetTime": 23
+      "targetTime": 17.4
+    },
+    {
+      "name": "match-sales",
+      "targetTime": 20.4
+    },
+    {
+      "name": "match-store",
+      "targetTime": 23.5
+    },
+    {
+      "name": "enrich",
+      "targetTime": 26
+    },
+    {
+      "name": "elt-name",
+      "targetTime": 39
     },
     {
       "name": "return",
-      "targetTime": 36
+      "targetTime": 44
     },
     {
       "name": "crm",
-      "targetTime": 47
+      "targetTime": 51.2
+    },
+    {
+      "name": "api",
+      "targetTime": 62.6
     },
     {
       "name": "connector",
-      "targetTime": 59
+      "targetTime": 66.1
+    },
+    {
+      "name": "request",
+      "targetTime": 70.6
+    },
+    {
+      "name": "response",
+      "targetTime": 71.98
+    },
+    {
+      "name": "load-customers",
+      "targetTime": 73.53
     },
     {
       "name": "own-analysis",
-      "targetTime": 73
+      "targetTime": 75.25
+    },
+    {
+      "name": "sales",
+      "targetTime": 83.1
+    },
+    {
+      "name": "source-access",
+      "targetTime": 87.25
     },
     {
       "name": "next",
-      "targetTime": 84
+      "targetTime": 103.8
+    },
+    {
+      "name": "htap",
+      "targetTime": 111.3
     },
     {
       "name": "end",
-      "targetTime": 96
+      "targetTime": 117.85
     }
   ],
   "seed": 104211

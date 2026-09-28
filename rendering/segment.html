@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Render segment</title>
+  </head>
+  <body style="background: #111; color: #eee; font: 14px monospace">
+    <pre id="status">Proje yükleniyor…</pre>
+    <script type="module">
+      import { Renderer } from '@motion-canvas/core';
+      import project from '/ddia/01/operational-vs-analytical-systems/project.ts?project';
+
+      const status = document.querySelector('#status');
+      const params = new URLSearchParams(location.search);
+      const start = Number(params.get('start'));
+      const end = Number(params.get('end'));
+      if (
+        !Number.isSafeInteger(start) ||
+        !Number.isSafeInteger(end) ||
+        start < 0 ||
+        end > 1_000_000 ||
+        end <= start ||
+        end - start > 18000
+      ) {
+        throw new Error('Geçersiz kare aralığı.');
+      }
+      const name = `ddia-ch1-${String(start).padStart(6, '0')}-${String(end - 1).padStart(6, '0')}`;
+      const renderer = new Renderer(project);
+      let resolveFinished;
+      const finished = new Promise((resolve) => (resolveFinished = resolve));
+      window.cancelSegment = async () => {
+        renderer.abort();
+        await finished;
+      };
+      let lastFrame = start;
+      renderer.onFrameChanged.subscribe((frame) => {
+        lastFrame = frame;
+        if (frame === start || frame % 300 === 0 || frame === end - 1) {
+          status.textContent = JSON.stringify({
+            state: 'rendering',
+            name,
+            frame,
+            end,
+            heap: performance.memory?.usedJSHeapSize,
+          });
+          parent.postMessage(
+            {
+              source: 'custom-export',
+              state: 'progress',
+              start,
+              end,
+              frame,
+              heap: performance.memory?.usedJSHeapSize,
+            },
+            location.origin,
+          );
+        }
+      });
+      renderer.onFinished.subscribe((result) => {
+        const state = result === 0 ? 'complete' : 'failed';
+        window.segmentResult = { state, result, name, lastFrame };
+        status.textContent = JSON.stringify({ state, result, name, lastFrame });
+        parent.postMessage(
+          { source: 'custom-export', state, result, start, end, name, lastFrame },
+          location.origin,
+        );
+        resolveFinished();
+      });
+      try {
+        await renderer.render({
+          ...project.meta.getFullRenderingSettings(),
+          name,
+          range: [start / 60, (end - 1) / 60],
+          fps: 60,
+          resolutionScale: 1,
+          exporter: { name: 'custom-export-segment', options: {} },
+        });
+      } catch (error) {
+        window.segmentResult = { state: 'failed', error: String(error), name, lastFrame };
+        status.textContent = String(error);
+        parent.postMessage(
+          { source: 'custom-export', state: 'failed', start, end, error: String(error) },
+          location.origin,
+        );
+        resolveFinished();
+      }
+    </script>
+  </body>
+</html>

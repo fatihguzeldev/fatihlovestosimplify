@@ -18,56 +18,112 @@
       "targetTime": 10
     },
     {
-      "name": "read",
-      "targetTime": 17
+      "name": "narration-start",
+      "targetTime": 10.9
     },
     {
-      "name": "scan",
+      "name": "read",
+      "targetTime": 24
+    },
+    {
+      "name": "read-response",
       "targetTime": 29
     },
     {
+      "name": "read-status",
+      "targetTime": 30.8
+    },
+    {
+      "name": "scan",
+      "targetTime": 34
+    },
+    {
+      "name": "scan-detail",
+      "targetTime": 36.7
+    },
+    {
       "name": "resources",
-      "targetTime": 37
+      "targetTime": 43.55
     },
     {
       "name": "contention",
-      "targetTime": 43
+      "targetTime": 57.5
     },
     {
       "name": "order-response",
-      "targetTime": 55
+      "targetTime": 66.6
     },
     {
       "name": "report-response",
-      "targetTime": 67
+      "targetTime": 77.6
     },
     {
       "name": "sources",
-      "targetTime": 80
+      "targetTime": 95.8
+    },
+    {
+      "name": "source-sales",
+      "targetTime": 106.15
+    },
+    {
+      "name": "source-stock",
+      "targetTime": 108.55
+    },
+    {
+      "name": "source-store",
+      "targetTime": 112.2
+    },
+    {
+      "name": "sources-together",
+      "targetTime": 118.45
     },
     {
       "name": "layouts",
-      "targetTime": 101
+      "targetTime": 121.2
+    },
+    {
+      "name": "schema",
+      "targetTime": 140.8
     },
     {
       "name": "access",
-      "targetTime": 122
+      "targetTime": 151
+    },
+    {
+      "name": "access-restriction",
+      "targetTime": 158.3
+    },
+    {
+      "name": "summary",
+      "targetTime": 167.5
     },
     {
       "name": "warehouse",
-      "targetTime": 142
+      "targetTime": 182.2
+    },
+    {
+      "name": "warehouse-name",
+      "targetTime": 191.15
     },
     {
       "name": "placement",
-      "targetTime": 158
+      "targetTime": 196.05
+    },
+    {
+      "name": "placement-analytics",
+      "targetTime": 201.7
+    },
+    {
+      "name": "empty",
+      "targetTime": 216.7
     },
     {
       "name": "next",
-      "targetTime": 174
+      "targetTime": 222
     },
     {
       "name": "end",
-      "targetTime": 186
+      "targetTime": 225.6666666667
     }
   ],
   "seed": 104209

@@ -1,5 +1,5 @@
 import { Circle, Layout, Path, type Txt } from '@motion-canvas/2d';
-import { all, waitFor, waitUntil } from '@motion-canvas/core';
+import { all, waitUntil } from '@motion-canvas/core';
 import { cartoonArrow } from '../../../../../common/cartoon-arrow';
 import { theme } from '../../theme';
 import { accent, foreground, heading, muted, paper, text } from '../shared/drawing';
@@ -7,13 +7,14 @@ import { accent, foreground, heading, muted, paper, text } from '../shared/drawi
 export function* batchAndStream(stage: Layout, title: Txt) {
   const tray = paper(370, 350, '#101315');
   tray.root.position([-635, 95]);
-  const mode = text('daily batch', 31, { position: [-635, -228], fill: accent });
-  const clock = text('ertesi gün · 02:00', 29, {
+  const mode = text('payment events', 31, { position: [-635, -228], fill: accent });
+  const clock = text('', 29, {
     position: [0, -228],
     fontFamily: theme.fontFamily.mono,
     fill: muted,
   });
   const times = ['14:01:00', '14:01:10', '14:01:20'];
+  const eventTimes: Txt[] = [];
   const events = times.map((time, i) => {
     const row = new Layout({ position: [0, -112 + i * 112], opacity: 0 });
     const card = new Path({
@@ -24,15 +25,17 @@ export function* batchAndStream(stage: Layout, title: Txt) {
       lineWidth: 2.5,
       lineJoin: 'round',
     });
+    const eventTime = text(time, 23, {
+      position: [-55, 22],
+      offset: [-1, 0],
+      fill: accent,
+      fontFamily: theme.fontFamily.mono,
+    });
+    eventTimes.push(eventTime);
     row.add([
       card,
       text('reddedildi', 25, { position: [-55, -19], offset: [-1, 0] }),
-      text(time, 23, {
-        position: [-55, 22],
-        offset: [-1, 0],
-        fill: accent,
-        fontFamily: theme.fontFamily.mono,
-      }),
+      eventTime,
       new Path({
         position: [-96, 18],
         data: 'M -8 -8 L 8 8 M -8 8 L 8 -8',
@@ -46,6 +49,7 @@ export function* batchAndStream(stage: Layout, title: Txt) {
   });
   const rule = paper(400, 300, '#101315');
   rule.root.position([0, 95]);
+  rule.root.opacity(0);
   const marks = [0, 1, 2].map((i) => {
     const mark = new Circle({
       position: [-70 + i * 70, 49],
@@ -86,12 +90,14 @@ export function* batchAndStream(stage: Layout, title: Txt) {
   const delay = text('sonraki çalıştırmayı bekliyor', 26, {
     position: [-635, 335],
     fill: muted,
+    opacity: 0,
   });
   const resultTime = text('', 24, {
     position: [650, 285],
     fill: accent,
     fontFamily: theme.fontFamily.mono,
   });
+  const ruleLabel = text('örnek inceleme kuralı', 29, { position: [0, -132], opacity: 0 });
   stage.add([
     tray.root,
     mode,
@@ -106,36 +112,60 @@ export function* batchAndStream(stage: Layout, title: Txt) {
       position: [-635, -132],
       fontFamily: theme.fontFamily.mono,
     }),
-    text('örnek inceleme kuralı', 29, { position: [0, -132] }),
+    ruleLabel,
     text('inceleme kuyruğu', 29, { position: [650, -132] }),
   ]);
   stage.opacity(0);
   title.children(heading('aynı hesapta ', 'üç başarısız deneme.').children());
   yield* all(title.opacity(1, 0.3), stage.opacity(1, 0.5));
+  yield* waitUntil('payment-events');
   for (const event of events) {
     yield* event.opacity(1, 0.3);
-    yield* waitFor(0.5);
   }
+  yield* waitUntil('payment-rule');
+  yield* all(rule.root.opacity(1, 0.4), ruleLabel.opacity(1, 0.3));
+  yield* waitUntil('batch-schedule');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('kontrolü ', 'günlük batch job', ' yapıyor.').children());
+  mode.text('daily batch');
+  clock.text('her gün · 02:00');
+  yield* all(title.opacity(1, 0.3), delay.opacity(1, 0.3));
+
   yield* waitUntil('batch-run');
   yield* title.opacity(0, 0.2);
-  title.children(heading('günlük iş çalışınca ', 'fark ediyoruz.').children());
-  yield* all(title.opacity(1, 0.3), delay.opacity(0, 0.2), clock.fill(accent, 0.2));
+  title.children(heading('günlük iş çalışınca ', 'kayıtları kontrol ediyoruz.').children());
+  clock.text('ertesi gün · 02:00');
+  yield* all(
+    title.opacity(1, 0.3),
+    delay.opacity(0, 0.2),
+    clock.fill(accent, 0.2),
+    ...eventTimes.map((stamp) => stamp.fill(foreground, 0.3)),
+  );
   yield* consume.reveal(1, 0.3);
   yield* consume.travel(0.7);
   yield* consume.arrive();
+  yield* waitUntil('batch-event-times');
+  yield* all(...eventTimes.map((stamp) => stamp.fill(accent, 0.3)));
+  yield* waitUntil('batch-match');
   for (const mark of marks) {
     yield* all(mark.fill('#234b73', 0.18), mark.stroke(accent, 0.18));
   }
+  yield* waitUntil('batch-result');
   yield* emit.reveal(1, 0.3);
   yield* emit.travel(0.7);
   outcome.text('inceleme bekliyor');
   outcome.fill(accent);
   resultTime.text('ertesi gün · 02:00');
   yield* all(emit.arrive(), bell.opacity(1, 0.25), customer.opacity(1, 0.25));
+  yield* waitUntil('batch-delay');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('sonuç ', 'ertesi gün', ' kullanılabiliyor.').children());
+  yield* title.opacity(1, 0.3);
+
   yield* waitUntil('stream');
   yield* all(title.opacity(0, 0.2), stage.opacity(0, 0.4));
   mode.text('event stream');
-  clock.text(times[0]);
+  clock.text('');
   clock.fill(muted);
   delay.text('aynı olaylar · aynı kural');
   delay.opacity(1);
@@ -154,13 +184,23 @@ export function* batchAndStream(stage: Layout, title: Txt) {
   title.children(heading('denemeleri ', 'geldikçe değerlendirelim.').children());
   yield* all(title.opacity(1, 0.3), stage.opacity(1, 0.5));
   yield* consume.reveal(1, 0.3);
-  for (let i = 0; i < events.length; i++) {
-    clock.text(times[i]);
-    yield* events[i].opacity(1, 0.25);
+  function* processEvent(index: number) {
+    clock.text(times[index]);
+    yield* events[index].opacity(1, 0.25);
     yield* consume.travel(0.65);
-    yield* all(consume.arrive(), marks[i].fill('#234b73', 0.2), marks[i].stroke(accent, 0.2));
-    yield* waitFor(0.4);
+    yield* all(
+      consume.arrive(),
+      marks[index].fill('#234b73', 0.2),
+      marks[index].stroke(accent, 0.2),
+    );
   }
+  yield* waitUntil('stream-first');
+  yield* processEvent(0);
+  yield* waitUntil('stream-second');
+  yield* processEvent(1);
+  yield* waitUntil('stream-third');
+  yield* processEvent(2);
+  yield* waitUntil('stream-result');
   yield* emit.reveal(1, 0.3);
   yield* emit.travel(0.7);
   clock.text('14:01:22');
@@ -174,8 +214,14 @@ export function* batchAndStream(stage: Layout, title: Txt) {
   yield* title.opacity(1, 0.3);
   yield* waitUntil('latency');
   yield* title.opacity(0, 0.2);
-  title.children(heading('bu da ', 'sıfır gecikme', ' demek değil.').children());
-  delay.text('işleme ve aktarım zaman alır');
-  resultTime.text('bu örnekte · +2 sn');
+  title.children(heading('işleme ve aktarım ', 'zaman alıyor.').children());
+  delay.text('işleme ve aktarım');
+  yield* title.opacity(1, 0.3);
+  yield* waitUntil('two-seconds');
+  resultTime.text('14:01:22 · +2 sn');
+  yield* resultTime.scale(1.08, 0.2).to(1, 0.3);
+  yield* waitUntil('nonzero-latency');
+  yield* title.opacity(0, 0.2);
+  title.children(heading('stream kullanmak ', 'sıfır gecikme', ' demek değil.').children());
   yield* title.opacity(1, 0.3);
 }

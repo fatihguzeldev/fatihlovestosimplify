@@ -147,6 +147,7 @@ export function* showCache(view: View2D) {
   ]);
   view.add(root);
   yield* root.opacity(1, 0.5);
+  yield* waitUntil('cache-calculate');
   yield* all(compute.reveal(1, 0.4), computeLabel.opacity(1, 0.3));
   yield* compute.travel(0.5);
   yield* all(compute.arrive(), route.end(1, 1.4));
@@ -162,6 +163,7 @@ export function* showCache(view: View2D) {
     ticket.rotation(-1, 0.4, easeOutCubic),
     cache.face.stroke(accent, 0.15).to(foreground, 0.25),
   );
+  yield* waitUntil('cache-return');
   yield* reply.reveal(1, 0.3);
   yield* reply.travel(0.5);
   yield* all(reply.arrive(), estimate.opacity(1, 0.25));

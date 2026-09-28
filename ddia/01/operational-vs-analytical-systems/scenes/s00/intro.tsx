@@ -2,6 +2,7 @@ import { Layout, makeScene2D, Node, Path, Txt } from '@motion-canvas/2d';
 import { createRef, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../../common/fonts';
 import { theme } from '../../theme';
+import { bookContents } from '../shared/book-contents';
 
 export default makeScene2D(function* (view) {
   yield loadFonts();
@@ -10,6 +11,7 @@ export default makeScene2D(function* (view) {
   view.fontFamily(theme.fontFamily.sans);
   view.fontWeight(400);
 
+  const intro = createRef<Node>();
   const chapter = createRef<Txt>();
   const brush = createRef<Layout>();
   const operational = createRef<Txt>();
@@ -28,7 +30,7 @@ export default makeScene2D(function* (view) {
   const analyticalLeft = () => versusLeft() + versus().width() + topicGap;
 
   view.add(
-    <Node position={[-960, -540]}>
+    <Node ref={intro} position={[-960, -540]}>
       <Txt
         ref={chapter}
         offset={[-1, -1]}
@@ -140,4 +142,8 @@ export default makeScene2D(function* (view) {
   );
 
   yield* waitUntil('start-video');
+  yield* intro().opacity(0, 0.35);
+  intro().remove();
+  yield* bookContents(view, null, 'introduction');
+  yield* waitUntil('end');
 });

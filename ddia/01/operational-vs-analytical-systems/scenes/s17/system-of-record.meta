@@ -3,43 +3,127 @@
   "timeEvents": [
     {
       "name": "part",
-      "targetTime": 5
+      "targetTime": 2
     },
     {
       "name": "contents-focus",
-      "targetTime": 6.9
+      "targetTime": 3.9
     },
     {
       "name": "contents-close",
-      "targetTime": 9.4
+      "targetTime": 6.4
     },
     {
       "name": "first-write",
-      "targetTime": 16
+      "targetTime": 10
+    },
+    {
+      "name": "narration-start",
+      "targetTime": 10.9
+    },
+    {
+      "name": "write-request",
+      "targetTime": 19.8
+    },
+    {
+      "name": "write-record",
+      "targetTime": 21.55
+    },
+    {
+      "name": "write-amount",
+      "targetTime": 23.35
     },
     {
       "name": "authority",
-      "targetTime": 34
+      "targetTime": 31.55
+    },
+    {
+      "name": "system-of-record",
+      "targetTime": 38.05
     },
     {
       "name": "conflict",
-      "targetTime": 48
+      "targetTime": 40.35
+    },
+    {
+      "name": "conflict-source",
+      "targetTime": 47.1
+    },
+    {
+      "name": "conflict-copy",
+      "targetTime": 49.95
+    },
+    {
+      "name": "choose-source",
+      "targetTime": 55.1
+    },
+    {
+      "name": "repair",
+      "targetTime": 60.5
+    },
+    {
+      "name": "repaired",
+      "targetTime": 63.3
+    },
+    {
+      "name": "source-error",
+      "targetTime": 66.15
+    },
+    {
+      "name": "authority-summary",
+      "targetTime": 82.15
     },
     {
       "name": "scope",
-      "targetTime": 64
+      "targetTime": 91.25
+    },
+    {
+      "name": "scope-sales",
+      "targetTime": 96.05
+    },
+    {
+      "name": "scope-stock",
+      "targetTime": 101.65
+    },
+    {
+      "name": "scope-role",
+      "targetTime": 107.2
     },
     {
       "name": "upstream",
-      "targetTime": 80
+      "targetTime": 122.2
+    },
+    {
+      "name": "upstream-load",
+      "targetTime": 123.6
+    },
+    {
+      "name": "upstream-name",
+      "targetTime": 127.6
+    },
+    {
+      "name": "source-copy",
+      "targetTime": 135.9
+    },
+    {
+      "name": "source-authority",
+      "targetTime": 142.9
+    },
+    {
+      "name": "distinction",
+      "targetTime": 151.7
+    },
+    {
+      "name": "lineage",
+      "targetTime": 158
     },
     {
       "name": "next",
-      "targetTime": 100
+      "targetTime": 162.1
     },
     {
       "name": "end",
-      "targetTime": 112
+      "targetTime": 169.21666666666667
     }
   ],
   "seed": 104217
