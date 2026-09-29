@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>designing data-intensive applications — playlist</title>
+    <link rel="icon" href="data:," />
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #0b0b0b;
+      }
+      svg {
+        display: block;
+        width: 100vw;
+        height: auto;
+        --accent: #dfed80;
+      }
+    </style>
+  </head>
+  <body>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="3840"
+      height="2160"
+      viewBox="0 0 1920 1080"
+      role="img"
+      aria-labelledby="title"
+    >
+      <title id="title">Designing Data-Intensive Applications — DDIA</title>
+      <rect width="1920" height="1080" fill="#0b0b0b" />
+      <defs>
+        <path
+          id="balloon"
+          d="M176 155 C349 123 636 133 829 117 C923 110 1030 120 1091 137 C1172 150 1210 193 1214 254 Q1222 301 1183 337 L1300 393 Q1254 397 1205 423 Q1179 499 1119 532 C941 559 653 545 454 564 C334 573 224 567 169 543 C110 518 106 468 105 406 Q99 318 117 226 Q126 174 176 155Z"
+        />
+        <clipPath id="balloon-fill"><use href="#balloon" /></clipPath>
+        <filter id="paper-grain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency=".72"
+            numOctaves="3"
+            seed="23"
+            stitchTiles="stitch"
+          />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+      </defs>
+      <!-- Separate ink strokes give the balloon an imperfect, drawn contour. -->
+      <g fill="none" stroke="#f5f0df" stroke-linecap="round" stroke-linejoin="round">
+        <path
+          d="M113 221 C102 277 94 350 98 415 C99 475 110 522 157 550 C224 589 329 580 452 577 C643 560 865 577 1043 553"
+          stroke-width="5"
+        />
+        <path d="M137 179 Q165 150 213 145" stroke-width="3" />
+        <path d="M1072 143 C1141 152 1191 180 1202 218" stroke-width="3" />
+      </g>
+      <use
+        href="#balloon"
+        fill="var(--accent)"
+        stroke="#11120d"
+        stroke-width="4"
+        stroke-linejoin="round"
+      />
+      <g clip-path="url(#balloon-fill)">
+        <rect x="95" y="110" width="1210" height="475" filter="url(#paper-grain)" opacity=".055" />
+      </g>
+      <g transform="translate(192 209) rotate(-5 124 140) scale(.40) translate(0 0)">
+        <path
+          d="M280.0 0.0H0.0V700.0H280.0C473.0 700.0 620.0 548.0 620.0 350.0C620.0 152.0 473.0 0.0 280.0 0.0ZM280.0 546.0H160.0V154.0H280.0C390.0 154.0 466.0 230.0 466.0 350.0C466.0 470.0 390.0 546.0 280.0 546.0Z"
+          fill="#151610"
+        />
+      </g>
+      <g transform="translate(464 220) rotate(4 124 140) scale(.40) translate(-690 0)">
+        <path
+          d="M970.0 0.0H690.0V700.0H970.0C1163.0 700.0 1310.0 548.0 1310.0 350.0C1310.0 152.0 1163.0 0.0 970.0 0.0ZM970.0 546.0H850.0V154.0H970.0C1080.0 154.0 1156.0 230.0 1156.0 350.0C1156.0 470.0 1080.0 546.0 970.0 546.0Z"
+          fill="#151610"
+        />
+      </g>
+      <g transform="translate(750 208) rotate(-5 32 140) scale(.40) translate(-1380 0)">
+        <path d="M1380.0 0.0V700.0H1540.0V0.0Z" fill="#151610" />
+      </g>
+      <g transform="translate(862 208) rotate(5 136 140) scale(.40) translate(-1580 0)">
+        <path
+          d="M2085.0 700.0H2260.0L2022.0 0.0H1818.0L1580.0 700.0H1755.0L1790.0 590.0H2050.0ZM1838.0 440.0 1920.0 183.0 2002.0 440.0Z"
+          fill="#151610"
+        />
+      </g>
+      <image href="./assets/boar-ivory.png" x="770" y="378" width="1080" height="636.593" />
+      <!-- Short motion strokes belong to the leap, not the background. -->
+      <g fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round">
+        <path d="M625 668 C657 653 696 642 728 647" />
+        <path d="M662 704 Q696 690 727 693" />
+      </g>
+      <image href="./assets/book-title.png" x="110" y="738" width="580" height="242.695" />
+    </svg>
+    <script>
+      window.thumbnailReady = Promise.all(
+        [...document.querySelectorAll('image')].map((element) => {
+          const image = new Image();
+          image.src = element.getAttribute('href');
+          return image.decode();
+        }),
+      );
+    </script>
+  </body>
+</html>
