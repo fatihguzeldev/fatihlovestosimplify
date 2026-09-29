@@ -1,18 +1,16 @@
 import { spawn } from 'node:child_process';
-import { access, mkdtemp, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
+import { access, mkdir, mkdtemp, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { outputPaths, projectArgument } from './projects.mjs';
 
 const require = createRequire(import.meta.url);
 const ffmpeg = require('@ffmpeg-installer/ffmpeg').path;
 const ffprobe = require('@ffprobe-installer/ffprobe').path;
-const root = path.dirname(fileURLToPath(import.meta.url));
-const project = path.resolve(root, '../ddia/01/operational-vs-analytical-systems');
-const directory = process.env.RENDER_OUTPUT_DIR || path.resolve(root, '../output/custom-export');
+const project = projectArgument();
+const { directory, finalFile } = outputPaths(project);
 const fps = 60;
-const finalFile = path.join(directory, 'ddia-chapter1-final.mp4');
 
 function execute(command, args) {
   return new Promise((resolve, reject) => {
@@ -29,12 +27,15 @@ function execute(command, args) {
 }
 
 function name(start, end) {
-  return `ddia-ch1-${String(start).padStart(6, '0')}-${String(end - 1).padStart(6, '0')}.mp4`;
+  return `segment-${String(start).padStart(6, '0')}-${String(end - 1).padStart(6, '0')}.mp4`;
 }
 
 const manifest = JSON.parse(await readFile(path.join(directory, 'segments.json'), 'utf8'));
 if (
   manifest.version !== 1 ||
+  manifest.project !== project ||
+  typeof manifest.audio !== 'boolean' ||
+  !Number.isFinite(manifest.audioOffset) ||
   !Number.isSafeInteger(manifest.total) ||
   manifest.total < 1 ||
   manifest.total > 1_000_000 ||
@@ -88,16 +89,17 @@ for (const { start, end } of ranges) {
 }
 if (cursor !== total) throw new Error(`Missing frames ${cursor}–${total - 1}.`);
 
-const tempDirectory = await mkdtemp(path.join(os.tmpdir(), 'ddia-finalize-'));
+await mkdir(path.dirname(finalFile), { recursive: true });
+const tempDirectory = await mkdtemp(path.join(os.tmpdir(), 'video-finalize-'));
 const concatFile = path.join(tempDirectory, 'segments.txt');
-const tempOutput = path.join(directory, 'ddia-chapter1-final.partial.mp4');
+const tempOutput = `${finalFile.slice(0, -4)}.partial.mp4`;
 try {
   await writeFile(
     concatFile,
     segments.map((file) => `file '${file.replaceAll("'", "'\\''")}'`).join('\n') + '\n',
   );
-  const audioFile = path.join(project, 'audio/narration.mp3');
-  await access(audioFile);
+  const audioFile = path.join(directory, 'audio-track');
+  if (manifest.audio) await access(audioFile);
   await execute(ffmpeg, [
     '-hide_banner',
     '-loglevel',
@@ -109,18 +111,12 @@ try {
     '0',
     '-i',
     concatFile,
-    '-i',
-    audioFile,
+    ...(manifest.audio ? ['-itsoffset', String(manifest.audioOffset), '-i', audioFile] : []),
     '-map',
     '0:v:0',
-    '-map',
-    '1:a:0',
+    ...(manifest.audio ? ['-map', '1:a:0', '-c:a', 'aac', '-b:a', '192k'] : ['-an']),
     '-c:v',
     'copy',
-    '-c:a',
-    'aac',
-    '-b:a',
-    '192k',
     '-t',
     String(total / fps),
     '-movflags',

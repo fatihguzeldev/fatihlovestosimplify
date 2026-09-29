@@ -2,15 +2,13 @@ import { spawn } from 'node:child_process';
 import { mkdir, rename, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-import { fileURLToPath } from 'node:url';
 import { PLUGIN_OPTIONS } from '@motion-canvas/vite-plugin';
+import { outputPaths, root, selectProject } from './projects.mjs';
 
 const require = createRequire(import.meta.url);
 const ffmpeg = require('@ffmpeg-installer/ffmpeg').path;
 const ffprobe = require('@ffprobe-installer/ffprobe').path;
 const event = 'custom-export-segment';
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const outputDirectory = process.env.RENDER_OUTPUT_DIR || path.join(root, 'output/custom-export');
 
 function run(command, args) {
   return new Promise((resolve, reject) => {
@@ -27,7 +25,7 @@ function run(command, args) {
 }
 
 class ExportSession {
-  constructor(name, fps, expectedFrames) {
+  constructor(outputDirectory, name, fps, expectedFrames) {
     this.name = name;
     this.fps = fps;
     this.expectedFrames = expectedFrames;
@@ -163,9 +161,7 @@ export default function customExport() {
           let session = sessions.get(client);
           let result;
           if (method === 'render-start') {
-            if (data?.name !== 'ddia_chapter1_operational_vs_analytical_systems') {
-              throw new Error('custom export is configured for DDIA chapter 1 only.');
-            }
+            const project = selectProject(data?.project);
             if (renderJob && ['running', 'stopping'].includes(renderJob.state)) {
               throw new Error('A full render is already running.');
             }
@@ -177,6 +173,8 @@ export default function customExport() {
               process.execPath,
               [
                 path.join(root, 'rendering/render.mjs'),
+                '--project',
+                project,
                 '--base',
                 `http://127.0.0.1:${address.port}`,
               ],
@@ -198,7 +196,7 @@ export default function customExport() {
               const measured = [...job.output.matchAll(/Measured (\d+) frames/g)].at(-1);
               if (measured) job.total = Number(measured[1]);
               for (const match of job.output.matchAll(
-                /(?:Rendered |Already valid: )ddia-ch1-\d{6}-(\d{6})\.mp4/g,
+                /(?:Rendered |Already valid: )segment-\d{6}-(\d{6})\.mp4/g,
               )) {
                 job.completedFrames = Math.max(job.completedFrames, Number(match[1]) + 1);
               }
@@ -237,6 +235,7 @@ export default function customExport() {
             }
           } else if (method === 'start') {
             if (session) throw new Error('This tab is already exporting.');
+            const { directory: outputDirectory } = outputPaths(selectProject(data?.project));
             if (!/^[a-zA-Z0-9_-]{1,120}$/.test(data?.name)) throw new Error('Invalid export name.');
             if (!Number.isInteger(data?.fps) || data.fps < 1 || data.fps > 120)
               throw new Error('Invalid FPS.');
@@ -247,7 +246,7 @@ export default function customExport() {
             )
               throw new Error('Segment must contain 1–18000 frames.');
             await mkdir(outputDirectory, { recursive: true });
-            session = new ExportSession(data.name, data.fps, data.expectedFrames);
+            session = new ExportSession(outputDirectory, data.name, data.fps, data.expectedFrames);
             sessions.set(client, session);
             client.socket.once('close', () => {
               if (sessions.get(client) === session) {
@@ -271,21 +270,14 @@ export default function customExport() {
         }
       });
       server.middlewares.use('/api/custom-export/status', async (request, response) => {
-        const total = Number(new URL(request.url, 'http://localhost').searchParams.get('total'));
-        if (!Number.isInteger(total) || total < 1 || total > 1000000) {
-          response.writeHead(400).end('Invalid total');
-          return;
+        try {
+          const params = new URL(request.url, 'http://localhost').searchParams;
+          const { directory } = outputPaths(selectProject(params.get('project')));
+          response.setHeader('Content-Type', 'application/json');
+          response.end(JSON.stringify({ directory }));
+        } catch (error) {
+          response.writeHead(400).end(String(error));
         }
-        await mkdir(outputDirectory, { recursive: true });
-        const { readdir } = await import('node:fs/promises');
-        const files = await readdir(outputDirectory);
-        response.setHeader('Content-Type', 'application/json');
-        response.end(
-          JSON.stringify({
-            directory: outputDirectory,
-            files: files.filter((name) => name.endsWith('.mp4') && !name.includes('.partial.')),
-          }),
-        );
       });
     },
   };

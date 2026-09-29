@@ -11,6 +11,13 @@ type Reply = { id: number; ok: boolean; result?: unknown; error?: string };
 type WorkerReply = { id: number; png?: string; error?: string };
 let editorRenderer: Renderer | undefined;
 
+function selectedProject() {
+  return (
+    new URLSearchParams(window.location.search).get('project') ??
+    decodeURIComponent(window.location.pathname)
+  );
+}
+
 class SegmentExporter implements Exporter {
   static readonly id = 'custom-export-segment';
   static readonly displayName = 'custom export segment';
@@ -60,6 +67,7 @@ class SegmentExporter implements Exporter {
       Math.ceil(this.settings.range[0] * this.settings.fps) +
       1;
     await SegmentExporter.invoke('start', {
+      project: selectedProject(),
       name: this.settings.name,
       fps: this.settings.fps,
       expectedFrames,
@@ -155,7 +163,7 @@ class CustomExporter implements Exporter {
 
   async start() {
     const result = (await SegmentExporter.invoke('render-start', {
-      name: this.settings.name,
+      project: selectedProject(),
     })) as { jobId: string };
     this.jobId = result.jobId;
   }
@@ -218,10 +226,10 @@ export default makePlugin({
   renderer: (renderer) => {
     editorRenderer = renderer;
   },
-  exporters: (project) =>
-    project.name === 'ddia_chapter1_operational_vs_analytical_systems'
-      ? window.location.pathname.endsWith('/rendering/segment.html')
-        ? [SegmentExporter]
-        : [CustomExporter]
-      : [],
+  // Keep the saved exporter available in segment pages so Motion Canvas does
+  // not rewrite project.meta while a render is running.
+  exporters: () =>
+    window.location.pathname.endsWith('/rendering/segment.html')
+      ? [CustomExporter, SegmentExporter]
+      : [CustomExporter],
 });

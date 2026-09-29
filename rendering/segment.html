@@ -8,10 +8,18 @@
     <pre id="status">Proje yükleniyor…</pre>
     <script type="module">
       import { Renderer } from '@motion-canvas/core';
-      import project from '/ddia/01/operational-vs-analytical-systems/project.ts?project';
 
       const status = document.querySelector('#status');
       const params = new URLSearchParams(location.search);
+      const file = params.get('project');
+      const project = await import(
+        /* @vite-ignore */ `/${file.split('/').map(encodeURIComponent).join('/')}?project`
+      )
+        .then((module) => module.default)
+        .catch((error) => {
+          window.segmentResult = { state: 'failed', error: String(error) };
+          throw error;
+        });
       const start = Number(params.get('start'));
       const end = Number(params.get('end'));
       if (
@@ -24,7 +32,7 @@
       ) {
         throw new Error('Geçersiz kare aralığı.');
       }
-      const name = `ddia-ch1-${String(start).padStart(6, '0')}-${String(end - 1).padStart(6, '0')}`;
+      const name = `segment-${String(start).padStart(6, '0')}-${String(end - 1).padStart(6, '0')}`;
       const renderer = new Renderer(project);
       let resolveFinished;
       const finished = new Promise((resolve) => (resolveFinished = resolve));

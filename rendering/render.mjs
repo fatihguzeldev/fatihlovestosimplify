@@ -2,16 +2,17 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { access, mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { setTimeout as delay } from 'node:timers/promises';
 import { chromium } from 'playwright';
 import { createServer } from 'vite';
+import { outputPaths, projectArgument, root } from './projects.mjs';
 
 const require = createRequire(import.meta.url);
 const ffprobe = require('@ffprobe-installer/ffprobe').path;
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const directory = process.env.RENDER_OUTPUT_DIR || path.join(root, 'output/custom-export');
+const project = projectArgument();
+const { directory } = outputPaths(project);
+const projectQuery = `project=${encodeURIComponent(project)}`;
 const browserPath =
   process.env.RENDER_BROWSER || '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser';
 const defaultChunk = 9000;
@@ -61,17 +62,19 @@ async function sourceFingerprint() {
   async function collect(relative) {
     for (const entry of await readdir(path.join(root, relative), { withFileTypes: true })) {
       const child = path.join(relative, entry.name);
-      if (entry.isDirectory()) await collect(child);
+      if (entry.isDirectory() && !['node_modules', '.git', 'output', 'dist'].includes(entry.name))
+        await collect(child);
       else if (
         entry.isFile() &&
-        (child.endsWith('audio/narration.mp3') ||
-          /\.(tsx?|jsx?|mjs|meta|html|css|png|jpe?g|svg|webp|woff2?)$/.test(child))
+        /\.(tsx?|jsx?|mjs|meta|html|css|png|jpe?g|svg|webp|woff2?|mp3|wav|flac|m4a|aac|ogg|mp4|webm)$/.test(
+          child,
+        )
       ) {
         files.push(child);
       }
     }
   }
-  await collect('ddia/01/operational-vs-analytical-systems');
+  await collect(path.dirname(project));
   await collect('common');
   await collect('rendering');
   files.push('vite.config.ts', 'package-lock.json');
@@ -94,7 +97,7 @@ async function prepareOutput(fingerprint) {
   }
   if (previous?.fingerprint === fingerprint) return;
   for (const file of await readdir(directory)) {
-    if (/^ddia-ch1-\d{6}-\d{6}\.mp4$/.test(file) || file === 'segments.json') {
+    if (/^segment-\d{6}-\d{6}\.mp4$/.test(file) || file === 'segments.json') {
       await rm(path.join(directory, file), { force: true });
     }
   }
@@ -105,7 +108,7 @@ async function prepareOutput(fingerprint) {
 }
 
 function name(start, end) {
-  return `ddia-ch1-${String(start).padStart(6, '0')}-${String(end - 1).padStart(6, '0')}.mp4`;
+  return `segment-${String(start).padStart(6, '0')}-${String(end - 1).padStart(6, '0')}.mp4`;
 }
 
 function run(command, args) {
@@ -168,9 +171,12 @@ async function renderRange(start, end) {
       activePage = await activeBrowser.newPage();
       activePage.on('crash', () => console.error(`Browser crashed on ${name(start, end)}.`));
       activePage.on('pageerror', (error) => console.error(`Page error: ${error}`));
-      await activePage.goto(`${base}/rendering/segment.html?start=${start}&end=${end}`, {
-        waitUntil: 'domcontentloaded',
-      });
+      await activePage.goto(
+        `${base}/rendering/segment.html?${projectQuery}&start=${start}&end=${end}`,
+        {
+          waitUntil: 'domcontentloaded',
+        },
+      );
       await activePage.waitForFunction(() => window.segmentResult, undefined, {
         timeout: 20 * 60 * 1000,
       });
@@ -200,7 +206,7 @@ async function renderRange(start, end) {
 
 let vite;
 try {
-  const response = await fetch(`${base}/api/custom-export/status?total=1`);
+  const response = await fetch(`${base}/api/custom-export/status?${projectQuery}`);
   if (!response.ok) throw new Error('Wrong server on port 9001.');
   const status = await response.json();
   if (path.resolve(status.directory) !== path.resolve(directory)) {
@@ -225,7 +231,9 @@ try {
 try {
   activeBrowser = await chromium.launch({ executablePath: browserPath, headless: true });
   activePage = await activeBrowser.newPage();
-  await activePage.goto(`${base}/rendering/probe.html`, { waitUntil: 'domcontentloaded' });
+  await activePage.goto(`${base}/rendering/probe.html?${projectQuery}`, {
+    waitUntil: 'domcontentloaded',
+  });
   await activePage.waitForFunction(() => window.renderInfo, undefined, { timeout: 70_000 });
   const probe = await activePage.evaluate(() => window.renderInfo);
   await activeBrowser.close();
@@ -251,18 +259,38 @@ try {
   console.log(`Measured ${total} frames at 60 FPS.`);
   const fingerprint = await sourceFingerprint();
   await prepareOutput(fingerprint);
+  if (probe.audio) {
+    const response = await fetch(probe.audio);
+    if (!response.ok) throw new Error(`Could not load project audio: ${response.status}`);
+    await writeFile(path.join(directory, 'audio-track'), Buffer.from(await response.arrayBuffer()));
+  }
   const segments = [];
   for (let start = from; start < to; start += chunk) {
     segments.push(...(await renderRange(start, Math.min(start + chunk, to))));
     if (interrupted) throw new Error('Render interrupted.');
   }
-  if (from === 0 && to === total && chunk === defaultChunk) {
+  if (from === 0 && to === total) {
     if ((await sourceFingerprint()) !== fingerprint) {
       throw new Error('Project sources changed during the render; rerun to refresh segments.');
     }
     const manifest = path.join(directory, 'segments.json');
     const temp = `${manifest}.partial`;
-    await writeFile(temp, JSON.stringify({ version: 1, total, fingerprint, segments }, null, 2));
+    await writeFile(
+      temp,
+      JSON.stringify(
+        {
+          version: 1,
+          project,
+          total,
+          fingerprint,
+          segments,
+          audio: Boolean(probe.audio),
+          audioOffset: probe.audioOffset,
+        },
+        null,
+        2,
+      ),
+    );
     await rename(temp, manifest);
     await import('./finalize.mjs');
   }

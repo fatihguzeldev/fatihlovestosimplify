@@ -7,10 +7,23 @@
   <body>
     <script type="module">
       import { Player } from '@motion-canvas/core';
-      import project from '/ddia/01/operational-vs-analytical-systems/project.ts?project';
 
       try {
-        const player = new Player(project, project.meta.getFullRenderingSettings());
+        const file = new URLSearchParams(location.search).get('project');
+        if (!file) throw new Error('Missing project.');
+        const { default: project } = await import(
+          /* @vite-ignore */ `/${file.split('/').map(encodeURIComponent).join('/')}?project`
+        );
+        const settings = project.meta.getFullRenderingSettings();
+        if (
+          settings.fps !== 60 ||
+          settings.size.x !== 1920 ||
+          settings.size.y !== 1080 ||
+          settings.resolutionScale !== 1
+        ) {
+          throw new Error('custom export currently requires 1920×1080 at 60 FPS.');
+        }
+        const player = new Player(project, settings);
         const total = await new Promise((resolve, reject) => {
           const timeout = setTimeout(() => reject(new Error('Duration probe timed out.')), 60_000);
           player.onDurationChanged.subscribe((duration) => {
@@ -21,7 +34,11 @@
           });
         });
         player.deactivate();
-        window.renderInfo = { total };
+        window.renderInfo = {
+          total,
+          audio: project.audio ? new URL(project.audio, location.href).href : null,
+          audioOffset: settings.audioOffset,
+        };
       } catch (error) {
         window.renderInfo = { error: String(error) };
       }
