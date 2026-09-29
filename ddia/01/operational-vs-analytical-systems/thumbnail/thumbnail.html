@@ -3,94 +3,38 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>aynı data. farklı işler. — ddia #01</title>
+    <title>aynı data, farklı işler. — ddia #01</title>
     <link rel="icon" href="data:," />
     <style>
+      @font-face {
+        font-family: Plex;
+        src: url('../../../../common/fonts/IBMPlexSans-Medium.woff2') format('woff2');
+        font-style: normal;
+        font-weight: 500;
+      }
+
+      @font-face {
+        font-family: Serif;
+        src: url('../../../../common/fonts/IBMPlexSerif-Italic.woff2') format('woff2');
+        font-style: italic;
+        font-weight: 400;
+      }
+
       html,
       body {
         margin: 0;
-        background: var(--background);
+        background: #0b0b0b;
       }
-      .thumbnail {
-        box-sizing: border-box;
+
+      .thumbnail > svg {
+        display: block;
         width: 100vw;
-        height: 56.25vw;
-        display: flex;
-        align-items: center;
-        padding: 5vw var(--space-xl);
-        color: var(--foreground);
-        font-family: var(--font-sans), sans-serif;
-        font-weight: 400;
-      }
-      .composition {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 4.2vw;
-      }
-      .chapter {
-        position: relative;
-      }
-      .chapter-label {
-        position: absolute;
-        left: 0;
-        bottom: calc(100% + 1.2vw);
-        margin: 0;
-        font-size: 3vw;
-        line-height: 1.3;
-        text-decoration: underline solid var(--chapter-accent);
-        text-decoration-thickness: var(--underline-thickness);
-        text-underline-offset: var(--space-s);
-        text-decoration-skip-ink: none;
-      }
-      .hero {
-        margin: 0;
-        font-size: 11.2vw;
-        font-weight: 500;
-        line-height: 1.07;
-        letter-spacing: -0.035em;
-      }
-      .accent {
-        color: var(--chapter-accent);
-      }
-      .byline {
-        margin: 0;
-        font-size: 4vw;
-        line-height: 1.3;
+        height: auto;
       }
     </style>
+    <script src="./thumbnail.js" defer></script>
   </head>
   <body>
-    <main class="thumbnail">
-      <div class="composition">
-        <div class="chapter">
-          <p class="chapter-label">chapter 1</p>
-          <h1 class="hero">aynı data.<br /><span class="accent">farklı işler.</span></h1>
-        </div>
-        <p class="byline">operational vs. analytical systems</p>
-      </div>
-    </main>
-    <script>
-      window.thumbnailReady = (async () => {
-        const [{ theme }, { loadFonts }] = await Promise.all([
-          import('../theme.ts'),
-          import('../../../../common/fonts.ts'),
-        ]);
-        const properties = {
-          '--background': theme.colors.background,
-          '--foreground': theme.colors.foreground,
-          '--chapter-accent': theme.colors.accent,
-          '--font-sans': `"${theme.fontFamily.sans}"`,
-          '--underline-thickness': `${theme.underlineThickness}vw`,
-        };
-        for (const [size, value] of Object.entries(theme.spacing)) {
-          properties[`--space-${size}`] = `${value}vw`;
-        }
-        for (const [property, value] of Object.entries(properties)) {
-          document.documentElement.style.setProperty(property, value);
-        }
-        await loadFonts();
-      })();
-    </script>
+    <main class="thumbnail"></main>
   </body>
 </html>
