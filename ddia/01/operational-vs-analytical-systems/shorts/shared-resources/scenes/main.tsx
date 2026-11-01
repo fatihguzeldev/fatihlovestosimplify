@@ -27,8 +27,7 @@ export default makeScene2D(function* (view) {
   const response = cartoonArrow('short-resources-response', [-220, -145], [-220, -310], accent, 0);
   const report = paper(760, 180, '#101519');
   report.root.y(600);
-  report.root.opacity(0);
-  const reportStatus = text('yanıt bekleniyor…', 37, { y: 37, fill: muted });
+  const reportStatus = text('henüz çalışmıyor', 37, { y: 37, fill: muted });
   report.root.add([text('ocak satış raporu', 35, { y: -38 }), reportStatus]);
   const query = cartoonArrow('short-resources-report', [0, 475], [0, 255], accent, 0);
   const work = new Layout({ y: 35, opacity: 0 });
@@ -95,7 +94,8 @@ export default makeScene2D(function* (view) {
   state.text('preparing');
   yield* response.arrive();
   yield* waitUntil('scan');
-  yield* all(report.root.opacity(1, 0.35), query.reveal(1, 0.3));
+  reportStatus.text('yanıt bekleniyor…');
+  yield* query.reveal(1, 0.3);
   yield* query.travel(0.55);
   yield* query.arrive();
   yield* waitUntil('detail');
