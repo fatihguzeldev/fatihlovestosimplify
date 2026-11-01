@@ -1,0 +1,46 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "sale",
+      "targetTime": 3.65
+    },
+    {
+      "name": "total",
+      "targetTime": 9.1
+    },
+    {
+      "name": "freshness",
+      "targetTime": 13.25
+    },
+    {
+      "name": "response-time",
+      "targetTime": 23.3
+    },
+    {
+      "name": "open",
+      "targetTime": 27.1
+    },
+    {
+      "name": "response",
+      "targetTime": 30.9
+    },
+    {
+      "name": "stale",
+      "targetTime": 35.85
+    },
+    {
+      "name": "slow",
+      "targetTime": 41.85
+    },
+    {
+      "name": "balanced",
+      "targetTime": 49.5
+    },
+    {
+      "name": "end",
+      "targetTime": 56.84
+    }
+  ],
+  "seed": 104224
+}
