@@ -37,9 +37,13 @@ export function outputPaths(
   outputRoot = process.env.RENDER_OUTPUT_DIR || path.join(root, 'output'),
 ) {
   const relative = path.dirname(project);
+  const final =
+    project === 'ps5-jb/project.ts'
+      ? path.join(relative, 'ps5-relapse-final.mp4')
+      : `${relative}.mp4`;
   return {
     directory: path.resolve(outputRoot, '.segments', relative),
-    finalFile: path.resolve(outputRoot, `${relative}.mp4`),
+    finalFile: path.resolve(outputRoot, final),
   };
 }
 

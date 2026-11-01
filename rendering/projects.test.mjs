@@ -36,6 +36,13 @@ test('mirrors the video folder beneath the output root, with isolated segment ca
   assert.notEqual(first.finalFile, second.finalFile);
 });
 
+test('keeps the standalone PS5 final video inside its own output folder', () => {
+  const root = '/tmp/video-output';
+  const ps5 = outputPaths('ps5-jb/project.ts', root);
+  assert.equal(ps5.finalFile, `${root}/ps5-jb/ps5-relapse-final.mp4`);
+  assert.equal(ps5.directory, `${root}/.segments/ps5-jb`);
+});
+
 test('selects only known projects and requires a choice when there are several', () => {
   const projects = ['ddia/01/example/project.ts', 'new series/02/example/project.ts'];
   assert.equal(selectProject(undefined, [projects[0]]), projects[0]);
