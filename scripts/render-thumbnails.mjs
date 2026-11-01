@@ -6,26 +6,25 @@ import { chromium } from 'playwright';
 import { createServer } from 'vite';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const excluded = new Set(['node_modules', '.git', 'dist', 'output', 'plans']);
+const excluded = new Set(['node_modules', '.git', '.production', 'dist', 'output', 'plans']);
 
-async function findThumbnails(directory) {
+export async function findThumbnails(
+  directory,
+  insideThumbnail = basename(directory) === 'thumbnail',
+) {
   const files = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const path = join(directory, entry.name);
     if (entry.isDirectory() && !excluded.has(entry.name)) {
-      files.push(...(await findThumbnails(path)));
-    } else if (
-      entry.isFile() &&
-      basename(directory) === 'thumbnail' &&
-      entry.name.endsWith('.html')
-    ) {
+      files.push(...(await findThumbnails(path, insideThumbnail || entry.name === 'thumbnail')));
+    } else if (entry.isFile() && insideThumbnail && entry.name.endsWith('.html')) {
       files.push(path);
     }
   }
   return files.sort();
 }
 
-async function render(browser, origin, html) {
+export async function render(browser, origin, html) {
   const page = await browser.newPage({
     viewport: { width: 3840, height: 2160 },
     deviceScaleFactor: 1,
@@ -117,7 +116,9 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error.message);
-  process.exitCode = 1;
-});
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error.message);
+    process.exitCode = 1;
+  });
+}
