@@ -16,7 +16,7 @@ export default makeScene2D(function* (view) {
   const title = heading('ödemeyi kaydet.\n', 'örüntüyü de bul.');
   const application = paper(760, 165);
   application.root.position([0, -400]);
-  const paymentStatus = text('ödeme denemeleri', 40, { y: 22 });
+  const paymentStatus = text('ödeme denemeleri · customer #17', 34, { y: 22 });
   application.root.add([text('market uygulaması', 29, { y: -44, fill: muted }), paymentStatus]);
   const system = paper(900, 920);
   system.root.position([0, 170]);
@@ -42,7 +42,11 @@ export default makeScene2D(function* (view) {
   const write = cartoonArrow('htap-portrait-write', [0, -293], [0, -230], accent, 0);
   const sync = cartoonArrow('htap-portrait-sync', [0, 62], [0, 138], accent, 0);
   const response = cartoonArrow('htap-portrait-response', [440, 340], [410, -400], accent, 0);
-  const rule = text('örnek kural: 30 sn’de 3 deneme', 32, { y: 710, fill: muted, opacity: 0 });
+  const rule = text('örnek kural: 30 sn’de 3 başarısız deneme', 30, {
+    y: 710,
+    fill: muted,
+    opacity: 0,
+  });
   const flag = paper(710, 92, '#182638');
   flag.root.position([0, 610]);
   flag.root.opacity(0);
