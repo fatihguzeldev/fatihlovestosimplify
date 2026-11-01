@@ -1,0 +1,82 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "no-execute",
+      "targetTime": 4.74
+    },
+    {
+      "name": "native-code",
+      "targetTime": 12.32
+    },
+    {
+      "name": "read1",
+      "targetTime": 18.4
+    },
+    {
+      "name": "caller",
+      "targetTime": 24.31
+    },
+    {
+      "name": "call",
+      "targetTime": 26.41
+    },
+    {
+      "name": "result",
+      "targetTime": 28.59
+    },
+    {
+      "name": "return-address",
+      "targetTime": 36.21
+    },
+    {
+      "name": "third-step",
+      "targetTime": 44.85
+    },
+    {
+      "name": "stack",
+      "targetTime": 49.65
+    },
+    {
+      "name": "write-return",
+      "targetTime": 61.63
+    },
+    {
+      "name": "native-target",
+      "targetTime": 68.47
+    },
+    {
+      "name": "pieces",
+      "targetTime": 83.83
+    },
+    {
+      "name": "pieces-second",
+      "targetTime": 87.29
+    },
+    {
+      "name": "pieces-third",
+      "targetTime": 90.29
+    },
+    {
+      "name": "argument",
+      "targetTime": 96.41
+    },
+    {
+      "name": "read-piece",
+      "targetTime": 102.49
+    },
+    {
+      "name": "take-result",
+      "targetTime": 107.77
+    },
+    {
+      "name": "gadgets",
+      "targetTime": 122.35
+    },
+    {
+      "name": "end",
+      "targetTime": 129.725
+    }
+  ],
+  "seed": 710102
+}
