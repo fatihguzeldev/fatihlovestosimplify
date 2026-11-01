@@ -18,7 +18,9 @@ export function heading(before: string, emphasis = '', after = '') {
     lineHeight: 82,
     fontWeight: 500,
     fill: foreground,
-    textWrap: true,
+    // v3.17 forwards CSS white-space values but omits pre-wrap from its type.
+    textWrap: 'pre-wrap' as 'pre',
+    textAlign: 'left',
     ...(emphasis
       ? {
           children: [
