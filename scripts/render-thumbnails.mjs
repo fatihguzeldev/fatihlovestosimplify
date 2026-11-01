@@ -44,6 +44,24 @@ export async function render(browser, origin, html) {
   try {
     const path = relative(root, html).split(sep).map(encodeURIComponent).join('/');
     await page.goto(`${origin}/${path}`, { waitUntil: 'load' });
+    // Thumbnail artwork declares its native export size, including portrait Shorts.
+    const size = await page.evaluate(() => {
+      const svg = document.querySelector('svg');
+      return {
+        width: Number(svg?.getAttribute('width')),
+        height: Number(svg?.getAttribute('height')),
+      };
+    });
+    if (
+      Number.isSafeInteger(size.width) &&
+      Number.isSafeInteger(size.height) &&
+      size.width > 0 &&
+      size.height > 0 &&
+      size.width <= 8192 &&
+      size.height <= 8192
+    ) {
+      await page.setViewportSize(size);
+    }
     await page.evaluate(async () => {
       let timeout;
       try {
