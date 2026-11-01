@@ -1,0 +1,190 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "ordinary-application-acceptance",
+      "targetTime": 0.05
+    },
+    {
+      "name": "name-loader",
+      "targetTime": 5.78
+    },
+    {
+      "name": "machine-code-in-file",
+      "targetTime": 10.89
+    },
+    {
+      "name": "normal-application-route",
+      "targetTime": 13.67
+    },
+    {
+      "name": "signature-condition",
+      "targetTime": 16.48
+    },
+    {
+      "name": "loading-in-existing-process",
+      "targetTime": 23.74
+    },
+    {
+      "name": "starter-code",
+      "targetTime": 27.5
+    },
+    {
+      "name": "name-starter-bootstrap",
+      "targetTime": 29.96
+    },
+    {
+      "name": "request-code-area",
+      "targetTime": 50.61
+    },
+    {
+      "name": "mapping-with-permissions",
+      "targetTime": 60.97
+    },
+    {
+      "name": "mapping-permissions",
+      "targetTime": 61.79
+    },
+    {
+      "name": "mapping-write-permission",
+      "targetTime": 62.99
+    },
+    {
+      "name": "mapping-execute-permission",
+      "targetTime": 63.31
+    },
+    {
+      "name": "name-mapping",
+      "targetTime": 64.83
+    },
+    {
+      "name": "place-new-code",
+      "targetTime": 71.65
+    },
+    {
+      "name": "verify-new-code",
+      "targetTime": 75.09
+    },
+    {
+      "name": "name-bootstrap",
+      "targetTime": 76.63
+    },
+    {
+      "name": "loader-is-a-file",
+      "targetTime": 79.41
+    },
+    {
+      "name": "argument-information",
+      "targetTime": 82.55
+    },
+    {
+      "name": "loader-address-source",
+      "targetTime": 86.3
+    },
+    {
+      "name": "kernel-pipes-source",
+      "targetTime": 89.46
+    },
+    {
+      "name": "prepare-handoff-pipes",
+      "targetTime": 92.46
+    },
+    {
+      "name": "name-four-descriptors",
+      "targetTime": 103.97
+    },
+    {
+      "name": "handoff-descriptors",
+      "targetTime": 105.47
+    },
+    {
+      "name": "loader-argument-address",
+      "targetTime": 110.08
+    },
+    {
+      "name": "loader-argument-size",
+      "targetTime": 111.78
+    },
+    {
+      "name": "resources-stay-open",
+      "targetTime": 113.72
+    },
+    {
+      "name": "start-native-thread",
+      "targetTime": 121.15
+    },
+    {
+      "name": "thread-arguments",
+      "targetTime": 126.8
+    },
+    {
+      "name": "thread-runs-bootstrap",
+      "targetTime": 130.92
+    },
+    {
+      "name": "bootstrap-prepares-loader",
+      "targetTime": 137.34
+    },
+    {
+      "name": "file-layout-to-memory",
+      "targetTime": 140.4
+    },
+    {
+      "name": "name-elf",
+      "targetTime": 152.19
+    },
+    {
+      "name": "read-elf-layout",
+      "targetTime": 167.11
+    },
+    {
+      "name": "load-loader-code",
+      "targetTime": 171.31
+    },
+    {
+      "name": "load-loader-data",
+      "targetTime": 172.61
+    },
+    {
+      "name": "loader-entry",
+      "targetTime": 190.22
+    },
+    {
+      "name": "name-loader-entry",
+      "targetTime": 194.26
+    },
+    {
+      "name": "loader-runs",
+      "targetTime": 195.99
+    },
+    {
+      "name": "loader-code-running",
+      "targetTime": 199.17
+    },
+    {
+      "name": "release-working-tools",
+      "targetTime": 211.2
+    },
+    {
+      "name": "loader-ready",
+      "targetTime": 218.56
+    },
+    {
+      "name": "wait-for-payload",
+      "targetTime": 224.93
+    },
+    {
+      "name": "listen-port",
+      "targetTime": 227.29
+    },
+    {
+      "name": "payload-not-sent",
+      "targetTime": 239.88
+    },
+    {
+      "name": "end",
+      "targetTime": 242.65
+    }
+  ],
+  "seed": 690019
+}
