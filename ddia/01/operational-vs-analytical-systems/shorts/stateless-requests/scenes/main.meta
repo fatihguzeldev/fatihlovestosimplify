@@ -1,0 +1,42 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "replace",
+      "targetTime": 8.5
+    },
+    {
+      "name": "request",
+      "targetTime": 12.71
+    },
+    {
+      "name": "query",
+      "targetTime": 14.993333
+    },
+    {
+      "name": "response",
+      "targetTime": 17.593333
+    },
+    {
+      "name": "independent",
+      "targetTime": 20.91
+    },
+    {
+      "name": "stateless",
+      "targetTime": 29.543333
+    },
+    {
+      "name": "stored-state",
+      "targetTime": 32.21
+    },
+    {
+      "name": "application",
+      "targetTime": 35.993333
+    },
+    {
+      "name": "end",
+      "targetTime": 40.46
+    }
+  ],
+  "seed": 104222
+}
