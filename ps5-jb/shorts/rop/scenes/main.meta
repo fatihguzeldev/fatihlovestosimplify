@@ -11,71 +11,71 @@
     },
     {
       "name": "read1",
-      "targetTime": 18.4
+      "targetTime": 31.48
     },
     {
       "name": "caller",
-      "targetTime": 24.31
+      "targetTime": 37.39
     },
     {
       "name": "call",
-      "targetTime": 26.41
+      "targetTime": 39.49
     },
     {
       "name": "result",
-      "targetTime": 28.59
+      "targetTime": 41.67
     },
     {
       "name": "return-address",
-      "targetTime": 36.21
+      "targetTime": 49.29
     },
     {
       "name": "third-step",
-      "targetTime": 44.85
+      "targetTime": 57.93
     },
     {
       "name": "stack",
-      "targetTime": 49.65
+      "targetTime": 62.73
     },
     {
       "name": "write-return",
-      "targetTime": 61.63
+      "targetTime": 74.71
     },
     {
       "name": "native-target",
-      "targetTime": 68.47
+      "targetTime": 81.55
     },
     {
       "name": "pieces",
-      "targetTime": 83.83
+      "targetTime": 96.91
     },
     {
       "name": "pieces-second",
-      "targetTime": 87.29
+      "targetTime": 100.37
     },
     {
       "name": "pieces-third",
-      "targetTime": 90.29
+      "targetTime": 103.37
     },
     {
       "name": "argument",
-      "targetTime": 96.41
+      "targetTime": 109.49
     },
     {
       "name": "read-piece",
-      "targetTime": 102.49
+      "targetTime": 115.57
     },
     {
       "name": "take-result",
-      "targetTime": 107.77
+      "targetTime": 120.85
     },
     {
       "name": "gadgets",
-      "targetTime": 122.35
+      "targetTime": 135.43
     },
     {
       "name": "end",
-      "targetTime": 129.725
+      "targetTime": 142.80833333333334
     }
   ],
   "seed": 710102

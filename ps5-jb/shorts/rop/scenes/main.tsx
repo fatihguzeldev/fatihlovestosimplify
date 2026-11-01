@@ -11,7 +11,7 @@ export default makeScene2D(function* (view) {
   const dataFace = panel(720, 330, 0, 0);
   const dataName = label('buffer', 0, -105, 46);
   const tape = bytes(['9', '16', '32', '64'], 0, 0, 135);
-  const writable = label('write', -155, 112, 44, palette.ink, true);
+  const writable = label('write: açık', -170, 112, 38, palette.ink, true);
   const executable = label('execute', 115, 112, 44, palette.muted, true);
   const blocked = new Line({
     points: [
@@ -26,10 +26,10 @@ export default makeScene2D(function* (view) {
 
   const read = new Layout({ position: [-40, 250] });
   const readFace = panel(720, 300, 0, 0);
-  const nativeName = label('native code', 0, -95, 46, palette.muted);
+  const nativeName = label('mevcut native code', 0, -95, 46, palette.muted);
   const readName = label('read1(B)', 0, -25, 48, palette.ink, true);
   readName.opacity(0);
-  const readBody = label('1 byte oku', 0, 45, 44, palette.muted, true);
+  const readBody = label('execute: açık', 0, 45, 44, palette.muted, true);
   const running = new Circle({ position: [-310, 0], size: 14, fill: palette.accent, opacity: 0 });
   read.add([readFace, nativeName, readName, readBody, running]);
 
@@ -158,6 +158,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('native-code');
   yield* all(readFace.stroke(palette.accent, 0.35), running.opacity(1, 0.35));
   yield* waitUntil('read1');
+  readBody.text('1 byte oku');
   yield* all(writable.opacity(0, 0.2), executable.opacity(0, 0.2), blocked.opacity(0, 0.2));
   yield* all(
     data.y(510, 0.65),
@@ -169,7 +170,8 @@ export default makeScene2D(function* (view) {
     nativeName.opacity(0, 0.3),
     readName.opacity(1, 0.35),
   );
-  dataName.text('buffer B');
+  dataName.text('B adresindeki buffer');
+  dataName.x(70);
   yield* waitUntil('caller');
   yield* caller.opacity(1, 0.35);
   yield* waitUntil('call');
