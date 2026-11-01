@@ -6,7 +6,27 @@ import { arrow, bytes, label, palette, panel, replace } from '../../shared/portr
 export default makeScene2D(function* (view) {
   view.fill(palette.paper);
   yield loadFonts();
-  const pipe = new Layout({ position: [-20, -40] });
+  const kernel = panel(860, 900, -20, -40);
+  const kernelName = label('kernel', -320, -440, 44, palette.muted);
+  const programName = label('program', -20, -655, 44, palette.muted);
+  const priorMemory = new Layout({});
+  priorMemory.add([
+    panel(740, 200, -20, -40),
+    label('kernel memory', -20, -90, 44, palette.muted),
+    label('adres K', -270, -5, 38, palette.muted, true),
+    label('43', -20, -5, 64, palette.ink, true),
+  ]);
+  const priorResult = label('43', 150, -230, 48, palette.accent, true);
+  priorResult.opacity(0);
+  const priorPath = arrow(
+    [
+      [-20, -505],
+      [-20, -140],
+    ],
+    palette.accent,
+  );
+  priorPath.end(0);
+  const pipe = new Layout({ position: [-20, -40], opacity: 0 });
   const pipeFace = panel(740, 500, 0, 0);
   const pipeName = label('pipe', -220, -310, 48);
   const pointerFace = panel(540, 110, 0, 0);
@@ -16,14 +36,16 @@ export default makeScene2D(function* (view) {
   pointer.add([pointerFace, pointerName, pointerValue]);
   pipe.add([pipeFace, pipeName, pointer]);
 
-  const normalBuffer = new Layout({ position: [-20, -40] });
+  const normalBuffer = new Layout({ position: [-20, -40], opacity: 0 });
   const abc = bytes(['A', 'B', 'C'], 0, 0, 150);
   const bufferName = label('buffer', 0, -90, 44, palette.muted);
   bufferName.opacity(0);
   normalBuffer.add([abc.root, bufferName]);
   const input = new Layout({ position: [-20, -555] });
-  input.add([panel(450, 100, 0, 0), label('write end', 0, 0, 48, palette.ink, true)]);
-  const output = new Layout({ position: [-20, 555] });
+  const inputFace = panel(720, 100, 0, 0);
+  const inputName = label('sysctl read(K)', 0, 0, 42, palette.ink, true);
+  input.add([inputFace, inputName]);
+  const output = new Layout({ position: [-20, 555], opacity: 0 });
   output.add([panel(450, 100, 0, 0), label('read end', 0, 0, 48, palette.ink, true)]);
   const incoming = arrow(
     [
@@ -55,7 +77,7 @@ export default makeScene2D(function* (view) {
     label('buffer pointer', 0, -65, 38, palette.muted, true),
     controlValue,
   ]);
-  const fieldAddress = label('M', -345, -135, 44, palette.accent, true);
+  const fieldAddress = label('alanın adresi: M', -20, 65, 38, palette.accent, true);
   fieldAddress.opacity(0);
   const controlPath = arrow(
     [
@@ -77,6 +99,15 @@ export default makeScene2D(function* (view) {
     palette.muted,
   );
   dataPath.end(0);
+  dataPath.points(
+    () =>
+      [
+        [250, pipe.y()],
+        [330, pipe.y()],
+        [330, normalBuffer.y()],
+        [205, normalBuffer.y()],
+      ] as [number, number][],
+  );
   const prepared = new Circle({
     position: [-20, -470],
     size: 16,
@@ -100,7 +131,33 @@ export default makeScene2D(function* (view) {
     new Rect({ width: 100, height: 85, fill: palette.paper }),
     label('44', 0, 0, 64, palette.accent, true),
   ]);
+  const lookup = new Layout({ opacity: 0 });
+  const lookupName = label('process record / PID', -20, -425, 40, palette.muted);
+  const descriptors = new Layout({ opacity: 0 });
+  const fdFour = panel(560, 64, -20, -280);
+  descriptors.add([
+    panel(560, 64, -20, -355),
+    label('3 → pipe', -20, -355, 38, palette.ink, true),
+    fdFour,
+    label('4 → pipe', -20, -280, 38, palette.ink, true),
+  ]);
+  lookup.add([panel(740, 240, -20, -350), lookupName, descriptors]);
+  const descriptorPath = arrow(
+    [
+      [260, -280],
+      [375, -280],
+      [375, 120],
+      [350, 120],
+    ],
+    palette.accent,
+  );
+  descriptorPath.end(0);
   view.add([
+    kernel,
+    kernelName,
+    priorMemory,
+    priorPath,
+    priorResult,
     pipe,
     normalBuffer,
     input,
@@ -117,8 +174,30 @@ export default makeScene2D(function* (view) {
     addressPacket,
     result,
     writePacket,
+    lookup,
+    descriptorPath,
+    programName,
   ]);
   abc.values.forEach((value) => value.opacity(0));
+
+  yield* waitUntil('existing-access');
+  yield* priorPath.end(1, 0.5);
+  yield* priorResult.opacity(1, 0.25);
+  yield* waitUntil('move-to-pipes');
+  yield* all(
+    priorPath.end(0, 0.25),
+    priorMemory.opacity(0, 0.3),
+    priorResult.opacity(0, 0.3),
+    input.opacity(0, 0.3),
+  );
+  yield* waitUntil('normal-pipe');
+  inputName.text('write end');
+  yield* all(
+    pipe.opacity(1, 0.35),
+    normalBuffer.opacity(1, 0.35),
+    input.opacity(1, 0.35),
+    output.opacity(1, 0.35),
+  );
 
   yield* waitUntil('normal-write');
   yield* incoming.end(1, 0.35);
@@ -139,11 +218,49 @@ export default makeScene2D(function* (view) {
     normalResult.opacity(0, 0.25),
     output.opacity(0, 0.25),
     input.opacity(0, 0.25),
+    programName.opacity(0, 0.25),
+    kernelName.opacity(0, 0.25),
   );
-  yield* all(pipeFace.height(300, 0.5), pipeName.y(-220, 0.5), normalBuffer.y(400, 0.5));
-  yield* all(pointer.opacity(1, 0.25), bufferName.opacity(1, 0.25));
+  kernelName.y(610);
+  yield* all(
+    pipeFace.height(300, 0.5),
+    pipeName.y(-220, 0.5),
+    normalBuffer.y(400, 0.5),
+    kernel.height(1140, 0.5),
+    kernel.y(80, 0.5),
+  );
+  yield* all(pointer.opacity(1, 0.25), bufferName.opacity(1, 0.25), kernelName.opacity(1, 0.25));
   yield* dataPath.end(1, 0.45);
+  yield* waitUntil('fd-numbers');
+  inputName.text('fd: 3, 4');
+  yield* all(input.opacity(1, 0.3), programName.opacity(1, 0.3));
+  yield* waitUntil('fd-three-four');
+  inputName.fontSize(38);
+  yield* replace(inputName, '3: write   4: read');
+  yield* waitUntil('find-process');
+  yield* all(pipe.y(120, 0.6), normalBuffer.y(520, 0.6));
+  yield* lookup.opacity(1, 0.3);
+  yield* waitUntil('fd-table');
+  yield* replace(lookupName, 'fd table', 0.24);
+  yield* descriptors.opacity(1, 0.3);
+  yield* waitUntil('follow-fd');
+  fdFour.stroke(palette.accent);
+  yield* descriptorPath.end(1, 0.6);
+  yield* waitUntil('field-found');
+  yield* pointerFace.stroke(palette.accent, 0.3);
   yield* waitUntil('second-pipe');
+  yield* all(
+    descriptorPath.end(0, 0.25),
+    lookup.opacity(0, 0.3),
+    input.opacity(0, 0.3),
+    programName.opacity(0, 0.3),
+  );
+  yield* all(
+    pipe.y(-40, 0.5),
+    normalBuffer.y(400, 0.5),
+    kernel.height(1370, 0.5),
+    kernel.y(-35, 0.5),
+  );
   yield* replace(pipeName, 'data pipe');
   yield* control.opacity(1, 0.4);
   yield* waitUntil('previous-access');
@@ -156,6 +273,8 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('field-address');
   yield* all(fieldAddress.opacity(1, 0.25), replace(controlValue, 'adres M'));
   yield* waitUntil('send-address');
+  yield* all(dataPath.end(0, 0.25), normalBuffer.opacity(0, 0.25));
+  yield* selected.opacity(1, 0.25);
   yield* addressPacket.opacity(1, 0.2);
   // The address travels along control's existing connection. Its own M field stays put.
   yield* addressPacket.y(-50, 0.75);
