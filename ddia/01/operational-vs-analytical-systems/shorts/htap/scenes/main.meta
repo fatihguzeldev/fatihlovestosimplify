@@ -1,0 +1,74 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "payment",
+      "targetTime": 3.25
+    },
+    {
+      "name": "two-failures",
+      "targetTime": 12.55
+    },
+    {
+      "name": "rule",
+      "targetTime": 17.4
+    },
+    {
+      "name": "inside",
+      "targetTime": 23.7
+    },
+    {
+      "name": "new-payment",
+      "targetTime": 31.2
+    },
+    {
+      "name": "write",
+      "targetTime": 36.15
+    },
+    {
+      "name": "write-record",
+      "targetTime": 40.05
+    },
+    {
+      "name": "sync",
+      "targetTime": 44.1
+    },
+    {
+      "name": "query",
+      "targetTime": 46.6
+    },
+    {
+      "name": "three-failures",
+      "targetTime": 52.9
+    },
+    {
+      "name": "response",
+      "targetTime": 56.9
+    },
+    {
+      "name": "flag",
+      "targetTime": 57.95
+    },
+    {
+      "name": "both",
+      "targetTime": 66.22
+    },
+    {
+      "name": "htap-name",
+      "targetTime": 71.11
+    },
+    {
+      "name": "expansion",
+      "targetTime": 77.81
+    },
+    {
+      "name": "managed",
+      "targetTime": 86.36
+    },
+    {
+      "name": "end",
+      "targetTime": 91.08
+    }
+  ],
+  "seed": 104201
+}
