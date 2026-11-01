@@ -13,7 +13,7 @@ export default makeScene2D(function* (view) {
   process.add([
     processFace,
     label('process', 0, -170, 48),
-    label('open(file)', 0, -35, 50, palette.ink, true),
+    label("open('/secret')", 0, -35, 50, palette.ink, true),
     mode,
   ]);
 
@@ -33,13 +33,12 @@ export default makeScene2D(function* (view) {
   const file = new Layout({ position: [-20, 500] });
   const fileFace = panel(620, 170, 0, 0);
   const requirement = label('root gerekli', 0, 30, 44, palette.muted);
-  requirement.opacity(0);
-  file.add([fileFace, label('dosya', 0, -37, 48), requirement]);
+  file.add([fileFace, label('/secret', 0, -37, 48, palette.ink, true), requirement]);
   const request = arrow([
     [-20, -385],
     [-20, -290],
   ]);
-  request.end(0);
+  request.end(1);
   const access = arrow([
     [-20, 270],
     [-20, 415],
@@ -47,11 +46,10 @@ export default makeScene2D(function* (view) {
   access.end(0);
   view.add([process, kernel, file, request, access]);
 
-  yield* request.end(1, 0.4);
   yield* waitUntil('identity');
   yield* credentials.opacity(1, 0.35);
   yield* waitUntil('root-required');
-  yield* requirement.opacity(1, 0.3);
+  yield* all(requirement.fill(palette.accent, 0.3), fileFace.stroke(palette.accent, 0.3));
   yield* waitUntil('deny');
   yield* all(replace(result, 'reddedildi'), fileFace.stroke(palette.accent, 0.25));
   result.fill(palette.accent);
