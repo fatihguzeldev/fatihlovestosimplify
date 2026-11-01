@@ -15,8 +15,9 @@ import { money, newSale } from '../../../scenes/s08/seller-panel';
 export default makeScene2D(function* (view) {
   yield loadFonts();
   view.fill(background);
-  const title = heading('bugünkü satışları\n', 'takip edelim.');
+  const title = heading('satıcı panelinde\n', 'satışları takip ediyoruz.');
   const panel = new Layout({ y: -60 });
+  const period = text('ocak', 32, { position: [270, -225], fill: muted });
   panel.add([
     new Path({
       data: 'M -368 -360 Q -390 -358 -388 -330 L -387 325 Q -386 359 -355 360 L 357 357 Q 390 358 389 327 L 391 -328 Q 391 -361 360 -358 Z',
@@ -31,11 +32,11 @@ export default makeScene2D(function* (view) {
       lineWidth: 1.5,
       opacity: 0.3,
     }),
-    text('bugün', 32, { position: [270, -225], fill: accent }),
+    period,
     text('toplam satış', 29, { position: [-175, -225], fill: muted }),
   ]);
   const details = new Layout({});
-  const amounts = [createSignal(1200), createSignal(900)];
+  const amounts = [createSignal(400), createSignal(300)];
   const total = text('', 70, {
     y: -143,
     text: () => money(amounts[0]() + amounts[1]()),
@@ -73,6 +74,10 @@ export default makeScene2D(function* (view) {
   const responseNote = text('paneli açınca ne kadar bekliyoruz?', 29, { y: 58 });
   response.add([responseLabel, responseNote]);
   view.add([title, panel, sale, update.root, freshness, response]);
+  yield* waitUntil('today');
+  period.text('bugün');
+  title.children(heading('bugünkü satışları\n', 'takip edelim.').children());
+  yield* all(period.fill(accent, 0.3), amounts[0](1200, 0.4), amounts[1](900, 0.4));
   yield* waitUntil('sale');
   yield* sale.opacity(1, 0.35);
   yield* waitUntil('total');

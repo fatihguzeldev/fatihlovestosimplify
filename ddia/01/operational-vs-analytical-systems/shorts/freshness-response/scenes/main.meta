@@ -2,44 +2,48 @@
   "version": 0,
   "timeEvents": [
     {
+      "name": "today",
+      "targetTime": 6.25
+    },
+    {
       "name": "sale",
-      "targetTime": 3.65
+      "targetTime": 13.95
     },
     {
       "name": "total",
-      "targetTime": 9.1
+      "targetTime": 19.4
     },
     {
       "name": "freshness",
-      "targetTime": 13.25
+      "targetTime": 23.55
     },
     {
       "name": "response-time",
-      "targetTime": 23.3
+      "targetTime": 33.6
     },
     {
       "name": "open",
-      "targetTime": 27.1
+      "targetTime": 37.4
     },
     {
       "name": "response",
-      "targetTime": 30.9
+      "targetTime": 41.2
     },
     {
       "name": "stale",
-      "targetTime": 35.85
+      "targetTime": 46.15
     },
     {
       "name": "slow",
-      "targetTime": 41.85
+      "targetTime": 52.15
     },
     {
       "name": "balanced",
-      "targetTime": 49.5
+      "targetTime": 59.8
     },
     {
       "name": "end",
-      "targetTime": 56.84
+      "targetTime": 67.14
     }
   ],
   "seed": 104224
