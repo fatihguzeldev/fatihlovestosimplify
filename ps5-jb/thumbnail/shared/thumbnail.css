@@ -1,0 +1,32 @@
+@font-face {
+  font-family: Sans;
+  src: url('../../../common/fonts/IBMPlexSans-Medium.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Sans;
+  src: url('../../../common/fonts/IBMPlexSans-MediumItalic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: PlexSerif;
+  src: url('../../../common/fonts/IBMPlexSerif-Italic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 400;
+}
+
+html,
+body {
+  margin: 0;
+  background: #202225;
+}
+
+svg {
+  display: block;
+  width: 100vw;
+  height: auto;
+}
