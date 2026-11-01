@@ -8,16 +8,15 @@ export default makeScene2D(function* (view) {
   view.fill(palette.paper);
   const index = new Layout({ y: -600 });
   const indexType = label('index', 0, -115, 44, palette.muted);
-  const indexValue = label('2 147 483 649', 0, -25, 50, palette.ink, true);
-  const bits = label('0x80000001', 0, 45, 38, palette.muted, true);
+  const indexValue = label('1', 0, 0, 62, palette.ink, true);
   const indexFace = panel(760, 150, 0, 0);
-  index.add([indexFace, indexType, indexValue, bits]);
+  index.add([indexFace, indexType, indexValue]);
 
   const check = new Layout({ y: -350, opacity: 0 });
-  const condition = label('if (index >= count)', 0, -25, 42, palette.ink, true);
-  const reject = label('reject', 0, 45, 40, palette.muted, true);
+  const condition = label('0 <= index < count', 0, -25, 42, palette.ink, true);
+  const reject = label('0, 1, 2', 0, 45, 40, palette.muted, true);
   check.add([panel(760, 155, 0, 0), condition, reject]);
-  const count = label('count = 65 536', 0, -215, 40, palette.muted, true);
+  const count = label('count = 3', 0, -215, 40, palette.muted, true);
   count.opacity(0);
   const conditionInput = arrow(
     [
@@ -44,10 +43,10 @@ export default makeScene2D(function* (view) {
   );
   invalidPath.end(0);
 
-  const list = new Layout({ y: 350 });
+  const list = new Layout({});
   const listTitle = label('C++ object listesi', 0, -265, 44, palette.muted);
   const listFace = panel(760, 440, 0, 0);
-  const entries = ['array', 'cart', '…'].map((value, i) => {
+  const entries = ['object', 'cart', 'object'].map((value, i) => {
     const row = new Layout({ y: -135 + i * 135 });
     const face = panel(540, 90, 55, 0);
     row.add([
@@ -60,21 +59,32 @@ export default makeScene2D(function* (view) {
   list.add([listFace, listTitle, ...entries.map((entry) => entry.row)]);
   const result = label('memory read', 0, 620, 46, palette.accent, true);
   result.opacity(0);
-  view.add([list, index, check, count, conditionInput, invalidPath, outside, result]);
+  const normalPath = arrow(
+    [
+      [0, -525],
+      [0, -465],
+      [365, -465],
+      [365, 0],
+      [325, 0],
+    ],
+    palette.accent,
+  );
+  entries[1].face.stroke(palette.accent);
+  view.add([list, index, normalPath, check, count, conditionInput, invalidPath, outside, result]);
 
-  yield* waitUntil('signed-index');
-  yield* all(replace(indexType, 'signed int32'), replace(indexValue, '−2 147 483 647'));
-  yield* indexValue.fill(palette.accent, 0.25);
   yield* waitUntil('bounds');
+  yield* normalPath.opacity(0, 0.2);
+  yield* all(list.y(350, 0.45), entries[1].face.stroke(palette.rule, 0.3));
   yield* all(check.opacity(1, 0.35), count.opacity(1, 0.35));
   yield* conditionInput.end(1, 0.4);
+  yield* waitUntil('upper-only');
+  yield* all(replace(condition, 'if (index >= count)'), replace(reject, 'reject'));
 
   yield* waitUntil('negative-passes');
-  yield* replace(condition, '−2147483647 >= 65536');
+  yield* all(replace(indexValue, '−1'), indexValue.fill(palette.accent, 0.25));
+  yield* replace(condition, '−1 >= 3');
   yield* replace(reject, 'false');
   reject.fill(palette.accent);
-  yield* waitUntil('first-cart');
-  yield* entries[1].face.stroke(palette.accent, 0.3);
 
   yield* waitUntil('before-list');
   yield* all(
