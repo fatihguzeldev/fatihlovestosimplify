@@ -1,0 +1,98 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "notice-price",
+      "targetTime": 5.18
+    },
+    {
+      "name": "notice-quantity",
+      "targetTime": 6.56
+    },
+    {
+      "name": "notice-total",
+      "targetTime": 7.9
+    },
+    {
+      "name": "notice-cart",
+      "targetTime": 8.99
+    },
+    {
+      "name": "ordinary-plus",
+      "targetTime": 10
+    },
+    {
+      "name": "ordinary-total",
+      "targetTime": 11.835
+    },
+    {
+      "name": "look-inside-click",
+      "targetTime": 15.2
+    },
+    {
+      "name": "reveal-javascript",
+      "targetTime": 16.58
+    },
+    {
+      "name": "reveal-object",
+      "targetTime": 20.13
+    },
+    {
+      "name": "screen-price",
+      "targetTime": 24.7
+    },
+    {
+      "name": "match-price",
+      "targetTime": 26.17
+    },
+    {
+      "name": "screen-quantity",
+      "targetTime": 28.44
+    },
+    {
+      "name": "match-quantity",
+      "targetTime": 29.1
+    },
+    {
+      "name": "read-expression",
+      "targetTime": 30.3
+    },
+    {
+      "name": "read-price",
+      "targetTime": 31.76
+    },
+    {
+      "name": "read-quantity",
+      "targetTime": 32.82
+    },
+    {
+      "name": "read-quantity-value",
+      "targetTime": 34.74
+    },
+    {
+      "name": "finish-reads",
+      "targetTime": 35.55
+    },
+    {
+      "name": "multiply-values",
+      "targetTime": 40.73
+    },
+    {
+      "name": "calculate-total",
+      "targetTime": 41.23
+    },
+    {
+      "name": "screen-total",
+      "targetTime": 42.4
+    },
+    {
+      "name": "read-result",
+      "targetTime": 43.1
+    },
+    {
+      "name": "end",
+      "targetTime": 43.75
+    }
+  ],
+  "seed": 3627183252
+}
