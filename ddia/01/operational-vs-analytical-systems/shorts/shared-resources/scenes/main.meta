@@ -1,0 +1,42 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "read",
+      "targetTime": 13.1
+    },
+    {
+      "name": "first-response",
+      "targetTime": 18.1
+    },
+    {
+      "name": "scan",
+      "targetTime": 23.1
+    },
+    {
+      "name": "detail",
+      "targetTime": 25.8
+    },
+    {
+      "name": "resources",
+      "targetTime": 32.65
+    },
+    {
+      "name": "contention",
+      "targetTime": 46.6
+    },
+    {
+      "name": "order-response",
+      "targetTime": 55.7
+    },
+    {
+      "name": "conclusion",
+      "targetTime": 60.6
+    },
+    {
+      "name": "end",
+      "targetTime": 66.6
+    }
+  ],
+  "seed": 104225
+}
