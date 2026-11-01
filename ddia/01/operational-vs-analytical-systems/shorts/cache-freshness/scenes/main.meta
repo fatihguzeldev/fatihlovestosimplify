@@ -1,0 +1,38 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "calculate",
+      "targetTime": 3.246667
+    },
+    {
+      "name": "cache",
+      "targetTime": 15
+    },
+    {
+      "name": "reuse",
+      "targetTime": 19.18
+    },
+    {
+      "name": "traffic",
+      "targetTime": 22.753333
+    },
+    {
+      "name": "recalculate",
+      "targetTime": 27.903333
+    },
+    {
+      "name": "stale",
+      "targetTime": 29.82
+    },
+    {
+      "name": "refresh",
+      "targetTime": 36.4
+    },
+    {
+      "name": "end",
+      "targetTime": 45.55
+    }
+  ],
+  "seed": 104221
+}
