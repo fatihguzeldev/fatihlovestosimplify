@@ -10,6 +10,7 @@ export default defineConfig([
     'dist/**',
     'output/**',
     'plans/**',
+    '.production/**',
     'ilke/**',
     'ne ulan bu/**',
   ]),

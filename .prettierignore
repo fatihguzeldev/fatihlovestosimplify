@@ -2,6 +2,7 @@
 dist/
 output/
 plans/
+.production/
 ilke/
 ne ulan bu/
 **/package-lock.json
