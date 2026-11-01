@@ -47,7 +47,7 @@ export default makeScene2D(function* (view) {
   const oidName = label('kernel kaydı', -170, -430, 44, palette.muted);
   const fields = new Layout({ opacity: 0 });
   const kindFace = panel(640, 200, 0, -170);
-  const kindName = label('tür / izin', 0, -325, 42, palette.muted);
+  const kindName = label('type / izin', 0, -325, 42, palette.muted);
   const writePermission = label('write: kapalı', 0, -170, 44, palette.ink, true);
   const kind = bytes(['02', '80', '04', '80'], 0, -180, 150);
   kind.root.opacity(0);
