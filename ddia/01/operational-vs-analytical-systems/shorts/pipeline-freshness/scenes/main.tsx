@@ -5,7 +5,6 @@ import {
   background,
   cartoonArrow,
   cartoonDatabase,
-  heading,
   loadFonts,
   muted,
   paper,
@@ -14,7 +13,14 @@ import {
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('aynı satış. ', 'kaynak ve kopyası.');
+  const sale = paper(820, 175, '#101519');
+  sale.root.position([0, -665]);
+  const receiptAmount = text('185₺', 50, { position: [265, 0], fill: accent });
+  sale.root.add([
+    text('satış #1042', 39, { position: [-315, -33], offset: [-1, 0] }),
+    text('mağaza A · ocak', 30, { position: [-315, 34], offset: [-1, 0], fill: muted }),
+    receiptAmount,
+  ]);
   const source = cartoonDatabase('sales database · asıl kayıt', accent);
   source.root.position([-245, -270]);
   source.root.scale(1.2);
@@ -33,24 +39,29 @@ export default makeScene2D(function* (view) {
   lake.root.add(lakeAmount);
 
   const warehouse = cartoonDatabase('warehouse · kopya', accent);
-  warehouse.root.position([-245, 510]);
+  warehouse.root.position([-245, 440]);
   warehouse.root.scale(1.25);
   warehouse.caption.fontSize(26);
   warehouse.root.add(text('#1042', 25, { y: -8, fill: muted, fontFamily: 'IBM Plex Mono' }));
   const warehouseAmount = text('185₺', 42, { y: 51, fontFamily: 'IBM Plex Mono' });
   warehouse.root.add(warehouseAmount);
   const extract = cartoonArrow('short-freshness-source-to-lake', [-60, -130], [65, 40], accent, 1);
-  const load = cartoonArrow('short-freshness-lake-to-warehouse', [60, 240], [-60, 385], accent, 1);
+  const load = cartoonArrow('short-freshness-lake-to-warehouse', [60, 240], [-60, 315], accent, 1);
   const transferLabel = text('son aktarım', 29, { position: [170, 330], fill: muted });
   const query = text('', 28, { position: [170, 545], fontFamily: 'IBM Plex Mono', fill: accent });
-  const totalLabel = text('ocak toplamı', 29, { position: [0, 752], fill: muted, opacity: 0 });
+  const status = text('', 30, { position: [0, 685], fill: accent });
+  const totalLabel = text('ocak raporu · mağaza toplamları', 29, {
+    position: [0, 752],
+    fill: muted,
+    opacity: 0,
+  });
   const total = text('A: 400₺    B: 300₺', 40, {
     position: [0, 813],
     fontFamily: 'IBM Plex Mono',
     opacity: 0,
   });
   view.add([
-    title,
+    sale.root,
     source.root,
     lake.root,
     warehouse.root,
@@ -58,30 +69,33 @@ export default makeScene2D(function* (view) {
     load.root,
     transferLabel,
     query,
+    status,
     totalLabel,
     total,
   ]);
   yield loadFonts();
 
   yield* waitUntil('initial-total');
+  query.text('SUM(amount)');
   yield* all(totalLabel.opacity(1, 0.25), total.opacity(1, 0.25));
   yield* waitUntil('correct');
-  title.children(heading('asıl kayıttaki tutarı ', 'düzeltiyoruz.').children());
+  query.text('');
+  receiptAmount.fill(muted);
   yield* waitUntil('correct-value');
   canonical.text('165₺');
-  yield* canonical.fill(accent, 0.25);
+  receiptAmount.text('165₺');
+  yield* all(canonical.fill(accent, 0.25), receiptAmount.fill(accent, 0.25));
   yield* waitUntil('query');
-  title.children(heading('warehouse’u ', 'yeniden sorgulayalım.').children());
   query.text('SUM(amount)');
   yield* all(warehouse.top.stroke(accent, 0.25), total.opacity(0, 0.2));
   yield* waitUntil('old-result');
   yield* total.opacity(1, 0.3);
   yield* waitUntil('diagnosis');
-  title.children(heading('hesap doğru. ', 'data eski.').children());
+  status.text('sorgunun okuduğu kayıt hâlâ 185₺.');
   yield* warehouseAmount.fill(accent, 0.25);
 
   yield* waitUntil('pipeline');
-  title.children(heading('düzeltmeyi ', 'akış boyunca', ' taşıyalım.').children());
+  status.text('165₺ düzeltmesini kopyalara taşıyalım.');
   query.text('');
   yield* waitUntil('lake');
   yield* extract.travel(0.85);
@@ -90,7 +104,7 @@ export default makeScene2D(function* (view) {
   lakeAmount.text('165₺');
   yield* lakeAmount.fill(accent, 0.25);
   yield* waitUntil('warehouse-stale');
-  title.children(heading('lake güncel. ', 'warehouse henüz değil.').children());
+  status.text('lake: 165₺ · warehouse: 185₺');
   yield* warehouse.top.stroke(accent, 0.2).to(muted, 0.3);
   yield* waitUntil('load');
   transferLabel.text('transform + load');
@@ -101,7 +115,7 @@ export default makeScene2D(function* (view) {
   warehouseAmount.text('165₺');
   yield* warehouseAmount.fill(accent, 0.25);
   yield* waitUntil('new-query');
-  title.children(heading('şimdi ', 'yeniden hesaplayalım.').children());
+  status.text('warehouse artık 165₺ kaydını okuyor.');
   query.text('SUM(amount)');
   yield* total.opacity(0, 0.2);
   yield* waitUntil('new-result');
@@ -109,6 +123,6 @@ export default makeScene2D(function* (view) {
   total.fill(accent);
   yield* total.opacity(1, 0.3);
   yield* waitUntil('unchanged');
-  title.children(heading('20₺ düzeltme ', 'yalnız A’ya', ' yansıdı.').children());
+  status.text('düzeltilen satış mağaza A’ya ait.');
   yield* waitUntil('end');
 });
