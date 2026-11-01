@@ -27,59 +27,59 @@
     },
     {
       "name": "report",
-      "targetTime": 25.5
+      "targetTime": 21.76
     },
     {
       "name": "count",
-      "targetTime": 31.43
+      "targetTime": 27.69
     },
     {
       "name": "banana-count",
-      "targetTime": 35.81
+      "targetTime": 32.07
     },
     {
       "name": "milk-count",
-      "targetTime": 36.71
+      "targetTime": 32.97
     },
     {
       "name": "detail",
-      "targetTime": 40.56
+      "targetTime": 36.82
     },
     {
       "name": "features",
-      "targetTime": 48.62
+      "targetTime": 44.88
     },
     {
       "name": "feature-views",
-      "targetTime": 55.34
+      "targetTime": 51.6
     },
     {
       "name": "feature-cart",
-      "targetTime": 56.42
+      "targetTime": 52.68
     },
     {
       "name": "feature-time",
-      "targetTime": 58.87
+      "targetTime": 55.13
     },
     {
       "name": "representations",
-      "targetTime": 66.26
+      "targetTime": 62.52
     },
     {
       "name": "lost",
-      "targetTime": 77.98
+      "targetTime": 74.24
     },
     {
       "name": "reprocess",
-      "targetTime": 86.84
+      "targetTime": 83.1
     },
     {
       "name": "warehouse",
-      "targetTime": 91.78
+      "targetTime": 88.04
     },
     {
       "name": "end",
-      "targetTime": 99.68
+      "targetTime": 95.94
     }
   ],
   "seed": 104201
