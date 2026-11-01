@@ -13,8 +13,10 @@ export default makeScene2D(function* (view) {
   const kernelName = label('kernel', -280, -650, 48, palette.muted);
   const a = new Layout({ position: [0, -450] });
   const aFace = panel(320, 140, 0, 0);
-  const aName = label('iş', 0, 0, 44, palette.ink, true);
+  const aName = label('read request', 0, 0, 40, palette.ink, true);
   a.add([aFace, aName]);
+  const pending = label('bekleniyor', 200, -345, 40, palette.muted);
+  pending.opacity(0);
   const b = new Layout({ position: [190, -450], opacity: 0 });
   const bFace = panel(320, 140, 0, 0);
   b.add([bFace, label('request B', 0, 0, 44, palette.ink, true)]);
@@ -54,9 +56,9 @@ export default makeScene2D(function* (view) {
   ]);
   bPath.end(0);
 
-  const program = new Layout({ opacity: 0 });
+  const program = new Layout({});
   const programFace = panel(720, 180, 0, 520);
-  const programState = label('bekliyor', 0, 550, 44, palette.ink, true);
+  const programState = label('read("notlar.txt")', 0, 550, 40, palette.ink, true);
   program.add([programFace, label('program', 0, 470, 46), programState]);
   const allocation = arrow(
     [
@@ -68,13 +70,48 @@ export default makeScene2D(function* (view) {
   allocation.end(0);
   const syscall = label('syscall', 200, 365, 38, palette.muted, true);
   syscall.opacity(0);
+  const firstRequest = arrow(
+    [
+      [0, 430],
+      [0, -380],
+    ],
+    palette.accent,
+  );
+  firstRequest.end(0);
   const packet = new Layout({ position: [0, 390], opacity: 0 });
   packet.add([panel(180, 76, 0, 0, palette.accent), label('data', 0, 0, 42, palette.ink, true)]);
-  root.add([kernel, kernelName, a, b, waiter, aPath, bPath, program, allocation, syscall, packet]);
+  root.add([
+    kernel,
+    kernelName,
+    a,
+    b,
+    waiter,
+    aPath,
+    bPath,
+    program,
+    firstRequest,
+    pending,
+    allocation,
+    syscall,
+    packet,
+  ]);
+
+  yield* waitUntil('read-job');
+  yield* firstRequest.end(1, 0.65);
+  yield* waitUntil('job-pending');
+  yield* pending.opacity(1, 0.3);
+  yield* waitUntil('track-job');
+  yield* aFace.stroke(palette.accent, 0.3);
+  yield* waitUntil('kernel-record');
+  yield* aFace.fill(palette.accentWash, 0.3);
 
   yield* waitUntil('name-request');
   yield* replace(aName, 'request', 0.24);
+  yield* waitUntil('aio');
+  yield* replace(pending, 'AIO', 0.24);
   yield* waitUntil('waiting-record');
+  yield* all(firstRequest.end(0, 0.3), pending.opacity(0, 0.3));
+  programState.text('bekliyor');
   yield* waiter.opacity(1, 0.35);
   yield* waitUntil('name-waiter');
   yield* replace(waiterName, 'waiter', 0.24);
@@ -89,7 +126,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('introduce-b');
   yield* b.opacity(1, 0.35);
   yield* waitUntil('wait-together');
-  yield* program.opacity(1, 0.35);
+  yield* programFace.stroke(palette.accent, 0.35);
   yield* waitUntil('multi-wait');
   programState.fontSize(38);
   yield* replace(programState, 'aio_multi_wait', 0.24);
@@ -164,17 +201,5 @@ export default makeScene2D(function* (view) {
     contentFace.fill(palette.accentWash, 0.3),
   );
 
-  yield* waitUntil('order-matters');
-  yield* all(allocation.opacity(0.35, 0.25), waiterFace.stroke(palette.rule, 0.25));
-  yield* waitUntil('allocate-first');
-  yield* all(allocation.opacity(1, 0.3), waiterFace.stroke(palette.accent, 0.3));
-  yield* waitUntil('access-afterwards');
-  yield* all(
-    allocation.opacity(0.35, 0.3),
-    aPath.stroke(palette.accent, 0.3),
-    aFace.stroke(palette.accent, 0.3),
-  );
-  yield* aPath.lineWidth(6, 0.3);
-  yield* aPath.lineWidth(4, 0.3);
   yield* waitUntil('end');
 });
