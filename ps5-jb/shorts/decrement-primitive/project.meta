@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "shared": {
+    "background": "rgb(32,34,37)",
+    "range": [
+      0,
+      null
+    ],
+    "size": {
+      "x": 1080,
+      "y": 1920
+    },
+    "audioOffset": 0
+  },
+  "preview": {
+    "fps": 60,
+    "resolutionScale": 1
+  },
+  "rendering": {
+    "fps": 60,
+    "resolutionScale": 1,
+    "colorSpace": "srgb",
+    "exporter": {
+      "name": "custom-export",
+      "options": {}
+    }
+  },
+  "name": "bütün yapabildiğimiz bir sayıyı 1 azaltmaktı."
+}
