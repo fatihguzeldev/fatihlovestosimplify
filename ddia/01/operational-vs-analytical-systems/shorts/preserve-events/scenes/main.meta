@@ -1,0 +1,86 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "view-banana",
+      "targetTime": 2.4
+    },
+    {
+      "name": "view-milk",
+      "targetTime": 3.65
+    },
+    {
+      "name": "add-cart",
+      "targetTime": 5.25
+    },
+    {
+      "name": "events",
+      "targetTime": 6.6
+    },
+    {
+      "name": "fields",
+      "targetTime": 11.75
+    },
+    {
+      "name": "clickstream",
+      "targetTime": 19.55
+    },
+    {
+      "name": "report",
+      "targetTime": 25.5
+    },
+    {
+      "name": "count",
+      "targetTime": 31.43
+    },
+    {
+      "name": "banana-count",
+      "targetTime": 35.81
+    },
+    {
+      "name": "milk-count",
+      "targetTime": 36.71
+    },
+    {
+      "name": "detail",
+      "targetTime": 40.56
+    },
+    {
+      "name": "features",
+      "targetTime": 48.62
+    },
+    {
+      "name": "feature-views",
+      "targetTime": 55.34
+    },
+    {
+      "name": "feature-cart",
+      "targetTime": 56.42
+    },
+    {
+      "name": "feature-time",
+      "targetTime": 58.87
+    },
+    {
+      "name": "representations",
+      "targetTime": 66.26
+    },
+    {
+      "name": "lost",
+      "targetTime": 77.98
+    },
+    {
+      "name": "reprocess",
+      "targetTime": 86.84
+    },
+    {
+      "name": "warehouse",
+      "targetTime": 91.78
+    },
+    {
+      "name": "end",
+      "targetTime": 99.68
+    }
+  ],
+  "seed": 104201
+}
