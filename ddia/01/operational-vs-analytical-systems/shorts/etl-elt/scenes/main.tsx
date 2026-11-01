@@ -14,7 +14,7 @@ import {
 
 function sale(width = 650) {
   const card = paper(width, 190);
-  const region = text('region: Marmara', 35, { y: 56, fill: accent, opacity: 0 });
+  const region = text('bölge bilgisi yok', width < 400 ? 25 : 32, { y: 56, fill: muted });
   card.root.add([
     text('sales · #1042', 32, { y: -53, fill: muted }),
     text('store_id: A  ·  185₺', width < 400 ? 27 : 37, { y: -2 }),
@@ -42,6 +42,7 @@ export default makeScene2D(function* (view) {
   const warehouse = cartoonDatabase('warehouse', accent);
   warehouse.root.position([0, 610]);
   warehouse.root.scale(1.05);
+  const reportQuestion = text('bölgelere göre satış raporu', 31, { y: 845, fill: muted });
   const extract = cartoonArrow('etl-portrait-extract', [0, -220], [0, -90], accent, 0);
   const lookup = cartoonArrow('etl-portrait-lookup', [0, 219], [0, 115], accent, 0);
   const load = cartoonArrow('etl-portrait-load', [0, 128], [0, 470], accent, 0);
@@ -54,6 +55,7 @@ export default makeScene2D(function* (view) {
     store.root,
     copy.root,
   ]);
+  etl.add(reportQuestion);
   view.add([title, etl]);
   yield loadFonts();
 
@@ -71,7 +73,9 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('enrich');
   yield* lookup.reveal(1, 0.3);
   yield* lookup.travel(0.55);
-  yield* all(lookup.arrive(), copy.region.opacity(1, 0.3));
+  copy.region.text('region: Marmara');
+  copy.region.fontSize(35);
+  yield* all(lookup.arrive(), copy.region.fill(accent, 0.3));
   yield* waitUntil('load');
   yield* all(store.root.opacity(0, 0.3), lookup.root.opacity(0, 0.3));
   yield* load.reveal(1, 0.35);
@@ -104,6 +108,8 @@ export default makeScene2D(function* (view) {
   const saleLoad = cartoonArrow('elt-sale-load', [-220, -210], [-220, -100], accent, 0);
   const storeLoad = cartoonArrow('elt-store-load', [220, -210], [220, -100], accent, 0);
   const result = sale(650);
+  result.region.text('region: Marmara');
+  result.region.fill(accent);
   result.root.position([0, 390]);
   result.root.opacity(0);
   const left = cartoonArrow('elt-sales-transform', [-220, 205], [-110, 270], accent, 0);

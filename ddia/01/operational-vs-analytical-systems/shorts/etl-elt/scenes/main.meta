@@ -11,51 +11,51 @@
     },
     {
       "name": "transform",
-      "targetTime": 16.55
+      "targetTime": 16.46
     },
     {
       "name": "lookup",
-      "targetTime": 24.15
+      "targetTime": 19.46
     },
     {
       "name": "enrich",
-      "targetTime": 31.9
+      "targetTime": 27.21
     },
     {
       "name": "load",
-      "targetTime": 43.14
+      "targetTime": 38.45
     },
     {
       "name": "etl",
-      "targetTime": 48.01
+      "targetTime": 43.32
     },
     {
       "name": "elt",
-      "targetTime": 54.37
+      "targetTime": 45.48
     },
     {
       "name": "load-sales",
-      "targetTime": 57.37
+      "targetTime": 48.48
     },
     {
       "name": "load-stores",
-      "targetTime": 63.47
+      "targetTime": 54.58
     },
     {
       "name": "inside-transform",
-      "targetTime": 71.77
+      "targetTime": 62.88
     },
     {
       "name": "match",
-      "targetTime": 80.37
+      "targetTime": 71.48
     },
     {
       "name": "elt-name",
-      "targetTime": 93.37
+      "targetTime": 84.48
     },
     {
       "name": "end",
-      "targetTime": 98.62
+      "targetTime": 89.73
     }
   ],
   "seed": 104201
