@@ -1,8 +1,7 @@
 import { Layout, Line, makeScene2D } from '@motion-canvas/2d';
 import { all, waitUntil } from '@motion-canvas/core';
 import { loadFonts } from '../../../../common/fonts';
-import { consoleDrawing } from '../../../shared/drawing';
-import { arrow, label, palette, panel } from '../../shared/portrait';
+import { arrow, bytes, label, palette, panel } from '../../shared/portrait';
 
 export default makeScene2D(function* (view) {
   yield loadFonts();
@@ -10,21 +9,27 @@ export default makeScene2D(function* (view) {
 
   const system = panel(860, 1280, -40, 0);
   const systemName = label('PS5', -40, -690, 54);
-  const console = consoleDrawing();
-  console.position([-40, -50]);
-  console.scale(0.85);
-  const process = new Layout({ position: [-40, -300], opacity: 0 });
+  const process = new Layout({ position: [-40, -300] });
   const processFace = panel(760, 510, 0, 0);
-  const processName = label('process', 0, -195, 46, palette.muted);
+  const processName = label('tarayıcı', 0, -195, 46);
+  const code = new Layout({});
+  const example = bytes(['9', '16', '32', '64'], 0, 80, 125);
+  example.cells[0].stroke(palette.accent);
+  example.values[0].fill(palette.accent);
+  code.add([
+    label('page.js', -220, -110, 38, palette.muted, true),
+    label('view[0] = 9', 0, -20, 52, palette.ink, true),
+    example.root,
+  ]);
   const object = label('object', 0, -90, 48, palette.ink, true);
   const typedView = label('view', 0, 10, 48, palette.ink, true);
   const buffer = label('buffer', 0, 110, 48, palette.ink, true);
   object.opacity(0);
   typedView.opacity(0);
   buffer.opacity(0);
-  process.add([processFace, processName, object, typedView, buffer]);
+  process.add([processFace, processName, code, object, typedView, buffer]);
 
-  const kernel = new Layout({ position: [-40, 430], opacity: 0 });
+  const kernel = new Layout({ position: [-40, 430], opacity: 0.35 });
   const kernelFace = panel(760, 240, 0, 0);
   const kernelName = label('kernel memory', 0, 0, 48, palette.muted);
   kernel.add([kernelFace, kernelName]);
@@ -49,26 +54,17 @@ export default makeScene2D(function* (view) {
   permissionName.opacity(0);
   const operations = label('read / write', -40, 70, 46, palette.accent, true);
   operations.opacity(0);
-  view.add([
-    system,
-    systemName,
-    console,
-    process,
-    kernel,
-    attempt,
-    permission,
-    permissionName,
-    operations,
-  ]);
+  view.add([system, systemName, process, kernel, attempt, permission, permissionName, operations]);
 
   yield* waitUntil('processes');
-  yield* console.opacity(0, 0.35);
-  yield* all(process.opacity(1, 0.4), kernel.opacity(0.7, 0.4));
+  processName.text('tarayıcı process’i');
+  yield* kernel.opacity(0.7, 0.4);
   yield* waitUntil('webcontent');
   processName.text('WebContent process');
   yield* processName.fill(palette.ink, 0.25);
   yield* waitUntil('objects');
-  yield* object.opacity(1, 0.25);
+  yield* code.opacity(0, 0.2);
+  yield* object.opacity(1, 0.2);
   yield* waitUntil('views');
   yield* typedView.opacity(1, 0.25);
   yield* waitUntil('buffers');
