@@ -1,0 +1,58 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "loader-is-listening",
+      "targetTime": 5.74
+    },
+    {
+      "name": "recap-browser-memory",
+      "targetTime": 13.27
+    },
+    {
+      "name": "recap-native-request",
+      "targetTime": 16.93
+    },
+    {
+      "name": "recap-kernel-memory",
+      "targetTime": 20.73
+    },
+    {
+      "name": "recap-process-records",
+      "targetTime": 28.41
+    },
+    {
+      "name": "recap-loader",
+      "targetTime": 32.95
+    },
+    {
+      "name": "name-webcontent-process",
+      "targetTime": 43.39
+    },
+    {
+      "name": "same-user-mode",
+      "targetTime": 47.23
+    },
+    {
+      "name": "same-page-same-console",
+      "targetTime": 51.52
+    },
+    {
+      "name": "source-credit",
+      "targetTime": 74.87
+    },
+    {
+      "name": "github-source",
+      "targetTime": 78.43
+    },
+    {
+      "name": "return-to-original-pose",
+      "targetTime": 81.8
+    },
+    {
+      "name": "end",
+      "targetTime": 99.8
+    }
+  ],
+  "seed": 700019
+}
