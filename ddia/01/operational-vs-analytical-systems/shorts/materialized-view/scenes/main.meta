@@ -3,55 +3,59 @@
   "timeEvents": [
     {
       "name": "calculate",
-      "targetTime": 1.2
+      "targetTime": 3.45
+    },
+    {
+      "name": "store",
+      "targetTime": 7.63
     },
     {
       "name": "stored-a",
-      "targetTime": 8.05
+      "targetTime": 11.11
     },
     {
       "name": "stored-b",
-      "targetTime": 9.62
+      "targetTime": 12.81
     },
     {
       "name": "read",
-      "targetTime": 10.8
+      "targetTime": 14.73
     },
     {
       "name": "name",
-      "targetTime": 16.3
+      "targetTime": 19.55
     },
     {
       "name": "same-database",
-      "targetTime": 27.8
+      "targetTime": 27.41
     },
     {
-      "name": "return",
-      "targetTime": 29.9
+      "name": "correction-setup",
+      "targetTime": 33.89
     },
     {
       "name": "correct",
-      "targetTime": 40.3
+      "targetTime": 40.14
     },
     {
       "name": "stale",
-      "targetTime": 44.8
+      "targetTime": 41.67
     },
     {
       "name": "refresh",
-      "targetTime": 46
+      "targetTime": 46.19
     },
     {
       "name": "refreshed",
-      "targetTime": 50.4
+      "targetTime": 49.97
     },
     {
       "name": "conclusion",
-      "targetTime": 52.25
+      "targetTime": 52.07
     },
     {
       "name": "end",
-      "targetTime": 60.2
+      "targetTime": 60.04
     }
   ],
   "seed": 104202

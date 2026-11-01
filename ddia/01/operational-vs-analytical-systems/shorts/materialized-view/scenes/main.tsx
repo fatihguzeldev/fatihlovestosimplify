@@ -4,7 +4,6 @@ import {
   accent,
   background,
   cartoonArrow,
-  heading,
   loadFonts,
   muted,
   paper,
@@ -13,7 +12,11 @@ import {
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('her seferinde ', 'toplamasak?');
+  const question = text('ocakta hangi mağaza\nne kadar sattı?', 53, {
+    position: [0, -665],
+    lineHeight: 67,
+    textAlign: 'center',
+  });
   const boundary = new Rect({
     position: [0, 145],
     size: [930, 1300],
@@ -65,8 +68,9 @@ export default makeScene2D(function* (view) {
 
   const stored = paper(810, 250, '#17232f');
   stored.root.position([0, 340]);
-  stored.root.opacity(0.2);
-  stored.root.add(text('monthly_totals', 33, { y: -78, fontFamily: 'IBM Plex Mono' }));
+  stored.root.opacity(0);
+  const resultLabel = text('sorgu sonucu', 33, { y: -78 });
+  stored.root.add(resultLabel);
   const totals = ['A', 'B'].map((store, index) => {
     const x = -185 + index * 370;
     const value = text('—', 57, { position: [x, 20], fill: accent, fontFamily: 'IBM Plex Mono' });
@@ -83,7 +87,7 @@ export default makeScene2D(function* (view) {
   const ready = text('', 38, { position: [0, 610], fill: accent });
   const name = text('', 31, { position: [0, 690], fill: muted });
   view.add([
-    title,
+    question,
     boundary,
     databaseLabel,
     rows.root,
@@ -99,13 +103,18 @@ export default makeScene2D(function* (view) {
   yield* all(calculate.reveal(1, 0.3), operation.opacity(1, 0.3));
   yield* calculate.travel(0.85);
   yield* calculate.arrive();
-  yield* waitUntil('stored-a');
   totals[0].text('400₺');
-  yield* stored.root.opacity(1, 0.3);
-  yield* waitUntil('stored-b');
   totals[1].text('300₺');
+  yield* stored.root.opacity(1, 0.3);
+  yield* waitUntil('store');
+  resultLabel.text('monthly_totals · saklanan sonuç');
+  resultLabel.fontSize(29);
+  yield* all(question.opacity(0, 0.3), stored.face.stroke(accent, 0.3));
+  yield* waitUntil('stored-a');
+  yield* totals[0].scale(1.08, 0.16).to(1, 0.22);
+  yield* waitUntil('stored-b');
+  yield* totals[1].scale(1.08, 0.16).to(1, 0.22);
   yield* waitUntil('read');
-  title.children(heading('okurken ', 'hazır sonucu', ' alıyoruz.').children());
   ready.text('SELECT * FROM monthly_totals;');
   ready.fontFamily('IBM Plex Mono');
   ready.fontSize(31);
@@ -119,17 +128,19 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('same-database');
   yield* boundary.stroke(accent, 0.25).to(muted, 0.5);
 
-  yield* waitUntil('return');
-  title.children(heading('aynı database. ', 'kaynak değişiyor.').children());
+  yield* waitUntil('correction-setup');
   yield* all(rows.root.opacity(1, 0.3), calculate.root.opacity(0.25, 0.3), ready.opacity(0, 0.3));
   yield* waitUntil('correct');
   amounts[1].text('165');
   yield* amounts[1].fill(accent, 0.25);
   yield* waitUntil('stale');
-  title.children(heading('saklanan toplam ', 'hâlâ 400.').children());
+  ready.text('asıl kayıt değişti. saklanan toplam hâlâ 400₺.');
+  ready.fontFamily('IBM Plex Sans');
+  ready.fontSize(30);
+  yield* ready.opacity(1, 0.25);
   yield* stored.face.stroke(accent, 0.25);
   yield* waitUntil('refresh');
-  title.children(heading('sonucu ', 'refresh', ' edelim.').children());
+  ready.text('saklanan sonucu yeniden hesaplayalım.');
   operation.text('refresh');
   name.text('REFRESH MATERIALIZED VIEW monthly_totals;');
   name.fontFamily('IBM Plex Mono');
@@ -141,7 +152,6 @@ export default makeScene2D(function* (view) {
   totals[0].text('380₺');
   yield* totals[0].scale(1.08, 0.2).to(1, 0.25);
   yield* waitUntil('conclusion');
-  title.children(heading('bu örnekte sonuç ', 'kendiliğinden güncellenmiyor.').children());
   ready.text('kaynak değişti → sonuç yeniden hesaplandı');
   ready.fontFamily('IBM Plex Sans');
   ready.fontSize(33);
