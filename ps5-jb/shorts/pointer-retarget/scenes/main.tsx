@@ -64,15 +64,13 @@ export default makeScene2D(function* (view) {
   );
   bPath.end(0);
 
-  const readout = new Layout({ y: 315, opacity: 0 });
+  const readout = new Layout({ y: 315 });
   const query = label('view[0]', -160, 0, 54, palette.ink, true);
   const readArrow = arrow([
     [-5, 0],
     [185, 0],
   ]);
-  const value = label('24', 235, 0, 64, palette.accent, true);
-  value.opacity(0);
-  readArrow.opacity(0);
+  const value = label('?', 235, 0, 64, palette.accent, true);
   readout.add([query, readArrow, value]);
   view.add([aPath, bPath, real, a, b, readout]);
 
@@ -92,6 +90,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('normal-read');
   yield* readout.opacity(1, 0.2);
   yield* waitUntil('read-24');
+  yield* replace(value, '24');
   yield* all(
     value.opacity(1, 0.2),
     readArrow.opacity(1, 0.2),
