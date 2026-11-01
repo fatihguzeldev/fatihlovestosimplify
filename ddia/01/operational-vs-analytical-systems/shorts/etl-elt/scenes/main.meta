@@ -1,0 +1,62 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "extract",
+      "targetTime": 5.85
+    },
+    {
+      "name": "retained",
+      "targetTime": 10.45
+    },
+    {
+      "name": "transform",
+      "targetTime": 16.55
+    },
+    {
+      "name": "lookup",
+      "targetTime": 24.15
+    },
+    {
+      "name": "enrich",
+      "targetTime": 31.9
+    },
+    {
+      "name": "load",
+      "targetTime": 43.14
+    },
+    {
+      "name": "etl",
+      "targetTime": 48.01
+    },
+    {
+      "name": "elt",
+      "targetTime": 54.37
+    },
+    {
+      "name": "load-sales",
+      "targetTime": 57.37
+    },
+    {
+      "name": "load-stores",
+      "targetTime": 63.47
+    },
+    {
+      "name": "inside-transform",
+      "targetTime": 71.77
+    },
+    {
+      "name": "match",
+      "targetTime": 80.37
+    },
+    {
+      "name": "elt-name",
+      "targetTime": 93.37
+    },
+    {
+      "name": "end",
+      "targetTime": 98.62
+    }
+  ],
+  "seed": 104201
+}
