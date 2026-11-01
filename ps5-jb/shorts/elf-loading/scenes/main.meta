@@ -1,0 +1,46 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "elf",
+      "targetTime": 11.72
+    },
+    {
+      "name": "code-data",
+      "targetTime": 14.74
+    },
+    {
+      "name": "layout",
+      "targetTime": 20.76
+    },
+    {
+      "name": "prepare-memory",
+      "targetTime": 26.1
+    },
+    {
+      "name": "load-code",
+      "targetTime": 31.08
+    },
+    {
+      "name": "load-data",
+      "targetTime": 32.38
+    },
+    {
+      "name": "entry",
+      "targetTime": 41.78
+    },
+    {
+      "name": "execute",
+      "targetTime": 43.66
+    },
+    {
+      "name": "loader-runs",
+      "targetTime": 47.5
+    },
+    {
+      "name": "end",
+      "targetTime": 53.575
+    }
+  ],
+  "seed": 9033
+}
