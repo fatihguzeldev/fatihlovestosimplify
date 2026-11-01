@@ -1,0 +1,158 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "choose-content",
+      "targetTime": 1.32
+    },
+    {
+      "name": "allocated",
+      "targetTime": 10.3
+    },
+    {
+      "name": "buffer-24",
+      "targetTime": 13.27
+    },
+    {
+      "name": "buffer-48",
+      "targetTime": 14.15
+    },
+    {
+      "name": "buffer-72",
+      "targetTime": 14.77
+    },
+    {
+      "name": "buffer-96",
+      "targetTime": 15.51
+    },
+    {
+      "name": "normal-view",
+      "targetTime": 18.1
+    },
+    {
+      "name": "read-zero",
+      "targetTime": 31.2
+    },
+    {
+      "name": "read-result",
+      "targetTime": 35.89
+    },
+    {
+      "name": "expand-view",
+      "targetTime": 40.56
+    },
+    {
+      "name": "view-type",
+      "targetTime": 45.48
+    },
+    {
+      "name": "view-length",
+      "targetTime": 48.16
+    },
+    {
+      "name": "view-pointer",
+      "targetTime": 49.54
+    },
+    {
+      "name": "metadata-name",
+      "targetTime": 57.45
+    },
+    {
+      "name": "pointer-source",
+      "targetTime": 58.79
+    },
+    {
+      "name": "pointer-target",
+      "targetTime": 77.07
+    },
+    {
+      "name": "fake-data",
+      "targetTime": 80.1
+    },
+    {
+      "name": "fake-type",
+      "targetTime": 86.84
+    },
+    {
+      "name": "fake-length",
+      "targetTime": 89.92
+    },
+    {
+      "name": "fake-data-field",
+      "targetTime": 91.12
+    },
+    {
+      "name": "copy-view-reference",
+      "targetTime": 97.29
+    },
+    {
+      "name": "fake-target",
+      "targetTime": 104.82
+    },
+    {
+      "name": "fake-view-name",
+      "targetTime": 113.74
+    },
+    {
+      "name": "heap-layout",
+      "targetTime": 125
+    },
+    {
+      "name": "release-gap",
+      "targetTime": 134.77
+    },
+    {
+      "name": "place-object-list",
+      "targetTime": 143.1
+    },
+    {
+      "name": "repeat-address",
+      "targetTime": 148.12
+    },
+    {
+      "name": "outside-read",
+      "targetTime": 153.66
+    },
+    {
+      "name": "address-to-fake",
+      "targetTime": 159.3
+    },
+    {
+      "name": "grooming-name",
+      "targetTime": 179.49
+    },
+    {
+      "name": "summary-buffer",
+      "targetTime": 204.41
+    },
+    {
+      "name": "summary-address-link",
+      "targetTime": 206.6
+    },
+    {
+      "name": "summary-real-view",
+      "targetTime": 208.47
+    },
+    {
+      "name": "summary-metadata-link",
+      "targetTime": 213.37
+    },
+    {
+      "name": "plan-unchanged",
+      "targetTime": 228.66
+    },
+    {
+      "name": "normal-result",
+      "targetTime": 232.85
+    },
+    {
+      "name": "need-address",
+      "targetTime": 234.57
+    },
+    {
+      "name": "end",
+      "targetTime": 250.62
+    }
+  ],
+  "seed": 651101
+}
