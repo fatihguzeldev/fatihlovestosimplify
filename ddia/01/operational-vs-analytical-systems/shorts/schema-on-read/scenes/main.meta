@@ -2,12 +2,20 @@
   "version": 0,
   "timeEvents": [
     {
-      "name": "lake",
-      "targetTime": 1.2
+      "name": "files",
+      "targetTime": 6.05
     },
     {
-      "name": "files",
-      "targetTime": 5.7
+      "name": "event-file",
+      "targetTime": 7.19
+    },
+    {
+      "name": "review-file",
+      "targetTime": 8.45
+    },
+    {
+      "name": "image-file",
+      "targetTime": 11.11
     },
     {
       "name": "read",

@@ -18,7 +18,7 @@ export default makeScene2D(function* (view) {
   const title = heading('data lake: ', 'kaynak biçimini koru.');
   const lake = paper(900, 850);
   lake.root.position([0, 20]);
-  lake.root.opacity(0);
+  lake.root.opacity(1);
   lake.root.add(text('data lake', 41, { y: -345, fill: accent }));
   const files = [
     ['sales.jsonl', '#1042 · 185₺'],
@@ -28,7 +28,7 @@ export default makeScene2D(function* (view) {
   ].map(([label, detail], i) => {
     const card = paper(365, 190);
     card.root.position([i % 2 ? 215 : -215, i < 2 ? -140 : 150]);
-    card.root.opacity(0);
+    card.root.opacity(1);
     card.root.add([text(label, 28, { y: -43, fill: muted }), text(detail, 29, { y: 25 })]);
     if (i === 3) {
       const image = banana();
@@ -82,10 +82,11 @@ export default makeScene2D(function* (view) {
   view.add([title, lake.root, records.root, schema, read.root, report.root, meaning.root]);
   yield loadFonts();
 
-  yield* waitUntil('lake');
-  yield* lake.root.opacity(1, 0.45);
-  yield* waitUntil('files');
-  for (const file of files) yield* file.root.opacity(1, 0.3);
+  for (const [index, cue] of ['files', 'event-file', 'review-file', 'image-file'].entries()) {
+    yield* waitUntil(cue);
+    if (index > 0) yield* files[index - 1].face.stroke(foreground, 0.15);
+    yield* files[index].face.stroke(accent, 0.2);
+  }
   yield* waitUntil('read');
   title.children(heading('kullanmadan önce,\n', 'alanları yorumluyoruz.').children());
   yield* all(lake.root.opacity(0, 0.5), records.root.opacity(1, 0.5));
