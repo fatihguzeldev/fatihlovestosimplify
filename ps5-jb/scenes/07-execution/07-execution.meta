@@ -1,0 +1,254 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "data-and-code",
+      "targetTime": 1.25
+    },
+    {
+      "name": "writing-is-not-execution",
+      "targetTime": 9
+    },
+    {
+      "name": "existing-native-code",
+      "targetTime": 17.8
+    },
+    {
+      "name": "function-example",
+      "targetTime": 33.63
+    },
+    {
+      "name": "buffer-argument",
+      "targetTime": 39.52
+    },
+    {
+      "name": "example-result",
+      "targetTime": 45.7
+    },
+    {
+      "name": "caller-program",
+      "targetTime": 47.16
+    },
+    {
+      "name": "ordinary-call",
+      "targetTime": 49.6
+    },
+    {
+      "name": "argument-and-result",
+      "targetTime": 51.4
+    },
+    {
+      "name": "call-result",
+      "targetTime": 53.4
+    },
+    {
+      "name": "return-question",
+      "targetTime": 55.26
+    },
+    {
+      "name": "saved-return-address",
+      "targetTime": 60.8
+    },
+    {
+      "name": "return-address-name",
+      "targetTime": 65.4
+    },
+    {
+      "name": "normal-return",
+      "targetTime": 70.15
+    },
+    {
+      "name": "stack-name",
+      "targetTime": 74.05
+    },
+    {
+      "name": "return-changes",
+      "targetTime": 79.03
+    },
+    {
+      "name": "select-return-target",
+      "targetTime": 88.31
+    },
+    {
+      "name": "chain-returns",
+      "targetTime": 107.73
+    },
+    {
+      "name": "argument-placement",
+      "targetTime": 121.6
+    },
+    {
+      "name": "existing-pieces",
+      "targetTime": 125.86
+    },
+    {
+      "name": "gadget-read-result",
+      "targetTime": 128.5
+    },
+    {
+      "name": "gadget-take-result",
+      "targetTime": 129.1
+    },
+    {
+      "name": "gadget-final-result",
+      "targetTime": 130.7
+    },
+    {
+      "name": "pieces-stay-put",
+      "targetTime": 131.7
+    },
+    {
+      "name": "name-rop",
+      "targetTime": 141.86
+    },
+    {
+      "name": "name-gadgets",
+      "targetTime": 145.78
+    },
+    {
+      "name": "need-waiting-return",
+      "targetTime": 156.98
+    },
+    {
+      "name": "worker-normal",
+      "targetTime": 167.69
+    },
+    {
+      "name": "page-responsive",
+      "targetTime": 173
+    },
+    {
+      "name": "worker-thread",
+      "targetTime": 177.5
+    },
+    {
+      "name": "worker-numbers",
+      "targetTime": 181.45
+    },
+    {
+      "name": "worker-send",
+      "targetTime": 184.2
+    },
+    {
+      "name": "parallel-work",
+      "targetTime": 186.52
+    },
+    {
+      "name": "worker-result",
+      "targetTime": 191.85
+    },
+    {
+      "name": "worker-wait",
+      "targetTime": 194.2
+    },
+    {
+      "name": "worker-stack",
+      "targetTime": 198.7
+    },
+    {
+      "name": "worker-return-address",
+      "targetTime": 206.25
+    },
+    {
+      "name": "library-placement",
+      "targetTime": 223
+    },
+    {
+      "name": "library-base",
+      "targetTime": 237.05
+    },
+    {
+      "name": "library-offset",
+      "targetTime": 241.95
+    },
+    {
+      "name": "address-formula",
+      "targetTime": 245.6
+    },
+    {
+      "name": "find-library",
+      "targetTime": 250.5
+    },
+    {
+      "name": "code-address-known",
+      "targetTime": 260.47
+    },
+    {
+      "name": "worker-return-changes",
+      "targetTime": 268.59
+    },
+    {
+      "name": "resume-worker",
+      "targetTime": 273.35
+    },
+    {
+      "name": "need-system-service",
+      "targetTime": 280.21
+    },
+    {
+      "name": "service-layout",
+      "targetTime": 288.21
+    },
+    {
+      "name": "kernel-service",
+      "targetTime": 300.4
+    },
+    {
+      "name": "system-call",
+      "targetTime": 306
+    },
+    {
+      "name": "libkernel",
+      "targetTime": 309
+    },
+    {
+      "name": "kernel-does-work",
+      "targetTime": 319.46
+    },
+    {
+      "name": "need-kernel-location",
+      "targetTime": 325.04
+    },
+    {
+      "name": "route-query",
+      "targetTime": 332
+    },
+    {
+      "name": "query-response",
+      "targetTime": 338.94
+    },
+    {
+      "name": "leaking-response",
+      "targetTime": 341.4
+    },
+    {
+      "name": "kernel-placement",
+      "targetTime": 347.58
+    },
+    {
+      "name": "kernel-offset",
+      "targetTime": 352.25
+    },
+    {
+      "name": "kernel-base",
+      "targetTime": 354.4
+    },
+    {
+      "name": "kernel-permission",
+      "targetTime": 360.7
+    },
+    {
+      "name": "request-without-control",
+      "targetTime": 363.99
+    },
+    {
+      "name": "async-records",
+      "targetTime": 378.67
+    },
+    {
+      "name": "end",
+      "targetTime": 387.84
+    }
+  ],
+  "seed": 668719873
+}
