@@ -1,0 +1,38 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "store",
+      "targetTime": 4.25
+    },
+    {
+      "name": "crm",
+      "targetTime": 6.9
+    },
+    {
+      "name": "transfer",
+      "targetTime": 16.5
+    },
+    {
+      "name": "result",
+      "targetTime": 22.15
+    },
+    {
+      "name": "action",
+      "targetTime": 24.45
+    },
+    {
+      "name": "reverse-etl",
+      "targetTime": 32.2
+    },
+    {
+      "name": "return",
+      "targetTime": 37.67
+    },
+    {
+      "name": "end",
+      "targetTime": 42.9
+    }
+  ],
+  "seed": 104201
+}
