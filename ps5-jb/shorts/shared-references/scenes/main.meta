@@ -1,0 +1,54 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "array",
+      "targetTime": 1.39
+    },
+    {
+      "name": "same-cart",
+      "targetTime": 5.49
+    },
+    {
+      "name": "save-history",
+      "targetTime": 11.69
+    },
+    {
+      "name": "read-history",
+      "targetTime": 16.31
+    },
+    {
+      "name": "new-array",
+      "targetTime": 24.83
+    },
+    {
+      "name": "new-cart",
+      "targetTime": 25.85
+    },
+    {
+      "name": "shared-copy",
+      "targetTime": 27.33
+    },
+    {
+      "name": "change-quantity",
+      "targetTime": 36
+    },
+    {
+      "name": "read-second",
+      "targetTime": 37.63
+    },
+    {
+      "name": "second-result",
+      "targetTime": 38.87
+    },
+    {
+      "name": "original-unchanged",
+      "targetTime": 42.61
+    },
+    {
+      "name": "end",
+      "targetTime": 47.575
+    }
+  ],
+  "seed": 710001
+}
