@@ -1,0 +1,234 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "reference",
+      "targetTime": 0.41
+    },
+    {
+      "name": "example",
+      "targetTime": 19
+    },
+    {
+      "name": "calculation",
+      "targetTime": 31
+    },
+    {
+      "name": "getter",
+      "targetTime": 36.83
+    },
+    {
+      "name": "getter-result-path",
+      "targetTime": 43.2
+    },
+    {
+      "name": "getter-result",
+      "targetTime": 43.91
+    },
+    {
+      "name": "intercept",
+      "targetTime": 46.47
+    },
+    {
+      "name": "proxy-request",
+      "targetTime": 48.3
+    },
+    {
+      "name": "proxy-name",
+      "targetTime": 49.44
+    },
+    {
+      "name": "proxy-receiver",
+      "targetTime": 60.85
+    },
+    {
+      "name": "receiver-this",
+      "targetTime": 65.77
+    },
+    {
+      "name": "receiver-cart",
+      "targetTime": 70.9
+    },
+    {
+      "name": "names",
+      "targetTime": 74.18
+    },
+    {
+      "name": "name-binding",
+      "targetTime": 81.17
+    },
+    {
+      "name": "object-binding",
+      "targetTime": 85.92
+    },
+    {
+      "name": "scope",
+      "targetTime": 90.8
+    },
+    {
+      "name": "real-path",
+      "targetTime": 103.15
+    },
+    {
+      "name": "engine-request",
+      "targetTime": 109.79
+    },
+    {
+      "name": "scope-receiver",
+      "targetTime": 114.89
+    },
+    {
+      "name": "return-scope",
+      "targetTime": 120.8
+    },
+    {
+      "name": "scope-leak",
+      "targetTime": 122.8
+    },
+    {
+      "name": "getter-record",
+      "targetTime": 131.8
+    },
+    {
+      "name": "getter-function",
+      "targetTime": 135.92
+    },
+    {
+      "name": "read-getter",
+      "targetTime": 144.64
+    },
+    {
+      "name": "returned-getter-record",
+      "targetTime": 151.88
+    },
+    {
+      "name": "getter-reference",
+      "targetTime": 160.21
+    },
+    {
+      "name": "target-reference",
+      "targetTime": 162.3
+    },
+    {
+      "name": "function-property",
+      "targetTime": 163.78
+    },
+    {
+      "name": "prepared-object",
+      "targetTime": 166.1
+    },
+    {
+      "name": "host-reference",
+      "targetTime": 166.7
+    },
+    {
+      "name": "convert",
+      "targetTime": 181.9
+    },
+    {
+      "name": "wrapper",
+      "targetTime": 185.58
+    },
+    {
+      "name": "wrapper-kind",
+      "targetTime": 188.06
+    },
+    {
+      "name": "normal-symbol",
+      "targetTime": 197.5
+    },
+    {
+      "name": "symbol-value",
+      "targetTime": 199
+    },
+    {
+      "name": "symbol-description",
+      "targetTime": 203.12
+    },
+    {
+      "name": "symbol-etiket",
+      "targetTime": 205.74
+    },
+    {
+      "name": "to-string",
+      "targetTime": 208.46
+    },
+    {
+      "name": "symbol-result",
+      "targetTime": 217.12
+    },
+    {
+      "name": "wrong-type",
+      "targetTime": 222.95
+    },
+    {
+      "name": "restore-chain",
+      "targetTime": 228.71
+    },
+    {
+      "name": "type-confusion",
+      "targetTime": 235.95
+    },
+    {
+      "name": "string-call",
+      "targetTime": 245.93
+    },
+    {
+      "name": "address-output",
+      "targetTime": 265.5
+    },
+    {
+      "name": "extract-address",
+      "targetTime": 270.2
+    },
+    {
+      "name": "name-object-address",
+      "targetTime": 276.28
+    },
+    {
+      "name": "mark-object-start",
+      "targetTime": 277
+    },
+    {
+      "name": "knowledge",
+      "targetTime": 277.91
+    },
+    {
+      "name": "record-address",
+      "targetTime": 289.9
+    },
+    {
+      "name": "address-formula",
+      "targetTime": 291.63
+    },
+    {
+      "name": "name-fake-address",
+      "targetTime": 296.64
+    },
+    {
+      "name": "reference-address",
+      "targetTime": 297.7
+    },
+    {
+      "name": "fill-address-buffer",
+      "targetTime": 302.6
+    },
+    {
+      "name": "normal-view-return",
+      "targetTime": 303.47
+    },
+    {
+      "name": "missing-access",
+      "targetTime": 310.6
+    },
+    {
+      "name": "handoff",
+      "targetTime": 312.29
+    },
+    {
+      "name": "end",
+      "targetTime": 319.22
+    }
+  ],
+  "seed": 651001
+}
