@@ -41,7 +41,7 @@ export default makeScene2D(function* (view) {
   );
   incoming.end(0);
   outgoing.end(0);
-  const normalResult = label('A B C', -20, 420, 48, palette.accent, true);
+  const normalResult = label('A B C', 150, 420, 48, palette.accent, true);
   normalResult.opacity(0);
 
   const control = new Layout({ position: [-20, -490], opacity: 0 });
