@@ -1,0 +1,42 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "model",
+      "targetTime": 5.6
+    },
+    {
+      "name": "deploy",
+      "targetTime": 13.9
+    },
+    {
+      "name": "inference",
+      "targetTime": 18.9
+    },
+    {
+      "name": "request",
+      "targetTime": 24.25
+    },
+    {
+      "name": "use-model",
+      "targetTime": 27.23
+    },
+    {
+      "name": "response",
+      "targetTime": 32.05
+    },
+    {
+      "name": "result",
+      "targetTime": 34.35
+    },
+    {
+      "name": "conclusion",
+      "targetTime": 38.23
+    },
+    {
+      "name": "end",
+      "targetTime": 41.8
+    }
+  ],
+  "seed": 104204
+}
