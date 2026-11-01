@@ -1,0 +1,62 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "events",
+      "targetTime": 1.759433106575969
+    },
+    {
+      "name": "rule",
+      "targetTime": 4.109433106575963
+    },
+    {
+      "name": "batch",
+      "targetTime": 8.65943310657596
+    },
+    {
+      "name": "batch-run",
+      "targetTime": 16.059433106575966
+    },
+    {
+      "name": "batch-match",
+      "targetTime": 21.40943310657596
+    },
+    {
+      "name": "batch-result",
+      "targetTime": 24.309433106575966
+    },
+    {
+      "name": "stream",
+      "targetTime": 34.15943310657596
+    },
+    {
+      "name": "first",
+      "targetTime": 40.85943310657596
+    },
+    {
+      "name": "second",
+      "targetTime": 42.80943310657595
+    },
+    {
+      "name": "third",
+      "targetTime": 47.10943310657596
+    },
+    {
+      "name": "stream-result",
+      "targetTime": 50.409433106575975
+    },
+    {
+      "name": "latency",
+      "targetTime": 64.35943310657596
+    },
+    {
+      "name": "nonzero",
+      "targetTime": 66.40943310657597
+    },
+    {
+      "name": "end",
+      "targetTime": 74.15943310657597
+    }
+  ],
+  "seed": 104200
+}
