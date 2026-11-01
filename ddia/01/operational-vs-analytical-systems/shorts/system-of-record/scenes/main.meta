@@ -1,0 +1,34 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "name",
+      "targetTime": 4.12
+    },
+    {
+      "name": "conflict",
+      "targetTime": 7.65
+    },
+    {
+      "name": "choose-source",
+      "targetTime": 17.95
+    },
+    {
+      "name": "repair",
+      "targetTime": 23.18
+    },
+    {
+      "name": "repaired",
+      "targetTime": 25.98
+    },
+    {
+      "name": "caution",
+      "targetTime": 28.97
+    },
+    {
+      "name": "end",
+      "targetTime": 44.333333333333336
+    }
+  ],
+  "seed": 104201
+}
