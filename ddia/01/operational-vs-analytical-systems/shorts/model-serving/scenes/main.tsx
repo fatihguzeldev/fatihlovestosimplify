@@ -7,7 +7,6 @@ import {
   cartoonArrow,
   cartoonService,
   foreground,
-  heading,
   loadFonts,
   muted,
   paper,
@@ -16,7 +15,11 @@ import {
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('eğitimden ', 'çalışan özelliğe.');
+  const question = text('eğittiğimiz model\nuygulamada nasıl kullanılacak?', 48, {
+    position: [0, -675],
+    lineHeight: 65,
+    textAlign: 'center',
+  });
   const training = paper(810, 220, '#101315');
   training.root.position([0, -340]);
   training.root.add([
@@ -112,7 +115,7 @@ export default makeScene2D(function* (view) {
   });
   const summary = text('', 39, { position: [0, 825], fill: accent });
   view.add([
-    title,
+    question,
     training.root,
     artifact.root,
     train.root,
@@ -134,7 +137,7 @@ export default makeScene2D(function* (view) {
   yield* train.travel(0.6);
   yield* all(train.arrive(), artifact.root.opacity(1, 0.3));
   yield* waitUntil('deploy');
-  title.children(heading('hazır modeli ', 'servise yerleştiriyoruz.').children());
+  yield* question.opacity(0, 0.3);
   const copy = paper(180, 57, '#17232f');
   copy.root.position([0, 20]);
   copy.root.add(text('model v1', 27, { fill: accent, fontFamily: 'IBM Plex Mono' }));
@@ -145,7 +148,6 @@ export default makeScene2D(function* (view) {
   copy.root.remove();
 
   yield* waitUntil('inference');
-  title.children(heading('muz sayfası ', 'öneri istiyor.').children());
   yield* all(
     training.root.opacity(0, 0.3),
     artifact.root.opacity(0, 0.3),
@@ -161,7 +163,6 @@ export default makeScene2D(function* (view) {
   yield* request.travel(1.1);
   yield* request.arrive();
   yield* waitUntil('use-model');
-  title.children(heading('servis ', 'önceden eğitilmiş modeli', ' kullanıyor.').children());
   yield* badge.face.stroke(accent, 0.3);
   yield* waitUntil('response');
   yield* all(response.reveal(1, 0.25), responseLabel.opacity(1, 0.25));
@@ -170,7 +171,6 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('result');
   yield* suggested.root.opacity(1, 0.3);
   yield* waitUntil('conclusion');
-  title.children(heading('hazır model, ', 'uygulamadaki öneriye', ' dönüştü.').children());
   summary.text('eğitim → deployment → kullanım');
   yield* waitUntil('end');
 });
