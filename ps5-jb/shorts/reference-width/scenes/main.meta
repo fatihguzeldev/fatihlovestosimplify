@@ -1,0 +1,70 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "bigint",
+      "targetTime": 1.92
+    },
+    {
+      "name": "primitive",
+      "targetTime": 11.98
+    },
+    {
+      "name": "write-value",
+      "targetTime": 18.22
+    },
+    {
+      "name": "reader-reference",
+      "targetTime": 30.88
+    },
+    {
+      "name": "extra-entry",
+      "targetTime": 37.72
+    },
+    {
+      "name": "width-rule",
+      "targetTime": 57.88
+    },
+    {
+      "name": "four-byte-rule",
+      "targetTime": 64.52
+    },
+    {
+      "name": "grow-lists",
+      "targetTime": 73.67
+    },
+    {
+      "name": "writer-two",
+      "targetTime": 84.79
+    },
+    {
+      "name": "reader-four",
+      "targetTime": 100.71
+    },
+    {
+      "name": "bytes",
+      "targetTime": 106.85
+    },
+    {
+      "name": "written-two",
+      "targetTime": 108.25
+    },
+    {
+      "name": "next-field",
+      "targetTime": 114.05
+    },
+    {
+      "name": "read-four",
+      "targetTime": 117.15
+    },
+    {
+      "name": "wrong-reference",
+      "targetTime": 126.27
+    },
+    {
+      "name": "end",
+      "targetTime": 129.925
+    }
+  ],
+  "seed": 710002
+}
