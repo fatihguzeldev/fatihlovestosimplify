@@ -1,0 +1,22 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "reveal-room",
+      "targetTime": 0.65
+    },
+    {
+      "name": "prepare-relapse",
+      "targetTime": 31.155
+    },
+    {
+      "name": "reveal-relapse",
+      "targetTime": 34.425
+    },
+    {
+      "name": "end",
+      "targetTime": 35
+    }
+  ],
+  "seed": 651100
+}
