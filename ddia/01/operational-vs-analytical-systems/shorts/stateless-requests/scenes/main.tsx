@@ -16,11 +16,11 @@ import {
 export default makeScene2D(function* (view) {
   yield loadFonts();
   view.fill(background);
-  const title = heading('aynı sunucuya\n', 'dönmek zorunda mıyız?');
+  const title = heading('siparişim\n', 'ne durumda?');
   const order = paper(720, 165, '#101519');
   order.root.y(-400);
-  const state = text('created', 48, { y: 32, fill: accent });
-  order.root.add([text('sipariş #1042', 36, { y: -34 }), state]);
+  const state = text('—', 48, { y: 32, fill: accent });
+  order.root.add([text('sipariş ekranı · #1042', 34, { y: -34 }), state]);
   const server = cartoonService('sunucu 1', accent);
   server.root.scale(1.2);
   server.caption.position([238, 0]);
@@ -31,7 +31,7 @@ export default makeScene2D(function* (view) {
   database.root.scale(1.25);
   const record = text('#1042 · created', 27, { y: 23, fill: accent });
   database.root.add(record);
-  const request = cartoonArrow('short-stateless-request', [0, -295], [0, -155], accent);
+  const request = cartoonArrow('short-stateless-request', [0, -295], [0, -155], accent, 0);
   const query = cartoonArrow('short-stateless-query', [0, 235], [0, 315], accent, 0);
   const reply = cartoonArrow('short-stateless-reply', [-215, 385], [-215, 145], accent, 0);
   const response = cartoonArrow('short-stateless-response', [-215, -160], [-215, -290], accent, 0);
@@ -50,6 +50,26 @@ export default makeScene2D(function* (view) {
     requestLabel,
     stateless,
   ]);
+  yield* waitUntil('first-request');
+  state.text('yükleniyor…');
+  yield* request.reveal(1, 0.25);
+  yield* request.travel(0.55);
+  yield* request.arrive();
+  yield* waitUntil('first-query');
+  yield* query.reveal(1, 0.25);
+  yield* query.travel(0.45);
+  yield* query.arrive();
+  yield* reply.reveal(1, 0.25);
+  yield* reply.travel(0.45);
+  yield* reply.arrive();
+  yield* waitUntil('first-response');
+  yield* response.reveal(1, 0.25);
+  yield* response.travel(0.55);
+  state.text('created');
+  yield* response.arrive();
+  yield* waitUntil('first-complete');
+  title.children(heading('aynı sunucuya\n', 'dönmek zorunda mıyız?').children());
+  yield* all(query.reveal(0, 0.2), reply.reveal(0, 0.2), response.reveal(0, 0.2));
   yield* waitUntil('replace');
   yield* server.root.opacity(0, 0.25);
   server.caption.text('sunucu 2');

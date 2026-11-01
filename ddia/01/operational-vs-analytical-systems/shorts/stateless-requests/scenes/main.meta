@@ -2,40 +2,56 @@
   "version": 0,
   "timeEvents": [
     {
+      "name": "first-request",
+      "targetTime": 1.833333
+    },
+    {
+      "name": "first-query",
+      "targetTime": 13.8
+    },
+    {
+      "name": "first-response",
+      "targetTime": 18.45
+    },
+    {
+      "name": "first-complete",
+      "targetTime": 22.97
+    },
+    {
       "name": "replace",
-      "targetTime": 8.5
+      "targetTime": 31.47
     },
     {
       "name": "request",
-      "targetTime": 12.71
+      "targetTime": 35.68
     },
     {
       "name": "query",
-      "targetTime": 14.993333
+      "targetTime": 37.963333
     },
     {
       "name": "response",
-      "targetTime": 17.593333
+      "targetTime": 40.563333
     },
     {
       "name": "independent",
-      "targetTime": 20.91
+      "targetTime": 43.88
     },
     {
       "name": "stateless",
-      "targetTime": 29.543333
+      "targetTime": 52.513333
     },
     {
       "name": "stored-state",
-      "targetTime": 32.21
+      "targetTime": 55.18
     },
     {
       "name": "application",
-      "targetTime": 35.993333
+      "targetTime": 58.963333
     },
     {
       "name": "end",
-      "targetTime": 40.46
+      "targetTime": 63.43
     }
   ],
   "seed": 104222
