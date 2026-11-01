@@ -1,0 +1,66 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "lake",
+      "targetTime": 1.2
+    },
+    {
+      "name": "files",
+      "targetTime": 5.7
+    },
+    {
+      "name": "read",
+      "targetTime": 18.6
+    },
+    {
+      "name": "fields",
+      "targetTime": 26.75
+    },
+    {
+      "name": "interpret",
+      "targetTime": 29.8
+    },
+    {
+      "name": "time",
+      "targetTime": 33.95
+    },
+    {
+      "name": "event",
+      "targetTime": 36.95
+    },
+    {
+      "name": "schema",
+      "targetTime": 43.27
+    },
+    {
+      "name": "report",
+      "targetTime": 45.35
+    },
+    {
+      "name": "banana-count",
+      "targetTime": 54.8
+    },
+    {
+      "name": "milk-count",
+      "targetTime": 55.65
+    },
+    {
+      "name": "meaning",
+      "targetTime": 56.16
+    },
+    {
+      "name": "view-meaning",
+      "targetTime": 61.31
+    },
+    {
+      "name": "conclusion",
+      "targetTime": 70.97
+    },
+    {
+      "name": "end",
+      "targetTime": 77.61
+    }
+  ],
+  "seed": 104201
+}
