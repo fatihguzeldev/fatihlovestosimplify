@@ -22,9 +22,11 @@ başka-seri/02/video-adı/project.ts
 → output/başka-seri/02/video-adı.mp4
 ```
 
-Dosya adı video klasöründen gelir. Geçici parçalar `output/.segments/` altında her video
-için ayrı tutulur. Ses, projenin `audio` alanından alınır; sessiz projeler de desteklenir.
-Custom export mevcut haliyle tam videoyu 1920×1080, 60 FPS olarak üretir.
+Dosya adı video klasöründen gelir. Geçici parçalar her video için ayrı tutulur;
+Shorts projelerinde `.production/`, diğer projelerde `output/.segments/` kullanılır.
+Ses, projenin `audio` alanından alınır; sessiz projeler de desteklenir.
+Custom export projenin çözünürlüğünü kullanır ve 60 FPS gerektirir. Yatay videolar
+1920×1080, dikey Shorts projeleri 1080×1920 olarak hazırlanmıştır.
 
 Komut satırından aynı export:
 
