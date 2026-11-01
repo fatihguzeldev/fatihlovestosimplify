@@ -1,0 +1,54 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "shipped",
+      "targetTime": 4.2
+    },
+    {
+      "name": "stale",
+      "targetTime": 5.35
+    },
+    {
+      "name": "invalidate",
+      "targetTime": 16.45
+    },
+    {
+      "name": "invalidated",
+      "targetTime": 21.4
+    },
+    {
+      "name": "get",
+      "targetTime": 25.95
+    },
+    {
+      "name": "miss",
+      "targetTime": 29.95
+    },
+    {
+      "name": "read",
+      "targetTime": 31.65
+    },
+    {
+      "name": "response",
+      "targetTime": 33.45
+    },
+    {
+      "name": "result",
+      "targetTime": 35.2
+    },
+    {
+      "name": "refill",
+      "targetTime": 35.7
+    },
+    {
+      "name": "refilled",
+      "targetTime": 37.45
+    },
+    {
+      "name": "end",
+      "targetTime": 41.6
+    }
+  ],
+  "seed": 10421901
+}
