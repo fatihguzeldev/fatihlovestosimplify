@@ -1,0 +1,162 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "stabilize-aio",
+      "targetTime": 4.65
+    },
+    {
+      "name": "clear-aio",
+      "targetTime": 17.5
+    },
+    {
+      "name": "working-pipes-remain",
+      "targetTime": 23.02
+    },
+    {
+      "name": "ordinary-file-request",
+      "targetTime": 29.65
+    },
+    {
+      "name": "identity-fields",
+      "targetTime": 33.26
+    },
+    {
+      "name": "file-permissions",
+      "targetTime": 39.31
+    },
+    {
+      "name": "file-needs-root",
+      "targetTime": 46.85
+    },
+    {
+      "name": "identity-decision",
+      "targetTime": 52.13
+    },
+    {
+      "name": "name-credentials",
+      "targetTime": 56.41
+    },
+    {
+      "name": "name-uid",
+      "targetTime": 59.35
+    },
+    {
+      "name": "root-zero-definition",
+      "targetTime": 62.03
+    },
+    {
+      "name": "change-identity",
+      "targetTime": 66.91
+    },
+    {
+      "name": "identity-zero",
+      "targetTime": 75.97
+    },
+    {
+      "name": "same-request",
+      "targetTime": 78.91
+    },
+    {
+      "name": "root-identity-used",
+      "targetTime": 85.17
+    },
+    {
+      "name": "same-request-granted",
+      "targetTime": 90.34
+    },
+    {
+      "name": "same-execution-mode",
+      "targetTime": 95.41
+    },
+    {
+      "name": "filesystem-boundary",
+      "targetTime": 105.66
+    },
+    {
+      "name": "filesystem-tree",
+      "targetTime": 109.8
+    },
+    {
+      "name": "process-filesystem-root",
+      "targetTime": 116.44
+    },
+    {
+      "name": "process-slash",
+      "targetTime": 123.72
+    },
+    {
+      "name": "name-filesystem-sandbox",
+      "targetTime": 128.16
+    },
+    {
+      "name": "file-outside-subtree",
+      "targetTime": 130.17
+    },
+    {
+      "name": "filesystem-unreachable",
+      "targetTime": 133.22
+    },
+    {
+      "name": "change-filesystem-links",
+      "targetTime": 144.6
+    },
+    {
+      "name": "filesystem-origin-system-root",
+      "targetTime": 148.81
+    },
+    {
+      "name": "filesystem-reachable",
+      "targetTime": 155.06
+    },
+    {
+      "name": "platform-checks",
+      "targetTime": 158.94
+    },
+    {
+      "name": "platform-library-call",
+      "targetTime": 167.55
+    },
+    {
+      "name": "name-authid",
+      "targetTime": 173.55
+    },
+    {
+      "name": "name-capabilities",
+      "targetTime": 177.94
+    },
+    {
+      "name": "platform-identity",
+      "targetTime": 182.01
+    },
+    {
+      "name": "platform-system-core",
+      "targetTime": 182.85
+    },
+    {
+      "name": "scoped-capabilities",
+      "targetTime": 184.51
+    },
+    {
+      "name": "library-constraints",
+      "targetTime": 187.1
+    },
+    {
+      "name": "change-library-constraint",
+      "targetTime": 191.62
+    },
+    {
+      "name": "platform-request-recap",
+      "targetTime": 204.59
+    },
+    {
+      "name": "ready-for-new-code",
+      "targetTime": 209.78
+    },
+    {
+      "name": "end",
+      "targetTime": 223.39
+    }
+  ],
+  "seed": 680019
+}
