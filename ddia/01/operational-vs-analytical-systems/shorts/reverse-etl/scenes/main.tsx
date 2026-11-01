@@ -1,10 +1,9 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
-import { all, easeInOutCubic, waitUntil } from '@motion-canvas/core';
+import { all, waitUntil } from '@motion-canvas/core';
 import {
   accent,
   background,
   cartoonArrow,
-  heading,
   loadFonts,
   muted,
   paper,
@@ -13,13 +12,19 @@ import {
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('uyarı hazır.\n', 'ekip nereden görecek?');
+  const flag = paper(820, 180, '#17232f');
+  flag.root.position([0, -670]);
+  flag.root.add([
+    text('analiz sonucu · müşteri #17', 30, { y: -44, fill: muted }),
+    text('inceleme bekliyor', 44, { y: 30, fill: accent }),
+  ]);
   const warehouse = paper(820, 310);
   warehouse.root.position([0, -300]);
+  const storedFlag = text('—', 45, { y: 69, fill: accent });
   warehouse.root.add([
     text('warehouse · review_flags', 34, { y: -103, fill: muted }),
     text('customer #17', 43, { y: -21 }),
-    text('inceleme bekliyor', 45, { y: 69, fill: accent }),
+    storedFlag,
   ]);
   const crm = paper(820, 430);
   crm.root.position([0, 430]);
@@ -44,14 +49,19 @@ export default makeScene2D(function* (view) {
   });
   const journey = new Layout({});
   journey.add([warehouse.root, transfer.root, crm.root, label]);
-  view.add([title, journey]);
+  const workScreen = text('inceleme ekibinin çalışma ekranı', 30, {
+    position: [0, 735],
+    fill: muted,
+    opacity: 0,
+  });
+  view.add([flag.root, journey, workScreen]);
   yield loadFonts();
 
   yield* waitUntil('store');
+  storedFlag.text('inceleme bekliyor');
   yield* warehouse.face.stroke(accent, 0.25).to('#f5f5f5', 0.4);
   yield* waitUntil('crm');
-  title.children(heading('inceleme ekibi\n', 'CRM’i kullanıyor.').children());
-  yield* crm.root.opacity(1, 0.4);
+  yield* all(crm.root.opacity(1, 0.4), workScreen.opacity(1, 0.4), flag.root.opacity(0.35, 0.4));
   yield* waitUntil('transfer');
   yield* transfer.reveal(1, 0.4);
   yield* transfer.travel(1);
@@ -62,10 +72,6 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('action');
   yield* action.root.opacity(1, 0.35);
   yield* waitUntil('reverse-etl');
-  title.children(heading('hazırladığımız veri,\n', 'günlük işe dönüyor.').children());
   yield* label.opacity(1, 0.4);
-  yield* waitUntil('return');
-  yield* all(transfer.travel(1.2), journey.y(-15, 0.6, easeInOutCubic));
-  yield* transfer.arrive();
   yield* waitUntil('end');
 });

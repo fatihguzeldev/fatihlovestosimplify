@@ -26,12 +26,8 @@
       "targetTime": 32.2
     },
     {
-      "name": "return",
-      "targetTime": 37.67
-    },
-    {
       "name": "end",
-      "targetTime": 42.9
+      "targetTime": 34.8
     }
   ],
   "seed": 104201
