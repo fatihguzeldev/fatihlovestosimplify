@@ -64,16 +64,19 @@ export default makeScene2D(function* (view) {
     label('cache', 170, 430, 46, palette.ink, true),
   ]);
   const boundary = panel(800, 590, -20, 355, palette.accent, 'transparent');
-  boundary.opacity(0);
   const localName = label('process’in gördüğü ağaç', -20, 585, 44, palette.muted);
-  localName.opacity(0);
-  const process = new Layout({ position: [245, -610] });
-  const uid = label('UID 0', 0, 0, 48, palette.accent, true);
-  process.add([panel(230, 100, 0, 0), label('process', 0, -80, 44), uid]);
+  const process = new Layout({ position: [230, -585] });
+  const uid = label('root', 0, 32, 48, palette.accent, true);
+  process.add([
+    panel(300, 150, 0, 0),
+    label('process', 0, -112, 44),
+    label('kimlik', 0, -34, 44, palette.muted),
+    uid,
+  ]);
   const origin = arrow(
     [
-      [245, -560],
-      [350, -560],
+      [230, -510],
+      [350, -510],
       [350, 155],
       [-40, 155],
     ],
@@ -83,13 +86,10 @@ export default makeScene2D(function* (view) {
   const rootField = label('filesystem root', 150, 15, 38, palette.accent, true);
   rootField.opacity(0);
   view.add([tree, boundary, localName, process, origin, rootField]);
-  target.opacity(0.25);
-  targetName.opacity(0.25);
-
   yield* waitUntil('local-root');
   yield* origin.end(1, 0.6);
   yield* waitUntil('subtree');
-  yield* all(boundary.opacity(1, 0.35), localName.opacity(1, 0.35));
+  yield* all(boundary.lineWidth(4, 0.35), localName.fill(palette.ink, 0.35));
   yield* waitUntil('slash');
   yield* rootField.opacity(1, 0.3);
   yield* waitUntil('target-outside');
@@ -105,7 +105,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('change-root');
   yield* all(origin.end(0, 0.3), rootField.opacity(0, 0.25));
   origin.points([
-    [130, -610],
+    [80, -610],
     [-90, -610],
   ]);
   yield* all(
