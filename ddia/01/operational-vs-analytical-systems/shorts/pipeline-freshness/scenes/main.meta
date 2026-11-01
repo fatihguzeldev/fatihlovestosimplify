@@ -1,0 +1,70 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "initial-total",
+      "targetTime": 5.45
+    },
+    {
+      "name": "correct",
+      "targetTime": 16.15
+    },
+    {
+      "name": "correct-value",
+      "targetTime": 18.2
+    },
+    {
+      "name": "query",
+      "targetTime": 26.8
+    },
+    {
+      "name": "old-result",
+      "targetTime": 31.05
+    },
+    {
+      "name": "diagnosis",
+      "targetTime": 32.8
+    },
+    {
+      "name": "pipeline",
+      "targetTime": 42.8
+    },
+    {
+      "name": "lake",
+      "targetTime": 47.85
+    },
+    {
+      "name": "lake-updated",
+      "targetTime": 51.2
+    },
+    {
+      "name": "warehouse-stale",
+      "targetTime": 52.9
+    },
+    {
+      "name": "load",
+      "targetTime": 56.1
+    },
+    {
+      "name": "loaded",
+      "targetTime": 62.1
+    },
+    {
+      "name": "new-query",
+      "targetTime": 64.6
+    },
+    {
+      "name": "new-result",
+      "targetTime": 68.25
+    },
+    {
+      "name": "unchanged",
+      "targetTime": 77.9
+    },
+    {
+      "name": "end",
+      "targetTime": 78.95
+    }
+  ],
+  "seed": 104203
+}
