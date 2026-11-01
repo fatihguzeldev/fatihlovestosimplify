@@ -7,3 +7,6 @@ ne ulan bu/6. ne ulan bu - artificial neural networks/public
 /dist/
 /output/
 /plans/
+
+# Local production workspace
+/.production/
