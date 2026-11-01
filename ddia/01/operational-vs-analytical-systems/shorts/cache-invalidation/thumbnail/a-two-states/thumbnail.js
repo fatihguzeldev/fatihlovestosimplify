@@ -1,4 +1,4 @@
-import { C, text, stroke, database, paper, mount } from './art.js';
+import { C, text, stroke, database, paper, mount } from '../shared/art.js';
 
 const title =
   text(92, 320, 112, 'sipariş çıktı.') +

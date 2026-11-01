@@ -1,4 +1,4 @@
-import { C, database, mount, paper, stroke, text } from './art.js';
+import { C, database, mount, paper, stroke, text } from '../shared/art.js';
 
 const actual =
   text(802, 525, 33, 'asıl kayıt · #1042', { anchor: 'middle', fill: C.muted }) +

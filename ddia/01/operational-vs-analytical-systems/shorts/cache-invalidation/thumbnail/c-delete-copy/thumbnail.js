@@ -1,4 +1,4 @@
-import { C, database, mount, paper, stroke, text } from './art.js';
+import { C, database, mount, paper, stroke, text } from '../shared/art.js';
 
 // The crossed-out copy sits in front; the original record stays whole behind it.
 const original = database(660, 905, 2.35, {
