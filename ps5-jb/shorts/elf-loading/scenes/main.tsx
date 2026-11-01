@@ -21,8 +21,6 @@ export default makeScene2D(function* (view) {
     lineWidth: 2,
   });
   file.add([fileFace, filename, codeSource, dataSource, sectionRule, layoutInfo]);
-  codeSource.opacity(0);
-  dataSource.opacity(0);
   layoutInfo.opacity(0);
   sectionRule.opacity(0);
 
@@ -100,7 +98,7 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('elf');
   yield* replace(filename, 'loader.elf');
   yield* waitUntil('code-data');
-  yield* all(codeSource.opacity(1, 0.35), dataSource.opacity(1, 0.35));
+  yield* all(codeSource.fill(palette.accent, 0.35), dataSource.fill(palette.accent, 0.35));
   yield* waitUntil('layout');
   yield* all(layoutInfo.opacity(1, 0.3), sectionRule.opacity(1, 0.3));
   yield* waitUntil('prepare-memory');
