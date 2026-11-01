@@ -2,60 +2,64 @@
   "version": 0,
   "timeEvents": [
     {
-      "name": "events",
-      "targetTime": 1.759433106575969
+      "name": "two-events",
+      "targetTime": 5.49
     },
     {
       "name": "rule",
-      "targetTime": 4.109433106575963
+      "targetTime": 10.34
+    },
+    {
+      "name": "third-event",
+      "targetTime": 18.95
     },
     {
       "name": "batch",
-      "targetTime": 8.65943310657596
+      "targetTime": 21.86
     },
     {
       "name": "batch-run",
-      "targetTime": 16.059433106575966
+      "targetTime": 29.26
     },
     {
       "name": "batch-match",
-      "targetTime": 21.40943310657596
+      "targetTime": 34.61
     },
     {
       "name": "batch-result",
-      "targetTime": 24.309433106575966
+      "targetTime": 37.51
     },
     {
       "name": "stream",
-      "targetTime": 34.15943310657596
+      "targetTime": 47.36
     },
     {
       "name": "first",
-      "targetTime": 40.85943310657596
+      "targetTime": 54.06
     },
     {
       "name": "second",
-      "targetTime": 42.80943310657595
+      "targetTime": 56.01
     },
     {
       "name": "third",
-      "targetTime": 47.10943310657596
+      "targetTime": 60.31
     },
     {
       "name": "stream-result",
-      "targetTime": 50.409433106575975
+      "targetTime": 63.61
     },
     {
       "name": "latency",
-      "targetTime": 64.35943310657596
+      "targetTime": 77.56
     },
     {
       "name": "nonzero",
-      "targetTime": 66.40943310657597
+      "targetTime": 79.61
     },
     {
       "name": "end",
-      "targetTime": 74.15943310657597
+      "targetTime": 88.06
     }
   ],
   "seed": 104200

@@ -14,7 +14,7 @@ import {
 export default makeScene2D(function* (view) {
   view.fill(background);
   const title = heading('aynı hesapta ', 'üç başarısız ödeme.');
-  const customer = text('customer #17', 31, {
+  const customer = text('market uygulaması · customer #17', 30, {
     position: [0, -475],
     fontFamily: 'IBM Plex Mono',
     fill: muted,
@@ -70,10 +70,12 @@ export default makeScene2D(function* (view) {
   ]);
   yield loadFonts();
 
-  yield* waitUntil('events');
-  for (const event of events) yield* event.root.opacity(1, 0.22);
+  yield* waitUntil('two-events');
+  yield* all(events[0].root.opacity(1, 0.25), events[1].root.opacity(1, 0.25));
   yield* waitUntil('rule');
   yield* rule.root.opacity(1, 0.35);
+  yield* waitUntil('third-event');
+  yield* events[2].root.opacity(1, 0.25);
   yield* waitUntil('batch');
   title.children(heading('kontrol ', 'her gece 02:00’de.').children());
   clock.text('daily batch');
