@@ -1,0 +1,58 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "calculate",
+      "targetTime": 1.2
+    },
+    {
+      "name": "stored-a",
+      "targetTime": 8.05
+    },
+    {
+      "name": "stored-b",
+      "targetTime": 9.62
+    },
+    {
+      "name": "read",
+      "targetTime": 10.8
+    },
+    {
+      "name": "name",
+      "targetTime": 16.3
+    },
+    {
+      "name": "same-database",
+      "targetTime": 27.8
+    },
+    {
+      "name": "return",
+      "targetTime": 29.9
+    },
+    {
+      "name": "correct",
+      "targetTime": 40.3
+    },
+    {
+      "name": "stale",
+      "targetTime": 44.8
+    },
+    {
+      "name": "refresh",
+      "targetTime": 46
+    },
+    {
+      "name": "refreshed",
+      "targetTime": 50.4
+    },
+    {
+      "name": "conclusion",
+      "targetTime": 52.25
+    },
+    {
+      "name": "end",
+      "targetTime": 60.2
+    }
+  ],
+  "seed": 104202
+}
