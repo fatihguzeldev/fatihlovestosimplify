@@ -56,13 +56,23 @@ export default makeScene2D(function* (view) {
   const operation = label('copied[0].quantity = 4', 0, 600, 38, palette.accent, true);
   operation.opacity(0);
   const history = new Layout({ y: 365, opacity: 0 });
-  history.add([fileDrawing(640, 140, 0, 0), label('history kaydı', 0, 0, 44, palette.muted)]);
+  const historyName = label('history', 95, 0, 44, palette.muted);
+  const historyBack = label('‹', -240, 0, 68, palette.ink, true);
+  const historyForward = label('›', -140, 0, 68, palette.muted, true);
+  const historyData = label('state: …', 0, 115, 38, palette.accent, true);
+  historyData.opacity(0);
+  history.add([fileDrawing(640, 140, 0, 0), historyName, historyBack, historyForward, historyData]);
   const savePath = arrow([
     [0, 190],
     [0, 285],
   ]);
   savePath.opacity(0);
   view.add([original.root, copied.root, command, operation, savePath, history]);
+
+  yield* waitUntil('history-intro');
+  yield* history.opacity(1, 0.35);
+  yield* waitUntil('history-data');
+  yield* historyData.opacity(1, 0.25);
 
   yield* waitUntil('array');
   yield* all(
@@ -77,7 +87,13 @@ export default makeScene2D(function* (view) {
   );
 
   yield* waitUntil('save-history');
-  yield* all(command.opacity(1, 0.3), history.opacity(1, 0.3), savePath.opacity(1, 0.3));
+  yield* all(
+    historyBack.opacity(0, 0.2),
+    historyForward.opacity(0, 0.2),
+    historyData.opacity(0, 0.2),
+  );
+  historyName.text('history kaydı');
+  yield* all(historyName.x(0, 0.3), command.opacity(1, 0.3), savePath.opacity(1, 0.3));
 
   yield* waitUntil('read-history');
   yield* replace(command, 'history.state');

@@ -2,52 +2,60 @@
   "version": 0,
   "timeEvents": [
     {
+      "name": "history-intro",
+      "targetTime": 6.07
+    },
+    {
+      "name": "history-data",
+      "targetTime": 14.63
+    },
+    {
       "name": "array",
-      "targetTime": 1.39
+      "targetTime": 18.79
     },
     {
       "name": "same-cart",
-      "targetTime": 5.49
+      "targetTime": 22.89
     },
     {
       "name": "save-history",
-      "targetTime": 11.69
+      "targetTime": 29.09
     },
     {
       "name": "read-history",
-      "targetTime": 16.31
+      "targetTime": 33.71
     },
     {
       "name": "new-array",
-      "targetTime": 24.83
+      "targetTime": 42.23
     },
     {
       "name": "new-cart",
-      "targetTime": 25.85
+      "targetTime": 43.25
     },
     {
       "name": "shared-copy",
-      "targetTime": 27.33
+      "targetTime": 44.73
     },
     {
       "name": "change-quantity",
-      "targetTime": 36
+      "targetTime": 53.4
     },
     {
       "name": "read-second",
-      "targetTime": 37.63
+      "targetTime": 55.03
     },
     {
       "name": "second-result",
-      "targetTime": 38.87
+      "targetTime": 56.27
     },
     {
       "name": "original-unchanged",
-      "targetTime": 42.61
+      "targetTime": 60.01
     },
     {
       "name": "end",
-      "targetTime": 47.575
+      "targetTime": 64.975
     }
   ],
   "seed": 710001
