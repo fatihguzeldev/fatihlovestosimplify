@@ -7,7 +7,6 @@ import {
   cartoonDatabase,
   cartoonService,
   foreground,
-  heading,
   loadFonts,
   muted,
   paper,
@@ -16,7 +15,12 @@ import {
 
 export default makeScene2D(function* (view) {
   view.fill(background);
-  const title = heading('sipariş ', 'yola çıktı.');
+  const order = paper(820, 200, '#101519');
+  order.root.position([0, -660]);
+  order.root.add(text('müşterinin ekranı · sipariş #1042', 31, { y: -58, fill: muted }));
+  const shownStatus = text('hazırlanıyor', 48, { y: 10, fill: accent });
+  const responseSource = text('', 25, { y: 69, fill: muted });
+  order.root.add([shownStatus, responseSource]);
   const database = cartoonDatabase('asıl kayıt · #1042', accent);
   database.root.position([-245, -190]);
   database.root.scale(1.25);
@@ -37,6 +41,13 @@ export default makeScene2D(function* (view) {
   const miss = cartoonArrow('short-cache-miss', [75, 300], [-65, 452], accent, 0);
   const read = cartoonArrow('short-cache-read-source', [-300, 290], [-300, 50], accent, 0);
   const response = cartoonArrow('short-cache-source-reply', [-125, 50], [-125, 290], accent, 0);
+  const staleReply = cartoonArrow(
+    'short-cache-stale-client-reply',
+    [390, 70],
+    [390, -535],
+    accent,
+    0,
+  );
   const operation = text('', 27, {
     position: [135, 405],
     fontFamily: 'IBM Plex Mono',
@@ -51,7 +62,7 @@ export default makeScene2D(function* (view) {
   });
   const result = text('', 50, { position: [0, 725], fill: accent });
   view.add([
-    title,
+    order.root,
     database.root,
     cache.root,
     service.root,
@@ -59,6 +70,7 @@ export default makeScene2D(function* (view) {
     miss.root,
     read.root,
     response.root,
+    staleReply.root,
     operation,
     readLabel,
     replyLabel,
@@ -70,11 +82,21 @@ export default makeScene2D(function* (view) {
   canonical.text('shipped');
   yield* all(canonical.fill(accent, 0.25), database.top.stroke(accent, 0.25));
   yield* waitUntil('stale');
-  title.children(heading('cache’in ', 'haberi yok.').children());
   yield* cache.face.stroke(accent, 0.25);
+  yield* waitUntil('stale-response');
+  operation.text('get() → preparing');
+  yield* request.reveal(1, 0.2);
+  yield* request.travel(0.5);
+  yield* request.arrive();
+  yield* staleReply.reveal(1, 0.25);
+  yield* staleReply.travel(0.7);
+  yield* staleReply.arrive();
+  responseSource.text('cache’ten gelen eski yanıt');
 
   yield* waitUntil('invalidate');
-  title.children(heading('eski cache kaydını ', 'geçersiz kılalım.').children());
+  yield* all(staleReply.root.opacity(0, 0.2), request.root.opacity(0, 0.2));
+  request.reveal(0);
+  request.root.opacity(1);
   operation.text('invalidate()');
   yield* request.reveal(1, 0.25);
   yield* request.travel(0.7);
@@ -94,7 +116,6 @@ export default makeScene2D(function* (view) {
   yield* request.travel(0.7);
   yield* request.arrive();
   yield* waitUntil('miss');
-  title.children(heading('cache miss. ', 'kaynağa dönüyoruz.').children());
   request.root.opacity(0);
   operation.text('miss');
   yield* miss.reveal(1, 0.2);
@@ -115,6 +136,8 @@ export default makeScene2D(function* (view) {
   yield* response.arrive();
   yield* waitUntil('result');
   result.text('yanıt: shipped');
+  shownStatus.text('yola çıktı');
+  responseSource.text('database’den gelen güncel yanıt');
 
   yield* waitUntil('refill');
   request.reveal(0);
@@ -133,7 +156,6 @@ export default makeScene2D(function* (view) {
   yield* waitUntil('refilled');
   cached.text('shipped');
   yield* cached.fill(accent, 0.25);
-  title.children(heading('sonraki okuma da ', 'güncel.').children());
   yield* all(operation.fill(foreground, 0.25), service.root.opacity(0.8, 0.25));
   yield* waitUntil('end');
 });

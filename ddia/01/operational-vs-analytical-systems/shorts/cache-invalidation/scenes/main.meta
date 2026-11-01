@@ -10,6 +10,10 @@
       "targetTime": 5.35
     },
     {
+      "name": "stale-response",
+      "targetTime": 8.44
+    },
+    {
       "name": "invalidate",
       "targetTime": 16.45
     },
