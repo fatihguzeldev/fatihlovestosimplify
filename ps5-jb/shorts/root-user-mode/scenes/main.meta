@@ -1,0 +1,62 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "identity",
+      "targetTime": 3.95
+    },
+    {
+      "name": "root-required",
+      "targetTime": 14.39
+    },
+    {
+      "name": "deny",
+      "targetTime": 19.89
+    },
+    {
+      "name": "credentials",
+      "targetTime": 24.33
+    },
+    {
+      "name": "uid",
+      "targetTime": 28.03
+    },
+    {
+      "name": "root-is-zero",
+      "targetTime": 32.71
+    },
+    {
+      "name": "identity-write",
+      "targetTime": 37.46
+    },
+    {
+      "name": "uid-zero",
+      "targetTime": 41.76
+    },
+    {
+      "name": "retry",
+      "targetTime": 45.88
+    },
+    {
+      "name": "allow",
+      "targetTime": 57.38
+    },
+    {
+      "name": "same-process",
+      "targetTime": 60.32
+    },
+    {
+      "name": "user-mode",
+      "targetTime": 62.54
+    },
+    {
+      "name": "cpu-mode",
+      "targetTime": 68.88
+    },
+    {
+      "name": "end",
+      "targetTime": 72.64166666666667
+    }
+  ],
+  "seed": 9031
+}
