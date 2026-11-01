@@ -1,0 +1,50 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "read",
+      "targetTime": 12.166667
+    },
+    {
+      "name": "order-result",
+      "targetTime": 14.566667
+    },
+    {
+      "name": "operational",
+      "targetTime": 26.683333
+    },
+    {
+      "name": "analytical-question",
+      "targetTime": 28.926667
+    },
+    {
+      "name": "report",
+      "targetTime": 39.443333
+    },
+    {
+      "name": "report-result",
+      "targetTime": 43.693333
+    },
+    {
+      "name": "store-a",
+      "targetTime": 45.193333
+    },
+    {
+      "name": "store-b",
+      "targetTime": 46.293333
+    },
+    {
+      "name": "analytical",
+      "targetTime": 52.143333
+    },
+    {
+      "name": "compare",
+      "targetTime": 53.753333
+    },
+    {
+      "name": "end",
+      "targetTime": 68.36
+    }
+  ],
+  "seed": 104223
+}
