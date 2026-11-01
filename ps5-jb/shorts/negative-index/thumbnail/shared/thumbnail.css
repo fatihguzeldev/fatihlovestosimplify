@@ -1,0 +1,12 @@
+@import '../../../../thumbnail/shared/thumbnail.css';
+
+@font-face {
+  font-family: Mono;
+  src: url('../../../../../common/fonts/IBMPlexMono-Medium.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 500;
+}
+
+body {
+  overflow: hidden;
+}
