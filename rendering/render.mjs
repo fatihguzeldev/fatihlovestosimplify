@@ -6,7 +6,8 @@ import { createRequire } from 'node:module';
 import { setTimeout as delay } from 'node:timers/promises';
 import { chromium } from 'playwright';
 import { createServer } from 'vite';
-import { outputPaths, projectArgument, root } from './projects.mjs';
+import { outputPaths, projectArgument, root, sourceDirectories } from './projects.mjs';
+import { renderFormat, videoMatches } from './video-format.mjs';
 
 const require = createRequire(import.meta.url);
 const ffprobe = require('@ffprobe-installer/ffprobe').path;
@@ -55,14 +56,19 @@ function option(name, fallback) {
 }
 
 let total;
+let format;
 
 async function sourceFingerprint() {
   const hash = createHash('sha256');
-  const files = [];
+  const files = new Set();
   async function collect(relative) {
     for (const entry of await readdir(path.join(root, relative), { withFileTypes: true })) {
       const child = path.join(relative, entry.name);
-      if (entry.isDirectory() && !['node_modules', '.git', 'output', 'dist'].includes(entry.name))
+      if (
+        entry.isDirectory() &&
+        !entry.name.startsWith('.') &&
+        !['node_modules', 'output', 'dist', 'raw', 'shorts'].includes(entry.name)
+      )
         await collect(child);
       else if (
         entry.isFile() &&
@@ -70,15 +76,19 @@ async function sourceFingerprint() {
           child,
         )
       ) {
-        files.push(child);
+        files.add(child);
       }
     }
   }
-  await collect(path.dirname(project));
-  await collect('common');
-  await collect('rendering');
-  files.push('vite.config.ts', 'package-lock.json');
-  for (const file of files.sort()) {
+  for (const directory of sourceDirectories(project)) await collect(directory);
+  if (project.startsWith('ddia/') && project.includes('/shorts/')) {
+    const video = project.split('/shorts/')[0];
+    files.add(path.join(video, 'theme.ts'));
+    files.add(path.join(path.dirname(video), 'theme.ts'));
+  }
+  files.add('vite.config.ts');
+  files.add('package-lock.json');
+  for (const file of [...files].sort()) {
     hash.update(file);
     hash.update('\0');
     hash.update(await readFile(path.join(root, file)));
@@ -144,12 +154,7 @@ async function validSegment(start, end) {
       ]),
     );
     const video = info.streams?.[0];
-    return (
-      video?.width === 1920 &&
-      video?.height === 1080 &&
-      video?.r_frame_rate === '60/1' &&
-      Number(video?.nb_read_frames) === end - start
-    );
+    return videoMatches(video, format, end - start);
   } catch {
     return false;
   }
@@ -243,6 +248,7 @@ try {
     throw new Error(`Could not measure video duration: ${JSON.stringify(probe)}`);
   }
   total = probe.total;
+  format = renderFormat(probe.format);
   const from = option('--from', 0);
   const to = option('--to', total);
   const chunk = option('--chunk', defaultChunk);
@@ -282,6 +288,7 @@ try {
           version: 1,
           project,
           total,
+          format,
           fingerprint,
           segments,
           audio: Boolean(probe.audio),

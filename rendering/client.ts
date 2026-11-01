@@ -1,4 +1,5 @@
 import { makePlugin, ObjectMetaField } from '@motion-canvas/core';
+import { renderFormat } from './video-format.mjs';
 import type {
   Exporter,
   Project,
@@ -62,6 +63,12 @@ class SegmentExporter implements Exporter {
   }
 
   async start() {
+    const format = renderFormat({
+      width: this.settings.size.x,
+      height: this.settings.size.y,
+      fps: this.settings.fps,
+      resolutionScale: this.settings.resolutionScale,
+    });
     const expectedFrames =
       Math.ceil(this.settings.range[1] * this.settings.fps) -
       Math.ceil(this.settings.range[0] * this.settings.fps) +
@@ -69,7 +76,7 @@ class SegmentExporter implements Exporter {
     await SegmentExporter.invoke('start', {
       project: selectedProject(),
       name: this.settings.name,
-      fps: this.settings.fps,
+      ...format,
       expectedFrames,
     });
     this.started = true;
@@ -146,15 +153,14 @@ class CustomExporter implements Exporter {
   constructor(private readonly settings: RendererSettings) {}
 
   async configuration(): Promise<RendererSettings> {
-    if (
-      this.settings.fps !== 60 ||
-      this.settings.size.x !== 1920 ||
-      this.settings.size.y !== 1080 ||
-      this.settings.resolutionScale !== 1 ||
-      this.settings.range[0] !== 0 ||
-      this.settings.range[1] !== Infinity
-    ) {
-      throw new Error('custom export currently requires the full 1920×1080, 60 FPS range.');
+    renderFormat({
+      width: this.settings.size.x,
+      height: this.settings.size.y,
+      fps: this.settings.fps,
+      resolutionScale: this.settings.resolutionScale,
+    });
+    if (this.settings.range[0] !== 0 || this.settings.range[1] !== Infinity) {
+      throw new Error('Custom export requires the full project range.');
     }
     // The editor renders just two placeholder frames. The full timeline is
     // processed by fresh browser processes started by the Vite plugin.

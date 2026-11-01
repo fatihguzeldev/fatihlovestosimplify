@@ -3,14 +3,14 @@ import { access, mkdir, mkdtemp, readFile, readdir, rename, rm, writeFile } from
 import os from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-import { outputPaths, projectArgument } from './projects.mjs';
+import { outputPaths, projectArgument, root } from './projects.mjs';
+import { renderFormat, videoMatches } from './video-format.mjs';
 
 const require = createRequire(import.meta.url);
 const ffmpeg = require('@ffmpeg-installer/ffmpeg').path;
 const ffprobe = require('@ffprobe-installer/ffprobe').path;
 const project = projectArgument();
 const { directory, finalFile } = outputPaths(project);
-const fps = 60;
 
 function execute(command, args) {
   return new Promise((resolve, reject) => {
@@ -44,6 +44,9 @@ if (
   throw new Error('Invalid segment manifest.');
 }
 const { total, segments: ranges } = manifest;
+// Older completed landscape manifests predate explicit format metadata.
+const format = renderFormat(manifest.format ?? { width: 1920, height: 1080, fps: 60 });
+const { fps } = format;
 
 const files = new Set(await readdir(directory));
 const segments = [];
@@ -76,12 +79,7 @@ for (const { start, end } of ranges) {
     ]),
   );
   const video = info.streams?.[0];
-  if (
-    video?.width !== 1920 ||
-    video?.height !== 1080 ||
-    video?.r_frame_rate !== '60/1' ||
-    Number(video?.nb_read_frames) !== end - start
-  ) {
+  if (!videoMatches(video, format, end - start)) {
     throw new Error(`Invalid segment ${filename}: ${JSON.stringify(video)}`);
   }
   segments.push(fullPath);
@@ -98,8 +96,17 @@ try {
     concatFile,
     segments.map((file) => `file '${file.replaceAll("'", "'\\''")}'`).join('\n') + '\n',
   );
-  const audioFile = path.join(directory, 'audio-track');
-  if (manifest.audio) await access(audioFile);
+  let audioFile = path.join(directory, 'audio-track');
+  if (manifest.audio) {
+    const lossless = path.join(root, path.dirname(project), 'audio/narration.flac');
+    try {
+      await access(lossless);
+      audioFile = lossless;
+    } catch {
+      // Existing projects may only have their browser-playback MP3.
+    }
+    await access(audioFile);
+  }
   await execute(ffmpeg, [
     '-hide_banner',
     '-loglevel',

@@ -42,9 +42,23 @@ export function outputPaths(
       ? path.join(relative, 'ps5-relapse-final.mp4')
       : `${relative}.mp4`;
   return {
-    directory: path.resolve(outputRoot, '.segments', relative),
+    directory: project.includes('/shorts/')
+      ? path.resolve(root, '.production', relative, 'render')
+      : path.resolve(outputRoot, '.segments', relative),
     finalFile: path.resolve(outputRoot, final),
   };
+}
+
+export function sourceDirectories(project) {
+  const directories = [path.dirname(project), 'common', 'rendering'];
+  if (project.startsWith('ps5-jb/shorts/')) {
+    directories.push('ps5-jb/shared', 'ps5-jb/shorts/shared', 'ps5-jb/scenes/00-opening');
+  }
+  if (project.startsWith('ddia/') && project.includes('/shorts/')) {
+    const video = project.split('/shorts/')[0];
+    directories.push(`${video}/shorts/shared`, `${video}/scenes`);
+  }
+  return directories;
 }
 
 export function projectArgument() {

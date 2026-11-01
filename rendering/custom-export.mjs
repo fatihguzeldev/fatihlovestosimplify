@@ -4,6 +4,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { PLUGIN_OPTIONS } from '@motion-canvas/vite-plugin';
 import { outputPaths, root, selectProject } from './projects.mjs';
+import { renderFormat } from './video-format.mjs';
 
 const require = createRequire(import.meta.url);
 const ffmpeg = require('@ffmpeg-installer/ffmpeg').path;
@@ -25,9 +26,10 @@ function run(command, args) {
 }
 
 class ExportSession {
-  constructor(outputDirectory, name, fps, expectedFrames) {
+  constructor(outputDirectory, name, format, expectedFrames, crf) {
     this.name = name;
-    this.fps = fps;
+    this.format = format;
+    this.fps = format.fps;
     this.expectedFrames = expectedFrames;
     this.frames = 0;
     this.finalPath = path.join(outputDirectory, `${name}.mp4`);
@@ -43,7 +45,7 @@ class ExportSession {
         '-f',
         'image2pipe',
         '-framerate',
-        String(fps),
+        String(format.fps),
         '-vcodec',
         'png',
         '-i',
@@ -51,10 +53,12 @@ class ExportSession {
         '-an',
         '-c:v',
         'libx264',
+        '-crf',
+        String(crf),
         '-pix_fmt',
         'yuv420p',
         '-r',
-        String(fps),
+        String(format.fps),
         '-movflags',
         '+faststart',
         this.tempPath,
@@ -83,8 +87,11 @@ class ExportSession {
     if (this.closed) throw new Error('Export session is closed.');
     if (index !== this.frames) throw new Error(`Expected frame ${this.frames}, got ${index}.`);
     const png = Buffer.from(base64, 'base64');
-    if (png.length < 8 || png.subarray(0, 8).toString('hex') !== '89504e470d0a1a0a') {
+    if (png.length < 24 || png.subarray(0, 8).toString('hex') !== '89504e470d0a1a0a') {
       throw new Error('Invalid PNG frame.');
+    }
+    if (png.readUInt32BE(16) !== this.format.width || png.readUInt32BE(20) !== this.format.height) {
+      throw new Error('PNG dimensions do not match the project.');
     }
     // The callback fires when Node has flushed this frame into the FFmpeg pipe.
     // Awaiting it bounds the queue to the browser's four worker results.
@@ -235,10 +242,16 @@ export default function customExport() {
             }
           } else if (method === 'start') {
             if (session) throw new Error('This tab is already exporting.');
-            const { directory: outputDirectory } = outputPaths(selectProject(data?.project));
+            const project = selectProject(data?.project);
+            const { directory: outputDirectory } = outputPaths(project);
             if (!/^[a-zA-Z0-9_-]{1,120}$/.test(data?.name)) throw new Error('Invalid export name.');
             if (!Number.isInteger(data?.fps) || data.fps < 1 || data.fps > 120)
               throw new Error('Invalid FPS.');
+            const format = renderFormat({
+              width: data.width ?? 1920,
+              height: data.height ?? 1080,
+              fps: data.fps,
+            });
             if (
               !Number.isInteger(data?.expectedFrames) ||
               data.expectedFrames < 1 ||
@@ -246,7 +259,13 @@ export default function customExport() {
             )
               throw new Error('Segment must contain 1–18000 frames.');
             await mkdir(outputDirectory, { recursive: true });
-            session = new ExportSession(outputDirectory, data.name, data.fps, data.expectedFrames);
+            session = new ExportSession(
+              outputDirectory,
+              data.name,
+              format,
+              data.expectedFrames,
+              project.includes('/shorts/') ? 16 : 23,
+            );
             sessions.set(client, session);
             client.socket.once('close', () => {
               if (sessions.get(client) === session) {
