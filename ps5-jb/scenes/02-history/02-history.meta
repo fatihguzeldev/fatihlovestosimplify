@@ -1,0 +1,218 @@
+{
+  "version": 0,
+  "timeEvents": [
+    {
+      "name": "browser-navigation",
+      "targetTime": 1.92
+    },
+    {
+      "name": "browser-navigation-end",
+      "targetTime": 3.02
+    },
+    {
+      "name": "history-api",
+      "targetTime": 6.32
+    },
+    {
+      "name": "history-list",
+      "targetTime": 8.64
+    },
+    {
+      "name": "history-data",
+      "targetTime": 13.71
+    },
+    {
+      "name": "history-cart",
+      "targetTime": 17.67
+    },
+    {
+      "name": "copy-question",
+      "targetTime": 20.59
+    },
+    {
+      "name": "show-array",
+      "targetTime": 26.81
+    },
+    {
+      "name": "first-link",
+      "targetTime": 27.87
+    },
+    {
+      "name": "two-links",
+      "targetTime": 28.81
+    },
+    {
+      "name": "write-history",
+      "targetTime": 36.59
+    },
+    {
+      "name": "read-history",
+      "targetTime": 41.22
+    },
+    {
+      "name": "isolate-original",
+      "targetTime": 45.75
+    },
+    {
+      "name": "copy-array",
+      "targetTime": 49.77
+    },
+    {
+      "name": "copy-cart",
+      "targetTime": 51.11
+    },
+    {
+      "name": "copy-first-link",
+      "targetTime": 52.3
+    },
+    {
+      "name": "copy-shared",
+      "targetTime": 53.11
+    },
+    {
+      "name": "mutate-copy",
+      "targetTime": 59.27
+    },
+    {
+      "name": "mutate-quantity",
+      "targetTime": 61.37
+    },
+    {
+      "name": "copy-second",
+      "targetTime": 62.6
+    },
+    {
+      "name": "source-unchanged",
+      "targetTime": 67.77
+    },
+    {
+      "name": "tracking-question",
+      "targetTime": 72.64
+    },
+    {
+      "name": "first-shared-link",
+      "targetTime": 74.77
+    },
+    {
+      "name": "same-object-again",
+      "targetTime": 75.67
+    },
+    {
+      "name": "remember-cart",
+      "targetTime": 93.39
+    },
+    {
+      "name": "writer-list",
+      "targetTime": 97.72
+    },
+    {
+      "name": "writer-array",
+      "targetTime": 103.11
+    },
+    {
+      "name": "writer-array-number",
+      "targetTime": 105.75
+    },
+    {
+      "name": "writer-first-element",
+      "targetTime": 113.52
+    },
+    {
+      "name": "writer-cart",
+      "targetTime": 116.85
+    },
+    {
+      "name": "writer-cart-number",
+      "targetTime": 119.6
+    },
+    {
+      "name": "writer-repeat",
+      "targetTime": 121
+    },
+    {
+      "name": "write-reference",
+      "targetTime": 129.58
+    },
+    {
+      "name": "reader-list",
+      "targetTime": 135.11
+    },
+    {
+      "name": "reader-empty-list",
+      "targetTime": 143.47
+    },
+    {
+      "name": "reader-array",
+      "targetTime": 145.93
+    },
+    {
+      "name": "reader-array-row",
+      "targetTime": 146.77
+    },
+    {
+      "name": "reader-array-number",
+      "targetTime": 148.11
+    },
+    {
+      "name": "reader-cart",
+      "targetTime": 152.93
+    },
+    {
+      "name": "reader-cart-row",
+      "targetTime": 163.22
+    },
+    {
+      "name": "reader-cart-number",
+      "targetTime": 164.55
+    },
+    {
+      "name": "read-reference",
+      "targetTime": 170.07
+    },
+    {
+      "name": "lookup-reference",
+      "targetTime": 174.32
+    },
+    {
+      "name": "reuse-cart",
+      "targetTime": 175.79
+    },
+    {
+      "name": "reader-second-link",
+      "targetTime": 178.41
+    },
+    {
+      "name": "compare-lists",
+      "targetTime": 180.57
+    },
+    {
+      "name": "compare-array",
+      "targetTime": 181.71
+    },
+    {
+      "name": "compare-cart",
+      "targetTime": 182.77
+    },
+    {
+      "name": "compare-original",
+      "targetTime": 183.91
+    },
+    {
+      "name": "compare-new",
+      "targetTime": 185.81
+    },
+    {
+      "name": "same-ordinals",
+      "targetTime": 192.63
+    },
+    {
+      "name": "settle-lists",
+      "targetTime": 193.72
+    },
+    {
+      "name": "end",
+      "targetTime": 194.32
+    }
+  ],
+  "seed": 651002
+}
