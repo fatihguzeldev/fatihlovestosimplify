@@ -1,0 +1,13 @@
+@import '../../../../../../../common/fonts.css';
+
+html,
+body {
+  margin: 0;
+  background: #0b0b0b;
+}
+
+svg {
+  display: block;
+  width: 100vw;
+  height: auto;
+}
